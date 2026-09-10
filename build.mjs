@@ -13,9 +13,9 @@ import { pathToFileURL } from 'node:url';
 import { SERVICES, HOURS } from './lib/services.js';
 import { PACKAGES } from './lib/packages.js';
 
-const SITE = 'https://www.elevatedigitals.co.za';
+const SITE = 'https://www.prismaticsyntax.com';
 const WA = '27650858437';
-const EMAIL = 'info@elevatedigitals.co.za';
+const EMAIL = 'hello@prismaticsyntax.com';
 const PHONE = '+27 65 085 8437';
 
 /* ── icons ──────────────────────────────────────────────────────────────
@@ -135,7 +135,7 @@ function renderPage(svc, all) {
         description: svc.metaDescription,
         serviceType: svc.name,
         url,
-        provider: { '@type': 'LocalBusiness', '@id': `${SITE}/#business`, name: 'Elevate Digitals' },
+        provider: { '@type': 'LocalBusiness', '@id': `${SITE}/#business`, name: 'Prismatic Syntax' },
         areaServed: [
           { '@type': 'State', name: 'Western Cape' },
           { '@type': 'State', name: 'Gauteng' },
@@ -167,17 +167,17 @@ function renderPage(svc, all) {
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
-<title>${esc(svc.metaTitle)} | Elevate Digitals</title>
+<title>${esc(svc.metaTitle)} | Prismatic Syntax</title>
 <meta name="description" content="${attr(svc.metaDescription)}">
 <meta name="keywords" content="${attr(svc.keywords)}">
-<meta name="author" content="Elevate Digitals">
+<meta name="author" content="Prismatic Syntax">
 <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large">
 <meta name="geo.region" content="ZA">
 <meta name="geo.country" content="South Africa">
 <meta name="geo.placename" content="Cape Town, Western Cape, South Africa">
 <meta name="geo.position" content="-33.9249;18.4241">
 <meta name="ICBM" content="-33.9249, 18.4241">
-<meta name="theme-color" content="#EDEDEA">
+<meta name="theme-color" content="#05090d">
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
 <link rel="alternate icon" type="image/png" href="/brand/favicon-180.png">
 <link rel="apple-touch-icon" href="/brand/favicon-180.png">
@@ -192,10 +192,9 @@ function renderPage(svc, all) {
 <meta property="og:image" content="${SITE}/og-image-1200x630.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="Elevate Digitals - Web Design South Africa">
-<meta property="og:site_name" content="Elevate Digitals">
+<meta property="og:image:alt" content="Prismatic Syntax - Web Design South Africa">
+<meta property="og:site_name" content="Prismatic Syntax">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:site" content="@ElevateDigitals">
 <meta name="twitter:title" content="${attr(svc.metaTitle)}">
 <meta name="twitter:description" content="${attr(svc.metaDescription)}">
 <meta name="twitter:image" content="${SITE}/og-image-1200x630.png">
@@ -204,7 +203,7 @@ ${JSON.stringify(jsonLd, null, 2)}
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@500;600;700;800&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/theme.css">
 <link rel="stylesheet" href="/site.css">
 </head>
@@ -213,8 +212,8 @@ ${JSON.stringify(jsonLd, null, 2)}
 
 <header class="site-head">
   <div class="wrap">
-    <a href="/" class="logo" aria-label="Elevate Digitals - go to homepage">
-      <img src="/brand/logo-horizontal-ink.svg" alt="Elevate Digitals" width="274" height="62">
+    <a href="/" class="logo" aria-label="Prismatic Syntax - go to homepage">
+      <img src="/brand/logo-on-dark.svg" alt="Prismatic Syntax" width="270" height="62">
     </a>
     <a href="/#services" class="head-back">All services</a>
   </div>
@@ -289,7 +288,7 @@ ${otherLinks}
 <footer class="site-foot">
   <div class="wrap">
     <div>
-      <img src="/brand/logo-horizontal-concrete.svg" alt="Elevate Digitals" width="274" height="62">
+      <img src="/brand/logo-on-dark.svg" alt="Prismatic Syntax" width="270" height="62">
       <p class="foot-desc">Modern web design for South African businesses that want to stand out and grow online. Packages from R8,500.</p>
       <p class="foot-contact">
         <a href="mailto:${EMAIL}">${EMAIL}</a><br>
@@ -324,7 +323,7 @@ ${all.map(s => `        <li><a href="/services/${s.slug}">${esc(s.nav)}</a></li>
     </div>
   </div>
   <div class="foot-bottom">
-    <div class="wrap">© 2026 Elevate Digitals. All rights reserved. · <a href="/privacy">Privacy</a> · <a href="/terms">Terms</a> · <a href="/refund-policy">Refund Policy</a></div>
+    <div class="wrap">© 2026 Prismatic Syntax. All rights reserved. · <a href="/privacy">Privacy</a> · <a href="/terms">Terms</a> · <a href="/refund-policy">Refund Policy</a></div>
   </div>
 </footer>
 
@@ -341,11 +340,11 @@ ${all.map(s => `        <li><a href="/services/${s.slug}">${esc(s.nav)}</a></li>
    Everything here stays live text. The logo is inlined as SVG markup rather
    than an <img>, because some engines rasterise a referenced SVG when printing
    and the whole point is that the PDF stays vector, editable and small. No
-   raster background, no exported image, no web font beyond Archivo. */
+   raster background, no exported image, no web fonts beyond Inter Tight and Manrope. */
 function renderMenu(all) {
   // Inlined, and the fixed width/height stripped so CSS can size it. Keeping
   // them would pin the mark at 274px in print.
-  const logo = readFileSync('brand/logo-horizontal-ink.svg', 'utf8')
+  const logo = readFileSync('brand/logo.svg', 'utf8')
     .replace(/\s(width|height)="[^"]*"/g, '')
     .replace('<svg ', '<svg class="logo" ');
 
@@ -353,7 +352,7 @@ function renderMenu(all) {
       <div class="m-contact">
         <span><strong>WhatsApp</strong> <a href="https://wa.me/${WA}">${PHONE}</a></span>
         <span><strong>Email</strong> <a href="mailto:${EMAIL}">${EMAIL}</a></span>
-        <span><strong>Web</strong> <a href="${SITE}">elevatedigitals.co.za</a></span>
+        <span><strong>Web</strong> <a href="${SITE}">prismaticsyntax.com</a></span>
       </div>`;
 
   const sections = all.map(svc => {
@@ -396,40 +395,40 @@ ${contact}
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Service Menu | Elevate Digitals</title>
-<meta name="description" content="Elevate Digitals service menu: web design, SEO, e-commerce, maintenance, booking systems, copywriting, video editing and brand identity, with pricing in ZAR.">
+<title>Service Menu | Prismatic Syntax</title>
+<meta name="description" content="Prismatic Syntax service menu: web design, SEO, e-commerce, maintenance, booking systems, copywriting, video editing and brand identity, with pricing in ZAR.">
 <meta name="robots" content="noindex, nofollow">
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
 <link rel="apple-touch-icon" href="/brand/favicon-180.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@500;600;700;800&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/theme.css">
 <style>
 /* Menu-only. Not in site.css: the eight service pages have no use for any of
    it, and print rules that nothing else shares are easier to reason about when
    they live next to the only document they format. */
 *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
-body { font-family:'Archivo',system-ui,sans-serif; background:var(--concrete); color:var(--ink); line-height:1.5; -webkit-font-smoothing:antialiased; }
+body { font-family:var(--f-body); background:var(--paper); color:var(--text); line-height:1.5; -webkit-font-smoothing:antialiased; }
 a { color:inherit; }
 .sheet { max-width:820px; margin:0 auto; padding:32px 24px 64px; }
 
 /* ── cover ── */
-.m-cover { padding-bottom:28px; border-bottom:2px solid var(--ink); }
+.m-cover { padding-bottom:28px; border-bottom:2px solid var(--text); }
 .logo { width:230px; height:auto; display:block; }
 .m-title { font-size:38px; font-weight:600; letter-spacing:-0.02em; line-height:1.05; margin-top:24px; }
 .m-sub { font-size:15px; color:var(--grey); margin-top:10px; max-width:56ch; }
-.m-assure { font-size:13.5px; color:var(--ink); margin-top:18px; padding:14px 16px; background:var(--surface); border:1px solid var(--concrete-dark); border-radius:12px; max-width:62ch; }
+.m-assure { font-size:13.5px; color:var(--text); margin-top:18px; padding:14px 16px; background:var(--surface); border:1px solid var(--line); border-radius:0; max-width:62ch; }
 .m-assure strong { font-weight:600; }
 .m-note { font-size:12px; color:var(--grey); margin-top:14px; }
 .m-index { list-style:none; columns:2; gap:24px; margin-top:22px; font-size:13.5px; }
 .m-index li { padding:4px 0; break-inside:avoid; }
 .m-index a { text-decoration:none; color:var(--grey); }
-.m-index a:hover { color:var(--ink); }
+.m-index a:hover { color:var(--text); }
 
 /* ── a service ── */
 .m-svc { padding-top:34px; }
-.m-svc-head { border-bottom:1px solid var(--concrete-dark); padding-bottom:14px; }
+.m-svc-head { border-bottom:1px solid var(--line); padding-bottom:14px; }
 .m-svc-kicker { font-size:10.5px; font-weight:600; letter-spacing:0.16em; text-transform:uppercase; color:var(--grey); }
 .m-svc h2 { font-size:26px; font-weight:600; line-height:1.15; letter-spacing:-0.015em; margin-top:7px; max-width:24ch; }
 .m-svc-lede { font-size:13.5px; color:var(--grey); margin-top:9px; max-width:70ch; }
@@ -442,11 +441,12 @@ a { color:inherit; }
 
 .m-pricing { margin-top:22px; }
 .m-pricing-lead { font-size:12.5px; color:var(--grey); margin:-4px 0 14px; max-width:74ch; }
-.m-tier { padding:11px 0; border-top:1px solid var(--concrete-dark); break-inside:avoid; }
-.m-tier:last-of-type { border-bottom:1px solid var(--concrete-dark); }
+.m-tier { padding:11px 0; border-top:1px solid var(--line); break-inside:avoid; }
+.m-tier:last-of-type { border-bottom:1px solid var(--line); }
 .m-tier-top { display:flex; align-items:baseline; justify-content:space-between; gap:16px; }
 .m-tier-name { font-size:14px; font-weight:600; letter-spacing:0.02em; }
-.m-rec { display:inline-block; margin-left:9px; font-size:8.5px; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; background:var(--hivis); color:var(--ink); padding:2px 7px; border-radius:50px; vertical-align:1px; }
+.m-title, .m-svc h2, .m-end h2 { font-family:var(--f-display); font-weight:800; text-transform:uppercase; }
+.m-rec { display:inline-block; margin-left:9px; font-size:8.5px; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; background:var(--blue); color:var(--surface); padding:2px 7px; border-radius:0; vertical-align:1px; }
 .m-tier-price { font-size:19px; font-weight:600; letter-spacing:-0.01em; white-space:nowrap; }
 .m-per { font-size:11px; font-weight:500; color:var(--grey); }
 .m-tier-period { font-size:11.5px; color:var(--grey); margin-top:1px; }
@@ -454,22 +454,22 @@ a { color:inherit; }
 .m-tier-feats { font-size:11.5px; color:var(--grey); margin-top:4px; line-height:1.55; }
 
 /* Unset price — deliberately loud so a draft cannot be sent as if it were final. */
-.tbc { display:inline-block; font-family:ui-monospace,SFMono-Regular,Menlo,monospace; font-size:11px; font-weight:700; letter-spacing:0.04em; border:1.5px dashed var(--ink); border-radius:6px; padding:2px 7px; }
+.tbc { display:inline-block; font-family:ui-monospace,SFMono-Regular,Menlo,monospace; font-size:11px; font-weight:700; letter-spacing:0.04em; border:1.5px dashed var(--text); border-radius:0; padding:2px 7px; }
 
-.m-contact { display:flex; flex-wrap:wrap; gap:6px 22px; margin-top:20px; padding-top:12px; border-top:1px solid var(--concrete-dark); font-size:11.5px; color:var(--grey); break-inside:avoid; }
-.m-contact strong { color:var(--ink); font-weight:600; }
+.m-contact { display:flex; flex-wrap:wrap; gap:6px 22px; margin-top:20px; padding-top:12px; border-top:1px solid var(--line); font-size:11.5px; color:var(--grey); break-inside:avoid; }
+.m-contact strong { color:var(--text); font-weight:600; }
 .m-contact a { text-decoration:none; }
 
-.m-end { margin-top:40px; padding:24px; background:var(--surface); border:1px solid var(--concrete-dark); border-radius:16px; }
+.m-end { margin-top:40px; padding:24px; background:var(--surface); border:1px solid var(--line); border-radius:0; }
 .m-end h2 { font-size:22px; font-weight:600; }
 .m-end p { font-size:13.5px; color:var(--grey); margin-top:8px; max-width:56ch; }
 .m-end .m-contact { border-top:none; margin-top:14px; padding-top:0; font-size:13px; }
 
 /* ── screen-only controls ── */
-.bar { position:sticky; top:0; z-index:10; display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:12px; background:var(--concrete); border-bottom:1px solid var(--concrete-dark); padding:12px 24px; }
+.bar { position:sticky; top:0; z-index:10; display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:12px; background:var(--paper); border-bottom:1px solid var(--line); padding:12px 24px; }
 .bar p { font-size:12.5px; color:var(--grey); }
-.bar-btn { font-family:inherit; font-size:14px; font-weight:600; background:var(--hivis); color:var(--ink); border:none; border-radius:50px; padding:11px 22px; cursor:pointer; }
-.bar-btn:hover { background:var(--hivis-dark); }
+.bar-btn { font-family:inherit; font-size:14px; font-weight:600; background:var(--blue); color:var(--surface); border:none; border-radius:0; padding:11px 22px; cursor:pointer; }
+.bar-btn:hover { background:var(--blue-dark); }
 
 @media (max-width:560px) {
   .m-incl ul, .m-index { columns:1; }

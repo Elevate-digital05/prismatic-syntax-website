@@ -38,7 +38,7 @@ for (const svc of SERVICES) {
                      'name="geo.position"', 'name="twitter:card"']) {
     assert.ok(page.includes(tag), at(`head is missing ${tag}`));
   }
-  assert.ok(page.includes(`<link rel="canonical" href="https://www.elevatedigitals.co.za/services/${svc.slug}">`),
+  assert.ok(page.includes(`<link rel="canonical" href="https://www.prismaticsyntax.com/services/${svc.slug}">`),
     at('canonical points at the wrong URL'));
   assert.ok(JSON.parse(page.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/)[1]),
     at('structured data is not valid JSON'));
@@ -80,8 +80,8 @@ for (const page of ['blog/website-cost-south-africa-2026.html', 'blog/whatsapp-m
   // A legal page does not link to itself, so it carries the other two.
   const wanted = page.match(/^(privacy|terms|refund-policy)\.html$/) ? 2 : 3;
   assert.equal(legal.length, wanted, `${page}: expected ${wanted} legal links in the footer, found ${legal.length}`);
-  assert.doesNotMatch(html, /class="logo">ELEVATE/,
-    `${page}: still uses the text wordmark instead of /brand/logo-horizontal-ink.svg`);
+  assert.doesNotMatch(html, /class="logo">PRISMATIC/,
+    `${page}: still uses the text wordmark instead of /brand/logo.svg`);
 }
 console.log('ok standalone pages: blog and legal pages carry the real logo and the legal links');
 
@@ -183,7 +183,7 @@ assert.ok(menu.includes('.m-svc { break-before:page;'), 'services no longer star
 assert.ok(menu.includes('<svg class="logo"'), 'the logo is not inlined vector SVG');
 assert.doesNotMatch(menu, /<img|background-image|url\(["']?data:image\/(png|jpe?g|gif|webp)/i,
   'menu.html contains a raster image — it must stay live text and vector');
-assert.ok(menu.includes("family=Archivo"), 'menu.html is not loading the real Archivo webfont');
+assert.ok(menu.includes("family=Inter+Tight"), 'menu.html is not loading the Inter Tight webfont');
 
 // Screen-only chrome must not reach paper.
 const printCss = menu.slice(menu.indexOf('@media print'));
@@ -208,7 +208,7 @@ for (const chunk of menu.split('<section class="m-svc"').slice(1)) {
   assert.ok(chunk.slice(0, chunk.indexOf('</section>')).includes('class="m-contact"'),
     `menu section ${slug} has no contact block`);
 }
-for (const detail of ['wa.me/27650858437', 'info@elevatedigitals.co.za', '+27 65 085 8437', 'elevatedigitals.co.za']) {
+for (const detail of ['wa.me/27650858437', 'hello@prismaticsyntax.com', '+27 65 085 8437', 'prismaticsyntax.com']) {
   assert.ok(menu.includes(detail), `menu.html is missing ${detail}`);
 }
 console.log(`ok menu: ${SERVICES.length} sections, A4 print rules, inline vector logo, no raster`);

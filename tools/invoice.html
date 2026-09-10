@@ -3,22 +3,22 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Invoice | Elevate Digitals</title>
+<title>Invoice | Prismatic Syntax</title>
 <meta name="robots" content="noindex, nofollow">
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@500;600;700;800&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/theme.css">
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
-body{font-family:'Archivo',sans-serif;background:var(--concrete);color:var(--ink);font-size:14px;line-height:1.6;}
+body{font-family:var(--f-body);background:var(--paper);color:var(--text);font-size:14px;line-height:1.6;}
 
-.bar{background:var(--ink);color:var(--concrete);padding:14px 24px;display:flex;gap:12px;align-items:center;flex-wrap:wrap;}
-.bar p{font-size:13px;color:var(--concrete-dark);margin-right:auto;}
-.bar button{font-family:inherit;font-size:13px;font-weight:600;padding:9px 18px;border:none;border-radius:50px;background:var(--hivis);color:var(--ink);cursor:pointer;}
-.bar button.ghost{background:transparent;color:var(--concrete);border:1px solid var(--concrete-dark);}
+.bar{background:var(--ink);color:var(--paper);padding:14px 24px;display:flex;gap:12px;align-items:center;flex-wrap:wrap;}
+.bar p{font-size:13px;color:var(--line);margin-right:auto;}
+.bar button{font-family:inherit;font-size:13px;font-weight:600;padding:9px 18px;border:none;border-radius:0;background:var(--blue); color:var(--surface);cursor:pointer;}
+.bar button.ghost{background:transparent;color:var(--paper);border:1px solid var(--line);}
 
-.sheet{max-width:800px;margin:32px auto;background:var(--surface);border:1px solid var(--concrete-dark);padding:56px;}
+.sheet{max-width:800px;margin:32px auto;background:var(--surface);border:1px solid var(--line);padding:56px;}
 header{display:flex;justify-content:space-between;align-items:flex-start;gap:32px;margin-bottom:44px;}
 header img{height:44px;width:auto;}
 h1{font-size:30px;font-weight:600;letter-spacing:-0.02em;line-height:1;}
@@ -29,21 +29,21 @@ h1{font-size:30px;font-weight:600;letter-spacing:-0.02em;line-height:1;}
 .from{font-size:13px;line-height:1.8;}
 
 table{width:100%;border-collapse:collapse;margin-bottom:8px;}
-th{font-size:11px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--grey);text-align:left;padding:0 8px 10px;border-bottom:1px solid var(--ink);}
+th{font-size:11px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--grey);text-align:left;padding:0 8px 10px;border-bottom:1px solid var(--text);}
 th.r,td.r{text-align:right;}
-td{padding:12px 8px;border-bottom:1px solid var(--concrete-dark);vertical-align:top;}
+td{padding:12px 8px;border-bottom:1px solid var(--line);vertical-align:top;}
 tfoot td{border:none;padding:8px;}
 tfoot tr:first-child td{padding-top:18px;}
-tfoot .total td{border-top:1px solid var(--ink);font-size:18px;font-weight:600;padding-top:14px;}
+tfoot .total td{border-top:1px solid var(--text);font-size:18px;font-weight:600;padding-top:14px;}
 
 [contenteditable]{outline:none;}
-[contenteditable]:focus{background:var(--hivis);}
-[contenteditable]:empty::before{content:attr(data-ph);color:var(--concrete-dark);}
+[contenteditable]:focus{outline:2px solid var(--blue);outline-offset:2px;}
+[contenteditable]:empty::before{content:attr(data-ph);color:var(--line);}
 
-.terms{margin-top:40px;padding-top:24px;border-top:1px solid var(--concrete-dark);font-size:13px;color:var(--grey);}
-.terms strong{color:var(--ink);}
-.pay{margin-top:20px;padding:18px 20px;background:var(--concrete);font-size:13px;line-height:1.9;}
-.todo{background:var(--hivis);padding:1px 5px;font-weight:600;color:var(--ink);}
+.terms{margin-top:40px;padding-top:24px;border-top:1px solid var(--line);font-size:13px;color:var(--grey);}
+.terms strong{color:var(--text);}
+.pay{margin-top:20px;padding:18px 20px;background:var(--paper);font-size:13px;line-height:1.9;}
+.todo{background:var(--blue);padding:1px 5px;font-weight:600;color:var(--surface);}
 .rm{border:none;background:none;color:var(--grey);cursor:pointer;font-size:16px;line-height:1;padding:0 4px;}
 
 @media print{
@@ -66,11 +66,11 @@ tfoot .total td{border-top:1px solid var(--ink);font-size:18px;font-weight:600;p
 <div class="sheet">
   <header>
     <div>
-      <img src="/brand/logo-horizontal-ink.svg" alt="Elevate Digitals">
+      <img src="/brand/logo.svg" alt="Prismatic Syntax">
     </div>
     <div style="text-align:right;">
       <h1>Invoice</h1>
-      <div class="num">No. <span contenteditable data-ph="ED-0001">ED-0001</span></div>
+      <div class="num">No. <span contenteditable data-ph="PS-0001">PS-0001</span></div>
     </div>
   </header>
 
@@ -78,9 +78,9 @@ tfoot .total td{border-top:1px solid var(--ink);font-size:18px;font-weight:600;p
     <div>
       <div class="lbl">From</div>
       <div class="from">
-        <strong>Elevate Digitals</strong><br>
+        <strong>Prismatic Syntax</strong><br>
         Cape Town, South Africa<br>
-        info@elevatedigitals.co.za<br>
+        hello@prismaticsyntax.com<br>
         +27 65 085 8437
       </div>
     </div>
@@ -134,7 +134,7 @@ tfoot .total td{border-top:1px solid var(--ink);font-size:18px;font-weight:600;p
       EFT: <span class="todo">TODO: bank, account name, account number, branch code</span><br>
       Reference: the invoice number above.
     </div>
-    <p style="margin-top:18px;">Elevate Digitals is not a registered VAT vendor. No VAT is charged on this invoice.</p>
+    <p style="margin-top:18px;">Prismatic Syntax is not a registered VAT vendor. No VAT is charged on this invoice.</p>
   </div>
 </div>
 

@@ -1,4 +1,4 @@
-# Elevate Digitals
+# Prismatic Syntax
 
 Static site. No framework, no dependencies. `index.html` is the homepage and,
 via `showPage()`, the services / packages / pay / blog / contact views too.
@@ -47,7 +47,7 @@ email, not a landing page.
 Printing: open `/menu`, hit **Save as PDF** (or Cmd-P), and choose "Save as
 PDF". It is set up for A4 portrait with one service per page; the toolbar and
 the contents list do not print. The current 8 services come to 9 pages at about
-500KB, with Archivo embedded and the logo as vector — no raster anywhere, so it
+500KB, with Inter Tight and Manrope embedded and the logo as vector — no raster anywhere, so it
 stays sharp at any zoom and small enough to attach.
 
 `check-build.mjs` fails if the menu ever grows a raster image, loses the A4 page

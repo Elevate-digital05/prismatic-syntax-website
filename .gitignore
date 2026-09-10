@@ -1,0 +1,8 @@
+# Secrets live here locally and never in the repo. Vercel holds the real ones.
+.env
+.env.local
+.DS_Store
+node_modules/
+
+# Per-machine Claude Code settings. launch.json is shared; this is not.
+.claude/settings.local.json

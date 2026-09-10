@@ -1,0 +1,20 @@
+{
+  "cleanUrls": true,
+  "trailingSlash": false,
+  "redirects": [
+    { "source": "/website-cost-south-africa-2026", "destination": "/blog/website-cost-south-africa-2026", "permanent": true },
+    { "source": "/website-cost-south-africa-2026.html", "destination": "/blog/website-cost-south-africa-2026", "permanent": true },
+    { "source": "/whatsapp-marketing-website", "destination": "/blog/whatsapp-marketing-website", "permanent": true },
+    { "source": "/whatsapp-marketing-website.html", "destination": "/blog/whatsapp-marketing-website", "permanent": true },
+    { "source": "/mobile-first-web-design-south-africa", "destination": "/blog/mobile-first-web-design-south-africa", "permanent": true },
+    { "source": "/mobile-first-web-design-south-africa.html", "destination": "/blog/mobile-first-web-design-south-africa", "permanent": true }
+  ],
+  "headers": [
+    {
+      "source": "/.well-known/apple-developer-merchantid-domain-association",
+      "headers": [
+        { "key": "Content-Type", "value": "text/plain; charset=utf-8" }
+      ]
+    }
+  ]
+}

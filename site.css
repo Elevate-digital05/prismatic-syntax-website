@@ -51,7 +51,7 @@ body {
 .hero { padding:148px 0 64px; background:var(--ink); color:var(--surface); box-shadow:0 0 0 100vmax var(--ink); clip-path:inset(0 -100vmax); }
 .kicker { display:inline-flex; align-items:center; gap:10px; font:500 12.5px/1 var(--f-display); letter-spacing:.08em; text-transform:uppercase; color:var(--grey-dark); margin-bottom:22px; }
 .kicker::before { content:''; width:8px; height:8px; border-radius:50%; background:var(--blue); }
-.hero h1 { font-family:var(--f-display); font-size:clamp(34px, 5.4vw, 68px); font-weight:800; line-height:.96; letter-spacing:-0.02em; text-transform:uppercase; max-width:17ch; overflow-wrap:break-word; }
+.hero h1 { font-family:var(--f-display); font-size:clamp(34px, 5.6vw, 70px); font-weight:700; line-height:1.02; letter-spacing:-0.035em; max-width:18ch; overflow-wrap:break-word; }
 .hero .lede { font-size:clamp(16px, 1.4vw, 18px); color:var(--grey-dark); margin-top:24px; max-width:56ch; }
 .hl { color:var(--blue); }
 
@@ -74,7 +74,7 @@ body {
 /* ── SECTIONS ── */
 .sec { padding:72px 0; }
 .sec[id] { scroll-margin-top:84px; }
-.sec > h2 { font-family:var(--f-display); font-size:clamp(26px, 3.4vw, 42px); font-weight:800; line-height:1; letter-spacing:-0.02em; text-transform:uppercase; }
+.sec > h2 { font-family:var(--f-display); font-size:clamp(28px, 3.6vw, 44px); font-weight:700; line-height:1.05; letter-spacing:-0.03em; }
 .sec > .sec-sub { font-size:15.5px; color:var(--grey); margin-top:14px; max-width:60ch; }
 
 /* ── WHAT'S INCLUDED ── solid rounded cards, barely lifted */
@@ -140,7 +140,7 @@ body {
 
 /* ── CLOSING CTA ── */
 .close-cta { padding:80px 0; margin-top:0; background:var(--ink); color:var(--surface); box-shadow:0 0 0 100vmax var(--ink); clip-path:inset(0 -100vmax); }
-.close-cta h2 { font-family:var(--f-display); font-size:clamp(28px, 4.4vw, 54px); font-weight:800; line-height:.98; letter-spacing:-0.02em; text-transform:uppercase; max-width:16ch; }
+.close-cta h2 { font-family:var(--f-display); font-size:clamp(30px, 4.6vw, 56px); font-weight:700; line-height:1.02; letter-spacing:-0.035em; max-width:16ch; }
 .close-cta p { font-size:16px; color:var(--grey-dark); margin-top:18px; max-width:52ch; }
 .hours { font-size:13px; color:var(--grey-dark); margin-top:20px; }
 

@@ -24,9 +24,9 @@ nav.on-light .back-link:hover { background:color-mix(in srgb, var(--ink) 5%, tra
 /* ── ARTICLE ── */
 article { max-width:760px; margin:0 auto; padding:132px 24px 80px; }
 .tag { display:inline-block; margin-bottom:16px; padding:7px 13px; border-radius:var(--r-pill); background:var(--mist); color:var(--text); font:600 13px/1 var(--f-display); }
-h1 { font-family:var(--f-display); font-size:clamp(28px, 5vw, 44px); font-weight:800; text-transform:uppercase; letter-spacing:-0.02em; line-height:1.1; margin-bottom:12px; }
+h1 { font-family:var(--f-display); font-size:clamp(30px, 5vw, 46px); font-weight:700; letter-spacing:-0.03em; line-height:1.1; margin-bottom:12px; }
 .meta { font-size:13px; color:var(--grey); margin-bottom:40px; }
-h2 { font-family:var(--f-display); font-size:22px; font-weight:800; text-transform:uppercase; letter-spacing:-0.01em; margin:40px 0 12px; color:var(--text); }
+h2 { font-family:var(--f-display); font-size:24px; font-weight:700; letter-spacing:-0.02em; margin:40px 0 12px; color:var(--text); }
 h3 { font-family:var(--f-display); }
 p { font-size:16px; line-height:1.8; color:var(--grey); margin-bottom:18px; }
 ul { padding-left:20px; margin-bottom:18px; }

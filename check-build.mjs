@@ -233,7 +233,7 @@ const regionLink = '<a class="nav-region" href="/south-africa">South Africa →<
 assert.ok(home.includes(regionLink), 'the homepage lost its "South Africa →" link at the top');
 const homeRest = home.replaceAll(abroadQ, '').replaceAll(abroadA, '').replaceAll(regionLink, '');
 for (const banned of ['South Africa', 'Cape Town', 'Johannesburg', 'Paystack', 'ZAR', 'en_ZA', 'geo.', 'name="ICBM"', 'name="keywords"',
-                      'currency-selector', 'lang-selector', 'Lead-Generating Machine', 'twitter:site']) {
+                      'currency-selector', 'lang-selector', 'lead-generating machine', 'twitter:site']) {
   assert.ok(!homeRest.includes(banned), `the homepage contains "${banned}", which belongs on /south-africa or nowhere`);
 }
 assert.doesNotMatch(homeRest, /\bR\d{1,3}(,\d{3})+|\bR\d{4,}/, 'the homepage shows a rand figure');
@@ -398,3 +398,17 @@ for (const [what, html] of [['nav', home.slice(home.indexOf('<nav'), home.indexO
   assert.deepEqual(got, expected(got), `the homepage ${what} lists sections as ${got.join(', ')}; the page runs ${sectionOrder.join(', ')}`);
 }
 console.log('ok homepage menus: nav, mobile menu and footer list sections in page order');
+
+/* ── headlines in sentence case, like iOS ── the display headings were set in
+   capitals by CSS, which also hid Title Case copy underneath. Neither comes back. */
+for (const [sheet, selectors] of [['home.css', ['.sec-h{', '.hero h1{', '.path-v{', '.cta-inner h2{', '.faq-main-header{']],
+                                  ['site.css', ['.hero h1 {', '.sec > h2 {', '.close-cta h2 {']],
+                                  ['article.css', ['h1 {', 'h2 {']]]) {
+  const css = readFileSync(sheet, 'utf8');
+  for (const sel of selectors) {
+    const at = css.indexOf(sel);
+    assert.ok(at >= 0 && !/text-transform:\s*uppercase/.test(css.slice(at, css.indexOf('}', at))),
+      `${sheet}: ${sel} is set in capitals again; headlines are sentence case`);
+  }
+}
+console.log('ok headlines: display headings are sentence case in home.css, site.css and article.css');

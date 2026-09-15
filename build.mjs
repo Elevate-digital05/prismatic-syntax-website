@@ -447,7 +447,7 @@ a { color:inherit; }
 .m-tier:last-of-type { border-bottom:1px solid var(--line); }
 .m-tier-top { display:flex; align-items:baseline; justify-content:space-between; gap:16px; }
 .m-tier-name { font-size:14px; font-weight:600; letter-spacing:0.02em; }
-.m-title, .m-svc h2, .m-end h2 { font-family:var(--f-display); font-weight:800; text-transform:uppercase; }
+.m-title, .m-svc h2, .m-end h2 { font-family:var(--f-display); font-weight:700; letter-spacing:-0.02em; }
 .m-rec { display:inline-block; margin-left:9px; font-size:8.5px; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; background:var(--blue); color:var(--surface); padding:2px 7px; border-radius:0; vertical-align:1px; }
 .m-tier-price { font-size:19px; font-weight:600; letter-spacing:-0.01em; white-space:nowrap; }
 .m-per { font-size:11px; font-weight:500; color:var(--grey); }
@@ -541,7 +541,7 @@ a { color:inherit; }
   <header class="m-cover">
     ${logo}
     <div class="m-cover-mid">
-      <h1 class="m-title">Service Menu</h1>
+      <h1 class="m-title">Service menu</h1>
       <p class="m-sub">Websites, and the work that keeps them earning, for South African trades and service businesses. Designed, built and looked after from Cape Town.</p>
       <div class="m-assure"><strong>See your homepage design before you pay anything.</strong> After a quick call, I'll build your homepage concept free. If you don't want to go ahead after seeing it, you owe nothing.</div>
       <p class="m-note">All prices in South African Rand. ${HOURS}.</p>

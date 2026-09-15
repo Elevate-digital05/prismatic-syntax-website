@@ -326,3 +326,12 @@ for (const [page, body] of linkSources.filter(([p]) => /^(services|blog)\//.test
 assert.ok(saPage.slice(saPage.indexOf('<nav'), saPage.indexOf('</nav>')).includes('<a class="nav-region" href="/">International →</a>'),
   '/south-africa lost its "International →" link at the top');
 console.log('ok audiences: matching hreflang, a link across at the top of both entry pages, service pages and blog posts never link to /');
+
+/* ── WhatsApp buttons are plain links ── the package and retainer buttons called
+   window.open, which in-app browsers and some phones block as a popup, so
+   "Get Started" did nothing. A link to wa.me opens WhatsApp everywhere. */
+for (const [name, page] of [['index.html', home], ['south-africa.html', saPage]]) {
+  assert.doesNotMatch(page, /window\.open\(|onclick="waEnquire/,
+    `${name}: opens WhatsApp through window.open, which gets blocked as a popup; link to wa.me instead`);
+}
+console.log('ok whatsapp: every WhatsApp button is a plain link, nothing relies on window.open');

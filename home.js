@@ -1,5 +1,5 @@
 /* Shared by every page: the hero motion, the FAQ, and the glass header's tone. */
-/* Home hero: dark tiles dissolve off the portrait on load and the portrait
+/* Home hero: dark tiles dissolve off the glass (prism.js) on load and the glass
    drifts with the pointer. The hero is the only part of either page that moves. */
 (function () {
   const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;

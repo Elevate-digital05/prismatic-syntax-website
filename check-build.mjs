@@ -329,6 +329,17 @@ assert.ok(saPage.slice(saPage.indexOf('<nav'), saPage.indexOf('</nav>')).include
   '/south-africa lost its "International →" link at the top');
 console.log('ok audiences: matching hreflang, a link across at the top of both entry pages, service pages and blog posts never link to /');
 
+/* ── the glass ── both entry pages open on the live WebGL form (prism.js), once,
+   in the hero: it is the first impression, and each copy is a ray tracer. The
+   portrait it replaced is gone. */
+for (const [name, page] of [['index.html', home], ['south-africa.html', saPage]]) {
+  assert.equal(page.match(/class="prism-canvas"/g)?.length, 1, `${name}: exactly one prism canvas, in the hero`);
+  assert.ok(page.includes('<script src="/prism.js" defer></script>'), `${name} does not load prism.js`);
+  assert.doesNotMatch(page, /hero-portrait/, `${name} still shows the portrait`);
+}
+assert.ok(!existsSync('assets/hero-portrait.jpg'), 'assets/hero-portrait.jpg came back');
+console.log('ok prism: both entry pages render the glass form once, in the hero, and the portrait is gone');
+
 /* ── WhatsApp buttons are plain links ── the package and retainer buttons called
    window.open, which in-app browsers and some phones block as a popup, so
    "Get Started" did nothing. A link to wa.me opens WhatsApp everywhere. */

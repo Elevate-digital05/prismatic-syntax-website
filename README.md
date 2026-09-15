@@ -1,7 +1,8 @@
 # Prismatic Syntax
 
 Static site. No framework, no dependencies. Two entry pages share one stylesheet
-(`home.css`) and the hero motion (`home.js`):
+(`home.css`), the hero motion (`home.js`) and the hero's live WebGL glass form
+(`prism.js`):
 
 - `index.html` is the international homepage. English only, one long page, no
   rand prices, no currency or language switch. Contact offers a call first, then

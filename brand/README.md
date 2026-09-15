@@ -57,6 +57,7 @@ Since September 2026 the site follows iOS 27's Liquid Glass, matched against a s
 - **Corners nest and curve.** Cards and panels use `--r-lg`, things inside them `--r-md` or `--r-sm`; buttons, tags and nav controls are capsules; icon buttons are circles. Browsers that support `corner-shape` draw Apple's continuous curves.
 - **Everything speaks in sentence case.** Headlines, buttons, nav, tags, form labels and card titles; only small section labels keep capitals, like widget labels.
 - **One tint.** Blue fills the primary action and the Recommended card; secondary buttons are grey capsules.
+- **The prism.** The glass form in both entry pages' hero is rendered live in WebGL by `prism.js`, not an image: a core and four droplets that each move on their own and melt together, made of the same liquid glass as the interface. It is lit only in `--ink`, `--blue` and `--blue-light`; the rainbow at its edges is the glass splitting white light, which is the one place the site shows a spectrum. It appears once, in the hero, and nowhere else: it is the first impression, not a pattern.
 - **Always a solid fallback** for reduced transparency, increased contrast and browsers without `backdrop-filter`.
 
 ## Clear space

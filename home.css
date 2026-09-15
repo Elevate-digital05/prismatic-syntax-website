@@ -121,9 +121,13 @@ body:has(.mobile-menu.open) .hamburger span:nth-child(3){transform:translateY(-7
 
 /* ── HERO ── */
 .hero{position:relative;overflow:hidden;display:flex;align-items:center;min-height:clamp(640px,54vw,880px);padding:calc(var(--nav-h) + 48px) var(--pad) 80px;background:var(--ink);color:var(--surface);}
-.hero-media{position:absolute;top:-8px;right:-8px;height:calc(100% + 16px);aspect-ratio:532/520;-webkit-mask-image:linear-gradient(90deg,transparent,var(--ink) 26%);mask-image:linear-gradient(90deg,transparent,var(--ink) 26%);translate:calc(var(--px,0) * -14px) calc(var(--py,0) * -10px);transition:translate 1.2s var(--ease);}
-.hero-media img{width:100%;height:100%;object-fit:cover;object-position:right top;transform-origin:62% 38%;transform:scale(1.14);transition:transform 2.6s var(--ease) .1s;}
-.is-loaded .hero-media img{transform:none;}
+/* Both entry pages float a form of liquid glass beside the headline. prism.js renders
+   it live in WebGL so every part moves on its own; the blue glow behind it is plain
+   CSS and stays if WebGL is unavailable. */
+.hero-media{position:absolute;top:50%;right:max(-24px,calc((100% - 1400px) / 2 - 24px));width:clamp(380px,42vw,660px);aspect-ratio:1;translate:calc(var(--px,0) * -22px) calc(-50% + var(--py,0) * -16px);transition:translate 1.2s var(--ease);}
+.hero-media::before{content:'';position:absolute;inset:6%;border-radius:50%;background:radial-gradient(closest-side,color-mix(in srgb,var(--blue) 34%,transparent),transparent 72%);}
+.prism-canvas{position:relative;display:block;width:100%;height:100%;opacity:0;transition:opacity 1.4s var(--ease);}
+.prism-canvas.is-drawn{opacity:1;}
 /* The tiles only fade in place, so they run for reduced motion too. */
 .js-ready .hero-tiles{position:absolute;inset:0;display:grid;grid-template:repeat(9,1fr)/repeat(9,1fr);background:var(--ink);}
 .hero-tiles.is-ready{background:transparent;}
@@ -134,6 +138,12 @@ body:has(.mobile-menu.open) .hamburger span:nth-child(3){transform:translateY(-7
 .hero-in{position:relative;z-index:1;width:100%;max-width:1400px;margin:0 auto;}
 .hero-in>*{max-width:620px;}
 .hero-in>h1{max-width:720px;}
+/* Between the stacked layout and a wide screen the text column would run into the
+   glass, so on desktop widths it narrows with the viewport. */
+@media (min-width:1081px){
+  .hero-in>*{max-width:min(620px,52vw);}
+  .hero-in>h1{max-width:min(720px,54vw);}
+}
 .eyebrow{display:flex;align-items:center;font:500 12.5px/1 var(--f-display);letter-spacing:.08em;text-transform:uppercase;animation:fadeUp .8s var(--ease) .2s backwards;}
 .hero h1{margin-top:22px;font:700 clamp(40px,4.8vw,76px)/1.02 var(--f-display);letter-spacing:-.035em;overflow-wrap:break-word;animation:wipeUp 1.2s var(--ease) .3s backwards;}
 .hero-sub{margin-top:26px;font-size:clamp(16px,1.2vw,18.5px);line-height:1.55;color:var(--grey-dark);animation:fadeUp .8s var(--ease) .55s backwards;}
@@ -344,11 +354,12 @@ footer{position:relative;z-index:1;display:grid;grid-template-columns:1.6fr 1fr 
   .nav-region{margin-right:0;}
   .hamburger{display:flex;}
   /* Stacked hero: once the text column is as wide as the screen it would sit on
-     the portrait, and the blue headline disappears into the blue-lit face. The
-     photo goes above and fades into ink, so the text always sits on solid ink. */
+     the glass, so the glass goes above it, a square as wide as the column. It stays
+     inside its frame, so it needs no room of its own below, only the 32px the text
+     overlaps plus a little air. */
   .hero{display:block;min-height:0;padding:0 var(--pad) 64px;}
-  .hero-media{position:relative;top:auto;right:auto;width:calc(100% + 2 * var(--pad));height:min(92vw,560px);aspect-ratio:auto;margin:0 calc(-1 * var(--pad));translate:none;-webkit-mask-image:linear-gradient(180deg,var(--ink) 58%,transparent);mask-image:linear-gradient(180deg,var(--ink) 58%,transparent);}
-  .hero-media img{object-position:70% 20%;}
+  .hero-media{position:relative;top:auto;right:auto;width:auto;aspect-ratio:auto;margin:0 calc(-1 * var(--pad));padding:calc(var(--nav-h) + 4px) var(--pad) 44px;translate:none;}
+  .hero-media .prism-canvas{width:min(100%,460px);height:auto;aspect-ratio:1;margin:0 auto;}
   .hero-in{margin-top:-32px;}
   .sec-work,.contact-wrap{grid-template-columns:1fr;}
   .cta-inner{grid-template-columns:1fr;}
@@ -450,7 +461,6 @@ nav.on-light .nav-sub-all a{color:var(--blue);}
    the FAQ opening still animate; only things that travel are held still. */
 @media (prefers-reduced-motion:reduce){
   html{scroll-behavior:auto;}
-  .hero-media img,.is-loaded .hero-media img{transform:none;}
   :is(.path-card:hover .path-go,a.svc-card:hover .svc-more,.blog-card:hover .blog-read,.foot-links a:hover,.wa-btn:hover,.logo:hover .m2,.logo:hover .m3){transform:none;}
   @keyframes fadeUp{from{opacity:0;}to{opacity:1;}}
   @keyframes wipeUp{from{opacity:0;}}

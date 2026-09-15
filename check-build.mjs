@@ -223,13 +223,13 @@ console.log(tbc.length
 const home = out.get('index.html');
 const saPage = out.get('south-africa.html');
 // The two places the homepage names the country on purpose: the FAQ that says
-// plainly where the studio is based, and the quiet footer link to /south-africa.
+// plainly where the studio is based, and the link to /south-africa at the top.
 const abroadQ = 'Do you work with clients outside South Africa?';
 const abroadA = 'Yes. We are based in Cape Town and work with clients across the UK, Europe and North America.';
 assert.ok(home.includes(abroadQ) && home.includes(abroadA), 'the homepage lost the "clients outside South Africa" FAQ');
-const footerLink = '<a href="/south-africa">South Africa →</a>';
-assert.ok(home.includes(footerLink), 'the homepage footer lost its "South Africa →" link');
-const homeRest = home.replaceAll(abroadQ, '').replaceAll(abroadA, '').replaceAll(footerLink, '');
+const regionLink = '<a class="nav-region" href="/south-africa">South Africa →</a>';
+assert.ok(home.includes(regionLink), 'the homepage lost its "South Africa →" link at the top');
+const homeRest = home.replaceAll(abroadQ, '').replaceAll(abroadA, '').replaceAll(regionLink, '');
 for (const banned of ['South Africa', 'Cape Town', 'Johannesburg', 'Paystack', 'ZAR', 'en_ZA', 'geo.', 'name="ICBM"', 'name="keywords"',
                       'currency-selector', 'lang-selector', 'Lead-Generating Machine', 'twitter:site']) {
   assert.ok(!homeRest.includes(banned), `the homepage contains "${banned}", which belongs on /south-africa or nowhere`);
@@ -244,8 +244,8 @@ assert.ok(home.includes('<meta property="og:locale" content="en_GB">'), 'the hom
 const contactBlock = home.slice(home.indexOf('id="contact"'));
 const [book, mail, whatsapp] = ['>Book a call<', 'mailto:hello@prismaticsyntax.com', 'wa.me/'].map(s => contactBlock.indexOf(s));
 assert.ok(book >= 0 && book < mail && mail < whatsapp, 'the homepage contact block must offer a call, then email, then WhatsApp');
-assert.ok(home.includes('href="/south-africa"'), 'the homepage footer lost its link to /south-africa');
-assert.doesNotMatch(home.slice(home.indexOf('<nav'), home.indexOf('</nav>')), /south-africa/, '/south-africa belongs in the footer, not the main nav');
+assert.ok(home.slice(home.indexOf('<nav'), home.indexOf('</nav>')).includes(regionLink),
+  'the "South Africa →" link belongs in the nav, where a South African visitor sees it before any dollar price');
 
 for (const tag of ['name="keywords"', 'name="geo.region"', 'name="geo.placename"', 'name="geo.position"', 'name="ICBM"',
                    '<meta property="og:locale" content="en_ZA">', '<link rel="canonical" href="https://www.prismaticsyntax.com/south-africa">']) {
@@ -321,7 +321,8 @@ for (const [page, body] of linkSources.filter(([p]) => /^(services|blog)\//.test
   assert.doesNotMatch(body.replace(/<!--[\s\S]*?-->/g, ''), /href="\/(?:#[^"]*)?"/,
     `${page} links to the international homepage; pages for South African trades lead back to /south-africa`);
 }
-// The one way across, each way: a quiet footer link, never the main nav.
-assert.ok(saPage.includes('<a href="/">International →</a>'), '/south-africa lost its "International →" footer link to the homepage');
-assert.doesNotMatch(saPage.slice(saPage.indexOf('<nav'), saPage.indexOf('</nav>')), /href="\/"/, 'the homepage belongs in the /south-africa footer, not its main nav');
-console.log('ok audiences: matching hreflang and footer links both ways, service pages and blog posts never link to /');
+// The way across sits at the top of each entry page, in the nav, so a visitor
+// sees it before any price in the wrong currency.
+assert.ok(saPage.slice(saPage.indexOf('<nav'), saPage.indexOf('</nav>')).includes('<a class="nav-region" href="/">International →</a>'),
+  '/south-africa lost its "International →" link at the top');
+console.log('ok audiences: matching hreflang, a link across at the top of both entry pages, service pages and blog posts never link to /');

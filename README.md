@@ -120,7 +120,7 @@ support hours, must not invent social proof, and must not price anything at a
 figure that is not published elsewhere on the site.
 
 It also holds the homepage to the international brief. Outside the one FAQ that
-says where the studio is based and the footer link to `/south-africa`, the
+says where the studio is based and the link to `/south-africa` at the top, the
 homepage may not mention South Africa, Cape Town, Johannesburg or Paystack, show
 a rand figure, carry the geo or keywords tags, or name SAST without `(UTC+2)`.
 Contact must offer a call, then email, then WhatsApp; `/south-africa` must keep
@@ -134,9 +134,10 @@ the questions on the page.
 
 The two entry pages also carry matching hreflang tags (`en` and `x-default` for
 the homepage, `en-ZA` for `/south-africa`), and the service pages and blog posts,
-which are written for South African trades, never link to the homepage. The only
-way across is a footer link on each entry page: "South Africa →" on the homepage
-and "International →" on `/south-africa`.
+which are written for South African trades, never link to the homepage. The way
+across is a link at the top of each entry page, in the nav, so nobody meets a
+price in the wrong currency first: "South Africa →" on the homepage and
+"International →" on `/south-africa`.
 
 ## Payments
 

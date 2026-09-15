@@ -70,6 +70,10 @@ footer .logo-lockup{height:40px;width:auto;}
 
 .nav-actions{display:flex;align-items:center;gap:10px;}
 .btn-nav{--fill:var(--blue);height:44px;padding:0 20px;background:transparent;color:var(--surface);border:1px solid var(--blue);font-size:12px;}
+/* The way across to the other audience's page: top right at every width, so a
+   visitor sees it before any price in a currency that is not theirs. */
+.nav-region{padding:8px 16px 8px 0;margin-right:6px;border-right:1px solid var(--line-dark);color:var(--surface);font:500 12.5px/1 var(--f-display);letter-spacing:.05em;text-transform:uppercase;text-decoration:none;white-space:nowrap;transition:color .3s;}
+.nav-region:hover{color:var(--blue-light);}
 .hamburger{display:none;flex-direction:column;justify-content:center;gap:6px;width:44px;height:44px;padding:0 9px;cursor:pointer;}
 .hamburger span{height:1.5px;background:var(--surface);transition:transform .4s var(--ease),opacity .3s;}
 body:has(.mobile-menu.open) .hamburger span:nth-child(1){transform:translateY(7.5px) rotate(45deg);}
@@ -408,7 +412,9 @@ footer{position:relative;z-index:1;display:grid;grid-template-columns:1.6fr 1fr 
   .svc-grid{grid-template-columns:repeat(2,1fr);}
 }
 @media (max-width:1080px){
-  .nav-links,.nav-actions{display:none;}
+  .nav-links,.btn-nav{display:none;}
+  .nav-actions{margin-left:auto;}
+  .nav-region{padding-right:0;margin-right:0;border-right:0;}
   .hamburger{display:flex;}
   /* Stacked hero: once the text column is as wide as the screen it would sit on
      the portrait, and the blue headline disappears into the blue-lit face. The
@@ -425,7 +431,9 @@ footer{position:relative;z-index:1;display:grid;grid-template-columns:1.6fr 1fr 
 }
 @media (max-width:760px){
   :root{--nav-h:64px;}
+  nav{gap:12px;}
   .logo svg{height:32px;}
+  .nav-region{font-size:11px;letter-spacing:.03em;}
   .hero h1{font-size:clamp(30px,9.2vw,52px);}
   .trust-in{padding-block:28px;}
   .trust-items{justify-content:flex-start;}
@@ -443,6 +451,10 @@ footer{position:relative;z-index:1;display:grid;grid-template-columns:1.6fr 1fr 
   footer{grid-template-columns:1fr;padding-top:56px;}
   .wa-btn{right:18px;bottom:calc(18px + env(safe-area-inset-bottom));width:50px;height:50px;}
   .wa-btn svg{width:24px;height:24px;}
+}
+
+@media (max-width:380px){
+  .logo svg{height:26px;}
 }
 
 /* Reduced motion means no MOVEMENT, not a dead page. Windows sets this flag

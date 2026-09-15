@@ -12,29 +12,11 @@
 <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@500;600;700;800&family=Manrope:wght@400;500;600;700&display=swap">
 <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@500;600;700;800&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/theme.css">
-<style>
-*{margin:0;padding:0;box-sizing:border-box;}
-body{font-family:var(--f-body);background:var(--paper);color:var(--text);min-height:100vh;}
-nav{padding:18px 32px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--line-dark);background:var(--ink);}
-.logo{display:inline-block;line-height:0;}
-.logo img{height:30px;width:auto;}
-.back-link{color:var(--paper);text-decoration:none;font-size:14px;transition:color 0.2s;}
-.back-link:hover{color:var(--blue-light);}
-article{max-width:760px;margin:60px auto;padding:0 24px 80px;}
-h1{font-family:var(--f-display);font-size:clamp(28px,5vw,40px);font-weight:800;text-transform:uppercase;letter-spacing:-0.02em;line-height:1.1;margin-bottom:10px;}
-.meta{font-size:13px;color:var(--grey);margin-bottom:32px;}
-h2{font-family:var(--f-display);font-size:20px;font-weight:800;text-transform:uppercase;letter-spacing:-0.01em;margin:36px 0 12px;color:var(--text);}
-p{font-size:15px;line-height:1.8;color:var(--grey);margin-bottom:16px;}
-ul{padding-left:20px;margin-bottom:16px;}
-li{font-size:15px;line-height:1.8;color:var(--grey);margin-bottom:6px;}
-a{color:var(--text);text-decoration-color:var(--blue);text-decoration-thickness:2px;text-underline-offset:3px;}
-footer{border-top:1px solid var(--line);padding:24px 32px;text-align:center;font-size:13px;color:var(--grey);}
-footer a{color:var(--text);text-decoration:underline;text-decoration-color:var(--blue);text-decoration-thickness:2px;text-underline-offset:3px;}
-</style>
+<link rel="stylesheet" href="/article.css">
 </head>
 <body>
 <nav>
-  <a href="/" class="logo"><img src="/brand/logo-on-dark.svg" alt="Prismatic Syntax" width="270" height="62"></a>
+  <a href="/" class="logo"><img class="logo-dark" src="/brand/logo-on-dark.svg" alt="Prismatic Syntax" width="270" height="62"><img class="logo-light" src="/brand/logo.svg" alt="" width="270" height="62"></a>
   <a href="/" class="back-link">← Back to site</a>
 </nav>
 <article>
@@ -96,5 +78,6 @@ footer a{color:var(--text);text-decoration:underline;text-decoration-color:var(-
 <footer>
   <p>© 2026 Prismatic Syntax · <a href="/">Home</a> · <a href="/privacy">Privacy</a> · <a href="/refund-policy">Refund Policy</a></p>
 </footer>
+<script src="/home.js" defer></script>
 </body>
 </html>

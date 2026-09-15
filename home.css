@@ -3,24 +3,7 @@
 
 /* Prismatic Syntax. Colour and type come from /theme.css; nothing here carries
    a literal colour. Reduced-motion handling lives in the block at the end. */
-:root{--pad:clamp(20px,4.9vw,96px);--nav-h:84px;
-  /* Corners nest the way Apple's do: whatever sits inside a container takes a
-     smaller radius than the container, and controls are capsules. */
-  --r-lg:28px;--r-md:20px;--r-sm:14px;--r-xs:10px;--r-pill:999px;
-  /* Liquid Glass, matched to iOS 27 on a device: clear rather than tinted, a heavy
-     blur that pulls colour up from whatever is behind, and a bright rim that
-     catches the light at the corners (the ::after ring further down). Dark over
-     dark content and frosted white over light content, like the system controls. */
-  --glass-fill:color-mix(in srgb,var(--ink) 52%,transparent);
-  --glass-fill-light:color-mix(in srgb,var(--surface) 70%,transparent);
-  --glass-blur:blur(22px) saturate(190%);
-  --glass-edge:color-mix(in srgb,var(--surface) 14%,transparent);
-  --glass-rim:linear-gradient(150deg,color-mix(in srgb,var(--surface) 62%,transparent),color-mix(in srgb,var(--surface) 12%,transparent) 32%,color-mix(in srgb,var(--surface) 4%,transparent) 58%,color-mix(in srgb,var(--surface) 34%,transparent));
-  --glass-shine:inset 0 1px 0 color-mix(in srgb,var(--surface) 18%,transparent),0 0 0 1px color-mix(in srgb,var(--ink) 30%,transparent);
-  /* Light cards sit on the page the way iOS widgets do: barely lifted. */
-  --lift:0 1px 2px color-mix(in srgb,var(--ink) 5%,transparent),0 14px 34px -20px color-mix(in srgb,var(--ink) 22%,transparent);
-  /* Dark bands get a soft blue light behind them, so the glass on them has colour to pick up. */
-  --ink-glow:radial-gradient(55% 60% at 88% 0%,color-mix(in srgb,var(--blue) 24%,transparent),transparent 72%),radial-gradient(45% 55% at 0% 100%,color-mix(in srgb,var(--blue) 12%,transparent),transparent 70%),var(--ink);}
+:root{--pad:clamp(20px,4.9vw,96px);--nav-h:84px;}
 html{scroll-behavior:smooth;background:var(--paper);}
 body{font-family:var(--f-body);background:var(--paper);color:var(--text);overflow-x:hidden;min-height:100vh;-webkit-font-smoothing:antialiased;}
 img{display:block;max-width:100%;}
@@ -412,7 +395,7 @@ footer{position:relative;z-index:1;display:grid;grid-template-columns:1.6fr 1fr 
 /* Over a light section the bar turns frosted white, the way iOS flips a small
    glass control with what is behind it. home.js sets .on-light. */
 nav.on-light{background:var(--glass-fill-light);box-shadow:0 0 0 1px color-mix(in srgb,var(--ink) 7%,transparent),0 10px 30px -16px color-mix(in srgb,var(--ink) 28%,transparent);}
-nav.on-light::after{background:linear-gradient(150deg,var(--surface),color-mix(in srgb,var(--surface) 30%,transparent) 40%,color-mix(in srgb,var(--surface) 70%,transparent));}
+nav.on-light::after{background:var(--glass-rim-light);}
 nav.on-light .logo{color:var(--text);}
 nav.on-light .nav-links a{color:var(--grey);}
 nav.on-light .nav-links a:hover{color:var(--text);}
@@ -430,7 +413,6 @@ nav.on-light .nav-sub-all a{color:var(--blue);}
    draw one get it, with larger radii because a squircle keeps more of the
    corner; everything else keeps the plain rounded corners. */
 @supports (corner-shape:squircle){
-  :root{--r-lg:46px;--r-md:34px;--r-sm:24px;--r-xs:16px;}
   :is(.p-card,.m-card,.svc-card,.blog-card,.path-card,.faq-accordion,.svc-rows,.team-row,.founder,.step,.contact-form,.hero-assure,.deposit-note,.p-retainer,.svc-icon,.form-group input,.form-group textarea){corner-shape:squircle;}
   :is(.hero-assure,.step,.contact-form)::after,.nav-sub::before{corner-shape:squircle;}
 }

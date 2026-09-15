@@ -82,6 +82,9 @@ for (const page of ['blog/website-cost-south-africa-2026.html', 'blog/whatsapp-m
   assert.equal(legal.length, wanted, `${page}: expected ${wanted} legal links in the footer, found ${legal.length}`);
   assert.doesNotMatch(html, /class="logo">PRISMATIC/,
     `${page}: still uses the text wordmark instead of /brand/logo.svg`);
+  // one shared stylesheet; these six pages used to drift apart as inline copies
+  assert.ok(html.includes('<link rel="stylesheet" href="/article.css">') && !html.includes('<style>'),
+    `${page}: styles itself inline again instead of using /article.css`);
 }
 console.log('ok standalone pages: blog and legal pages carry the real logo and the legal links');
 
@@ -371,10 +374,27 @@ console.log('ok audit: dev server local-only, security headers set, hash parsing
 /* ── the glass stays accessible ── the nav, menu and WhatsApp button are glass,
    and must turn solid for visitors who ask for less transparency or more
    contrast, and in browsers that cannot blur what is behind them. */
-const homeCss = readFileSync('home.css', 'utf8');
+for (const sheet of ['home.css', 'site.css', 'article.css']) {
+const sheetCss = readFileSync(sheet, 'utf8');
 for (const [needle, what] of [['prefers-reduced-transparency:reduce', 'its reduced-transparency fallback'],
                               ['prefers-contrast:more', 'its increased-contrast fallback'],
                               ['@supports not ((-webkit-backdrop-filter', 'its fallback for browsers without backdrop-filter']]) {
-  assert.ok(homeCss.includes(needle), `home.css lost ${what} for the glass`);
+  assert.ok(sheetCss.includes(needle), `${sheet} lost ${what} for the glass`);
 }
-console.log('ok glass: solid fallbacks for reduced transparency, increased contrast and no backdrop-filter');
+}
+console.log('ok glass: home.css, site.css and article.css keep solid fallbacks for reduced transparency, increased contrast and no backdrop-filter');
+
+/* ── the homepage menus follow the page ── the nav once listed Pricing before
+   Team while the page showed Team first. The nav, the mobile menu and the footer
+   must list sections in the order they appear. */
+const sectionOrder = [...home.matchAll(/<div class="band[^"]*" id="([a-z]+)"/g)].map(m => m[1]);
+const inOrder = html => [...new Set([...html.matchAll(/href="#([a-z]+)"/g)].map(m => m[1]))].filter(id => sectionOrder.includes(id));
+const expected = list => sectionOrder.filter(id => list.includes(id));
+for (const [what, html] of [['nav', home.slice(home.indexOf('<nav'), home.indexOf('</nav>'))],
+                            ['mobile menu', home.slice(home.indexOf('id="mobileMenu"'), home.indexOf('<main'))],
+                            // the Studio column only; the Contact column lists ways to get in touch, not sections
+                            ['footer', home.slice(home.indexOf('<footer'), home.indexOf('</ul>', home.indexOf('<footer')))]]) {
+  const got = inOrder(html);
+  assert.deepEqual(got, expected(got), `the homepage ${what} lists sections as ${got.join(', ')}; the page runs ${sectionOrder.join(', ')}`);
+}
+console.log('ok homepage menus: nav, mobile menu and footer list sections in page order');

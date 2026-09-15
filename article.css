@@ -1,0 +1,100 @@
+/* Prismatic Syntax — the blog posts and the legal pages, which used to carry six
+   near-identical inline copies of this. Colour, type, corners and glass come from
+   theme.css; nothing here may carry a literal colour value. */
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:var(--f-body); background:var(--paper); color:var(--text); min-height:100vh; -webkit-font-smoothing:antialiased; }
+:where(a,button,summary,[tabindex]):focus-visible { outline:2px solid var(--blue); outline-offset:3px; }
+
+/* ── HEADER ── the floating glass capsule: frosted white over the page, dark glass
+   over the footer (home.js sets .on-light). */
+nav { position:fixed; top:calc(12px + env(safe-area-inset-top)); left:max(12px, calc((100% - 760px) / 2 - 8px)); right:max(12px, calc((100% - 760px) / 2 - 8px)); z-index:100; height:60px; padding:0 8px 0 22px; display:flex; align-items:center; justify-content:space-between; gap:16px; border-radius:var(--r-pill); background:var(--glass-fill); -webkit-backdrop-filter:var(--glass-blur); backdrop-filter:var(--glass-blur); box-shadow:var(--glass-shine); transition:background-color .4s, box-shadow .4s; }
+nav::after { content:''; position:absolute; inset:0; padding:1px; border-radius:inherit; background:var(--glass-rim); -webkit-mask:linear-gradient(var(--ink) 0 0) content-box, linear-gradient(var(--ink) 0 0); -webkit-mask-composite:xor; mask:linear-gradient(var(--ink) 0 0) content-box, linear-gradient(var(--ink) 0 0); mask-composite:exclude; pointer-events:none; }
+.logo { display:inline-block; line-height:0; flex-shrink:0; }
+.logo img { height:28px; width:auto; }
+.logo-light { display:none; }
+.back-link { display:inline-flex; align-items:center; padding:11px 16px; border:1px solid var(--line-dark); border-radius:var(--r-pill); font:600 14px/1 var(--f-display); letter-spacing:-.005em; color:var(--surface); text-decoration:none; white-space:nowrap; transition:background-color .3s, border-color .3s; }
+.back-link:hover { background:color-mix(in srgb, var(--surface) 8%, transparent); }
+nav.on-light { background:var(--glass-fill-light); box-shadow:0 0 0 1px color-mix(in srgb, var(--ink) 7%, transparent), 0 10px 30px -16px color-mix(in srgb, var(--ink) 28%, transparent); }
+nav.on-light::after { background:var(--glass-rim-light); }
+nav.on-light .logo-dark { display:none; }
+nav.on-light .logo-light { display:inline; }
+nav.on-light .back-link { color:var(--text); border-color:color-mix(in srgb, var(--ink) 12%, transparent); }
+nav.on-light .back-link:hover { background:color-mix(in srgb, var(--ink) 5%, transparent); }
+
+/* ── ARTICLE ── */
+article { max-width:760px; margin:0 auto; padding:132px 24px 80px; }
+.tag { display:inline-block; margin-bottom:16px; padding:7px 13px; border-radius:var(--r-pill); background:var(--mist); color:var(--text); font:600 13px/1 var(--f-display); }
+h1 { font-family:var(--f-display); font-size:clamp(28px, 5vw, 44px); font-weight:800; text-transform:uppercase; letter-spacing:-0.02em; line-height:1.1; margin-bottom:12px; }
+.meta { font-size:13px; color:var(--grey); margin-bottom:40px; }
+h2 { font-family:var(--f-display); font-size:22px; font-weight:800; text-transform:uppercase; letter-spacing:-0.01em; margin:40px 0 12px; color:var(--text); }
+h3 { font-family:var(--f-display); }
+p { font-size:16px; line-height:1.8; color:var(--grey); margin-bottom:18px; }
+ul { padding-left:20px; margin-bottom:18px; }
+li { font-size:16px; line-height:1.8; color:var(--grey); margin-bottom:6px; }
+article a:not(.btn) { color:var(--text); text-decoration-color:var(--blue); text-decoration-thickness:2px; text-underline-offset:3px; }
+code { overflow-wrap:anywhere; word-break:break-all; font-size:13px; }
+
+/* ── BOXES ── solid, rounded and barely lifted, like the service pages' cards */
+:is(.stat-box, .cta-box, .callout) { background:var(--surface); border:1px solid var(--line); border-radius:var(--r-lg); box-shadow:var(--lift); }
+.stat-box { padding:20px 24px; margin:24px 0; font-size:15px; color:var(--grey); line-height:1.6; }
+.stat-box strong { color:var(--text); font-size:24px; display:block; font-family:var(--f-display); margin-bottom:4px; }
+.stat-grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin:24px 0; }
+.stat-grid .stat-box { margin:0; padding:20px; text-align:center; }
+.stat-num { font-family:var(--f-display); font-size:32px; font-weight:600; color:var(--text); margin-bottom:4px; }
+.stat-label { font-size:13px; color:var(--grey); line-height:1.4; }
+@media (max-width:600px) { .stat-grid { grid-template-columns:1fr; } }
+:is(.tip-box, .highlight) { margin:24px 0; padding:16px 20px; border-radius:var(--r-md); background:var(--mist); color:var(--grey); line-height:1.7; }
+.tip-box { font-size:14px; }
+.highlight { font-size:15px; }
+.callout { padding:18px 22px; margin:24px 0; }
+.callout p { margin:0; font-size:15px; }
+.checklist { list-style:none; padding:0; }
+.checklist li { padding:10px 0; border-bottom:1px solid var(--line); display:flex; align-items:flex-start; gap:10px; font-size:15px; color:var(--grey); }
+.checklist li::before { content:'✓'; color:var(--blue); font-weight:700; flex-shrink:0; margin-top:1px; }
+.cta-box { padding:32px; text-align:center; margin-top:48px; }
+.cta-box h3 { font-size:22px; font-weight:600; margin-bottom:10px; }
+.cta-box p { font-size:14px; color:var(--grey); margin-bottom:20px; }
+.btn { display:inline-flex; align-items:center; justify-content:center; height:50px; padding:0 26px; border-radius:var(--r-pill); background:var(--blue); color:var(--surface); font:600 15px/1 var(--f-display); letter-spacing:-.005em; text-decoration:none; box-shadow:inset 0 1px 0 color-mix(in srgb, var(--surface) 30%, transparent), inset 0 -1px 0 color-mix(in srgb, var(--ink) 22%, transparent); transition:background-color .3s, transform .3s var(--ease); }
+.btn:hover { background:var(--blue-dark); transform:translateY(-1px); }
+
+/* ── TABLES ── inside a rounded, lifted panel */
+table { width:100%; border-collapse:separate; border-spacing:0; margin:24px 0; background:var(--surface); border:1px solid var(--line); border-radius:var(--r-md); box-shadow:var(--lift); overflow:hidden; }
+th { padding:12px 16px; text-align:left; font:600 13px var(--f-display); color:var(--text); background:var(--mist); border-bottom:1px solid var(--line); }
+td { padding:12px 16px; border-bottom:1px solid var(--line); font-size:14px; color:var(--grey); vertical-align:top; }
+tr:last-child td { border-bottom:0; }
+.price-table tr:hover td { background:var(--mist); }
+
+/* ── FOOTER ── dark, like every other page's */
+footer { padding:28px 24px 32px; text-align:center; font-size:13px; color:var(--grey-dark); background:var(--ink); }
+footer p { margin:0; font-size:13px; color:var(--grey-dark); }
+footer a { color:var(--surface); text-decoration:underline; text-decoration-color:var(--blue-light); text-decoration-thickness:2px; text-underline-offset:3px; }
+.foot-legal { margin-top:6px; }
+
+@media (max-width:380px) {
+  nav { padding:0 6px 0 16px; }
+  .logo img { height:22px; }
+  .back-link { padding:9px 12px; font-size:13px; }
+}
+
+/* Apple's continuous corners, where the browser can draw them (radii in theme.css). */
+@supports (corner-shape:squircle) {
+  :is(.stat-box, .cta-box, .callout, .tip-box, .highlight, table) { corner-shape:squircle; }
+}
+
+/* ── GLASS FALLBACKS ── solid wherever the glass cannot do its job. */
+@supports not ((-webkit-backdrop-filter:blur(1px)) or (backdrop-filter:blur(1px))) {
+  nav { background:var(--ink); }
+  nav.on-light { background:var(--surface); }
+}
+@media (prefers-reduced-transparency:reduce) {
+  nav { -webkit-backdrop-filter:none; backdrop-filter:none; background:var(--ink); }
+  nav.on-light { background:var(--surface); }
+}
+@media (prefers-contrast:more) {
+  nav { background:var(--ink); }
+  nav.on-light { background:var(--surface); box-shadow:0 0 0 1px var(--text); }
+  :is(.stat-box, .cta-box, .callout, table) { border-color:var(--text); }
+}
+@media (prefers-reduced-motion:reduce) {
+  *, *::before, *::after { transition-duration:.01ms !important; }
+}

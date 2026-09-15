@@ -1,4 +1,4 @@
-/* Shared by the homepage (/) and /south-africa. */
+/* Shared by every page: the hero motion, the FAQ, and the glass header's tone. */
 /* Home hero: dark tiles dissolve off the portrait on load and the portrait
    drifts with the pointer. The hero is the only part of either page that moves. */
 (function () {
@@ -57,9 +57,9 @@ document.querySelectorAll('.faq-toggle').forEach(function (btn) {
    the way iOS 27 flips its small glass controls, so it never turns into a grey
    smear over a white section. */
 (function () {
-  const nav = document.querySelector('nav');
+  const nav = document.querySelector('nav, .site-head');
   if (!nav) return;
-  const DARK = '.hero, .band-ink, .cta-banner, footer, .foot-bottom, #page-contact, .mobile-menu';
+  const DARK = '.hero, .band-ink, .cta-banner, .close-cta, footer, .site-foot, .foot-bottom, #page-contact, .mobile-menu';
   let queued = false;
   const update = function () {
     queued = false;

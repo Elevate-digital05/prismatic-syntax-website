@@ -214,7 +214,7 @@ ${JSON.stringify(jsonLd, null, 2)}
 <header class="site-head">
   <div class="wrap">
     <a href="/south-africa" class="logo" aria-label="Prismatic Syntax - go to homepage">
-      <img src="/brand/logo-on-dark.svg" alt="Prismatic Syntax" width="270" height="62">
+      <img class="logo-dark" src="/brand/logo-on-dark.svg" alt="Prismatic Syntax" width="270" height="62"><img class="logo-light" src="/brand/logo.svg" alt="" width="270" height="62">
     </a>
     <a href="/south-africa#services" class="head-back">All services</a>
   </div>
@@ -329,6 +329,7 @@ ${all.map(s => `        <li><a href="/services/${s.slug}">${esc(s.nav)}</a></li>
 </footer>
 
 <a href="${attr(waLink(`Hi Kabelo, I'd like to talk about ${svc.name.toLowerCase()} for my business.`))}" class="wa-float" target="_blank" rel="noopener noreferrer" aria-label="Chat on WhatsApp">${waIcon(27)}</a>
+<script src="/home.js" defer></script>
 </body>
 </html>
 `;

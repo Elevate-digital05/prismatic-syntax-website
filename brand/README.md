@@ -49,7 +49,7 @@ Inter Tight for display — headings set in uppercase at weight 800 with slightl
 
 ## Shape and material
 
-Since September 2026 the site follows iOS 27's Liquid Glass, matched against a screen recording of the system. The tokens live at the top of `home.css`.
+Since September 2026 the site follows iOS 27's Liquid Glass, matched against a screen recording of the system. The tokens live in `theme.css`, and all three stylesheets use them: `home.css` for the entry pages, `site.css` for the service pages and `article.css` for the blog and legal pages.
 
 - **Glass is clear, with a bright rim.** Floating things (the nav bar, mobile menu, WhatsApp button) and the cards on dark bands are blurred glass with a 1px rim that is brightest at the corners, not a flat tint or a drop shadow.
 - **Glass follows what is behind it.** The nav is dark glass over dark sections and frosted white over light ones (`home.js` switches it). Dark bands carry a soft blue light for the glass to pick up.

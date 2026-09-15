@@ -42,39 +42,11 @@
 <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@500;600;700;800&family=Manrope:wght@400;500;600;700&display=swap">
 <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@500;600;700;800&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/theme.css">
-<style>
-*{margin:0;padding:0;box-sizing:border-box;}
-body{font-family:var(--f-body);background:var(--paper);color:var(--text);min-height:100vh;}
-nav{padding:18px 32px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--line-dark);background:var(--ink);}
-.logo{display:inline-block;line-height:0;}
-.foot-legal{margin-top:6px;}
-.logo img{height:30px;width:auto;}
-.back-link{color:var(--paper);text-decoration:none;font-size:14px;transition:color 0.2s;}
-.back-link:hover{color:var(--blue-light);}
-article{max-width:720px;margin:60px auto;padding:0 24px 80px;}
-.tag{display:inline-block;background:var(--surface);border:1px solid var(--line);color:var(--text);font-size:11px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;padding:4px 12px;border-radius:0;margin-bottom:16px;}
-h1{font-family:var(--f-display);font-size:clamp(28px,5vw,44px);font-weight:800;text-transform:uppercase;letter-spacing:-0.02em;line-height:1.1;margin-bottom:12px;}
-.meta{font-size:13px;color:var(--grey);margin-bottom:40px;}
-h2{font-family:var(--f-display);font-size:22px;font-weight:800;text-transform:uppercase;letter-spacing:-0.01em;margin:40px 0 12px;color:var(--text);}
-p{font-size:16px;line-height:1.8;color:var(--grey);margin-bottom:18px;}
-ul{padding-left:20px;margin-bottom:18px;}
-li{font-size:16px;line-height:1.8;color:var(--grey);margin-bottom:6px;}
-.price-table{width:100%;border-collapse:collapse;margin:24px 0;}
-.price-table th{background:var(--surface);padding:12px 16px;text-align:left;font-family:var(--f-display);font-size:13px;font-weight:600;border-bottom:1px solid var(--line);}
-.price-table td{padding:12px 16px;border-bottom:1px solid var(--line);font-size:14px;color:var(--grey);}
-.price-table tr:hover td{background:var(--surface);}
-.cta-box{background:var(--surface);border:1px solid var(--line);border-radius:0;padding:32px;text-align:center;margin-top:48px;}
-.cta-box h3{font-family:var(--f-display);font-size:22px;font-weight:600;margin-bottom:10px;}
-.cta-box p{font-size:14px;color:var(--grey);margin-bottom:20px;}
-.btn{display:inline-block;font-family:var(--f-display);text-transform:uppercase;letter-spacing:.06em;background:var(--blue); color:var(--surface);padding:14px 28px;border-radius:0;text-decoration:none;font-weight:600;font-size:15px;transition:transform 0.2s,box-shadow 0.2s;}
-.btn:hover{background:var(--blue-dark);transform:translateY(-2px);}
-footer{border-top:1px solid var(--line);padding:24px 32px;text-align:center;font-size:13px;color:var(--grey);}
-footer a{color:var(--text);text-decoration:underline;text-decoration-color:var(--blue);text-decoration-thickness:2px;text-underline-offset:3px;}
-</style>
+<link rel="stylesheet" href="/article.css">
 </head>
 <body>
 <nav>
-  <a href="/south-africa" class="logo" aria-label="Prismatic Syntax - go to homepage"><img src="/brand/logo-on-dark.svg" alt="Prismatic Syntax" width="270" height="62"></a>
+  <a href="/south-africa" class="logo" aria-label="Prismatic Syntax - go to homepage"><img class="logo-dark" src="/brand/logo-on-dark.svg" alt="Prismatic Syntax" width="270" height="62"><img class="logo-light" src="/brand/logo.svg" alt="" width="270" height="62"></a>
   <a href="/south-africa#blog" class="back-link">← Back to Blog</a>
 </nav>
 <article>
@@ -134,5 +106,6 @@ footer a{color:var(--text);text-decoration:underline;text-decoration-color:var(-
   <p>© 2026 <a href="/south-africa">Prismatic Syntax</a> · Web Design South Africa · <a href="/south-africa#blog">Blog</a> · <a href="/south-africa#services">Services</a></p>
   <p class="foot-legal"><a href="/privacy">Privacy</a> · <a href="/terms">Terms</a> · <a href="/refund-policy">Refund Policy</a></p>
 </footer>
+<script src="/home.js" defer></script>
 </body>
 </html>

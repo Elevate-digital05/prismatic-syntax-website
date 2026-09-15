@@ -160,7 +160,7 @@ monthly. `tools/invoice.html` is the invoice. Paystack was removed in September
 
 ## Brand
 
-`theme.css` holds every colour as a custom property. Nothing else in the repo
+`theme.css` holds every colour, and the corner and glass tokens, as custom properties; `home.css`, `site.css` (service pages) and `article.css` (blog and legal pages) build on it. Nothing else in the repo
 should carry a literal colour value. `/brand` holds the logo files, favicons and
 og-image; `brand/README.md` is the source of truth for usage.
 

@@ -1,12 +1,12 @@
 // The deposit allowlist in lib/pricing.js is a hardcoded copy of the
-// prices in index.html. When they drift, Paystack takes the money and the
+// prices in south-africa.html. When they drift, Paystack takes the money and the
 // verification call rejects it — which is exactly what happened between the
 // 2025 prices and the current ones. This fails loudly instead.
 // Run: node check-prices.mjs
 import { readFileSync } from 'node:fs';
 import { PACKAGES_ZAR, RETAINERS_ZAR, VALID_DEPOSIT_AMOUNTS_ZAR, RETAINER_PLANS, NON_SUBSCRIBABLE_RETAINERS_ZAR } from './lib/pricing.js';
 
-const html = readFileSync(new URL('./index.html', import.meta.url), 'utf8');
+const html = readFileSync(new URL('./south-africa.html', import.meta.url), 'utf8');
 
 const pull = (re) => [...html.matchAll(re)].map(m => parseInt(m[1], 10));
 const packages = [...new Set(pull(/class="pay-plan-item[^"]*"[^>]*data-price="(\d+)"/g))];
@@ -17,8 +17,8 @@ let bad = 0;
 const compare = (name, found, expected) => {
   const a = [...found].sort((x, y) => x - y).join(',');
   const b = [...expected].sort((x, y) => x - y).join(',');
-  if (!found.length) { console.error(`FAIL ${name}: none found in index.html — did the markup change?`); bad++; }
-  else if (a !== b) { console.error(`FAIL ${name}: index.html has [${a}], lib/pricing.js has [${b}]`); bad++; }
+  if (!found.length) { console.error(`FAIL ${name}: none found in south-africa.html — did the markup change?`); bad++; }
+  else if (a !== b) { console.error(`FAIL ${name}: south-africa.html has [${a}], lib/pricing.js has [${b}]`); bad++; }
   else console.log(`ok ${name}: [${a}]`);
 };
 

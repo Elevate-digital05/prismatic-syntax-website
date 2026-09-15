@@ -37,7 +37,8 @@ Four triangles split along a shallow diagonal: two in blue, two in ink (or white
 - `favicon.svg` + `favicon-180.png` — browser tab and Apple touch icon. The SVG swaps the ink triangles to white in dark mode.
 - `app-icon.svg` / `app-icon-512.png` — rounded corners, for app-style contexts
 - `profile-square.svg` / `profile-square-1000.png` — WhatsApp Business, Instagram, Facebook, LinkedIn. Square corners; every platform crops to a circle itself and the mark sits well inside the safe area.
-- `og-image.svg` / `og-image-1200x630.png` — link preview. **Use the PNG.** The SVG's headline is live text in Inter Tight; it falls back to another font on machines without it.
+- `og-image.svg` / `og-image-1200x630.png` — link preview for the homepage. **Use the PNG.** The SVG's headline is live text in Inter Tight; it falls back to another font on machines without it.
+- `og-image-south-africa.svg` / `og-image-south-africa-1200x630.png` — link preview for `/south-africa`, the service pages and the blog, with the South African headline and rand pricing.
 
 **Email**
 - `email-signature.html` — paste as HTML. It loads `logo-800.png` from prismaticsyntax.com, so the domain has to be live first; Gmail blocks images hosted on random services.

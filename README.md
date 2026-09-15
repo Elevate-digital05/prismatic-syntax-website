@@ -1,17 +1,29 @@
 # Prismatic Syntax
 
-Static site. No framework, no dependencies. `index.html` is the homepage and,
-via `showPage()`, the services / packages / pay / blog / contact views too.
-Alongside it are the generated service pages, three blog posts and three legal
-pages. Deployed on Vercel, which serves the extensionless URLs (`cleanUrls`).
+Static site. No framework, no dependencies. Two entry pages share one stylesheet
+(`home.css`) and the hero motion (`home.js`):
+
+- `index.html` is the international homepage. English only, one long page, no
+  rand prices, no Paystack, no currency or language switch. Contact offers a
+  call first, then email, then WhatsApp.
+- `south-africa.html` (`/south-africa`) is the site for South African trades and
+  service businesses, and was the homepage until September 2026. Via
+  `showPage()` it is also the services / packages / pay / blog / contact views,
+  in four languages, with the ZAR prices and the Paystack deposit calculator.
+
+Alongside them are the generated service pages, three blog posts and three legal
+pages. The service pages and blog posts still speak to South African trades, so
+they link back to `/south-africa`, not the homepage. Deployed on Vercel, which
+serves the extensionless URLs (`cleanUrls`).
 
 ## Service pages are generated
 
 `lib/services.js` is the single source of truth for every service line. From it,
-`build.mjs` writes `services/*.html` and injects the derived bits back into
-`index.html` and `sitemap.xml` between `<!--BUILD:…-->` markers — the homepage
-service grid, the nav dropdown, the mobile menu group, the footer links and the
-sitemap entries. Everything outside those markers is hand-written and safe to
+`build.mjs` writes `services/*.html` and injects the derived bits between
+`<!--BUILD:…-->` markers: into `south-africa.html` (the service grid, the nav
+dropdown, the mobile menu group and the footer links), into `index.html` (the
+homepage's services list, deliberately without links or prices) and into
+`sitemap.xml`. Everything outside those markers is hand-written and safe to
 edit.
 
 `lib/packages.js` does the same for the four website packages: `build.mjs` bakes
@@ -20,9 +32,16 @@ surfaces come from one source and a crawler reads them in the HTML rather than
 after a script runs. They were hand-written in two places once and drifted far
 enough to sell an account manager who did not exist.
 
+The homepage's prices are separate and in USD: `lib/pricing-usd.js`. They are set
+by hand, never converted from the rand sheet, because at the exchange rate the
+ZAR prices read as offshore template work to a UK or US buyer. While any figure
+is `TBD`, `build.mjs` renders "Every project is quoted after a short call."
+instead of a price sheet and says so in its output. Before filling them in,
+confirm how an overseas client pays the deposit: the Paystack flow charges ZAR.
+
 One thing is **not** generated: the four language dictionaries. A new service
 needs an `i18n` key (`svc9`, …) plus `svcN_name` / `svcN_desc` in all four
-dictionaries in `index.html`, or its homepage card stays English while the other
+dictionaries in `south-africa.html`, or its card stays English while the other
 seven translate. `check-build.mjs` fails if the key is missing and
 `check-i18n.mjs` fails if any dictionary is.
 
@@ -69,13 +88,29 @@ URLs: under it every extensionless link on the site (`/services/web-design`,
 production, so links can only be checked by reading their href instead of
 clicking them.
 
+## Domains
+
+`www.prismaticsyntax.com` is the canonical host everywhere: canonical tags,
+`og:url` and the sitemap. `vercel.json` carries host rules so nothing needs a
+code change on launch day:
+
+- Every `*.vercel.app` host gets `X-Robots-Tag: noindex, nofollow`, so the
+  preview URL stays out of Google while the real domain is not live. It never
+  applies to prismaticsyntax.com, so there is no tag to remember to remove.
+- `prismaticsyntax.com` (apex) 301s to `www`.
+- `elevatedigitals.co.za` 301s to `www`: `/services/*`, `/blog/*`, the legal
+  pages and `/menu` keep their path, everything else goes to the homepage. This
+  only takes effect once that domain is added to this Vercel project.
+
+`dev-server.mjs` matches redirects by exact path, so it ignores these host rules.
+
 ## Checks
 
 Run these before pushing. They exist because each one has already caught a live bug.
 
 ```
 node check-i18n.mjs        # every data-i18n key exists in all four dictionaries
-node check-prices.mjs      # index.html prices match what the server will accept
+node check-prices.mjs      # south-africa.html prices match what the server will accept
 node check-menu-scroll.mjs # tapping a mobile menu link lands at the top of the new page
 node check-packages.mjs    # package cards and the pay calculator render the same features
 node check-build.mjs       # generated pages are current, and keep the promises we can keep
@@ -89,6 +124,14 @@ in front of a visitor.
 the POPIA legal links, the free-concept offer, a WhatsApp CTA and the real
 support hours, must not invent social proof, and must not price anything at a
 figure that is not published elsewhere on the site.
+
+It also holds the homepage to the international brief. Outside the one FAQ that
+says where the studio is based and the footer link to `/south-africa`, the
+homepage may not mention South Africa, Cape Town, Johannesburg or Paystack, show
+a rand figure, carry the geo or keywords tags, or name SAST without `(UTC+2)`.
+Contact must offer a call, then email, then WhatsApp; `/south-africa` must keep
+its geo tags, `en_ZA` locale and its own canonical; and the vercel.app host must
+stay noindexed.
 
 ## Payments
 

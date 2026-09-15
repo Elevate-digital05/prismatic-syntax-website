@@ -1,14 +1,14 @@
 /* Tapping a mobile menu link must land on the new page at the top.
    Guards the regression where closeMenu restored the previous page's scroll
    offset and, because scroll-behavior is smooth, outran showPage's jump to
-   top. Pulls the real source out of index.html so it cannot drift. */
+   top. Pulls the real source out of south-africa.html so it cannot drift. */
 import { readFileSync } from 'node:fs';
 import assert from 'node:assert/strict';
 
-const html = readFileSync('index.html', 'utf8');
+const html = readFileSync('south-africa.html', 'utf8');
 const start = html.indexOf('let _menuScrollY');
 const src = html.slice(start, html.indexOf('\n', html.indexOf('function navTo(id)')));
-assert.ok(src.includes('function navTo'), 'menu source not found in index.html');
+assert.ok(src.includes('function navTo'), 'menu source not found in south-africa.html');
 
 let scrolledTo = null, shown = null;
 const body = { style: {} };

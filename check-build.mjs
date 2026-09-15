@@ -86,13 +86,13 @@ for (const page of ['blog/website-cost-south-africa-2026.html', 'blog/whatsapp-m
 console.log('ok standalone pages: blog and legal pages carry the real logo and the legal links');
 
 /* ── the homepage actually links through to them ── */
-const index = out.get('index.html');
+const index = out.get('south-africa.html');
 for (const svc of SERVICES) {
   assert.ok(index.includes(`href="/services/${svc.slug}"`),
-    `index.html does not link to /services/${svc.slug}`);
+    `south-africa.html does not link to /services/${svc.slug}`);
 }
 assert.ok(index.includes('routeFromHash'),
-  'index.html lost the hash router, so every /#services link lands on the hero again');
+  'south-africa.html lost the hash router, so every /#services link lands on the hero again');
 
 /* ── card copy matches the English dictionary ──
    The homepage cards carry data-i18n keys, so applyTranslation('en') rewrites
@@ -140,7 +140,7 @@ for (const m of index.matchAll(/<(\w+)[^>]*\sdata-i18n(-html)?="([a-z0-9_]+)"[^>
     .replace(/&quot;/g, '"').replace(/&#39;|&apos;/g, "'").replace(/&nbsp;/g, ' ')
     .replace(/\s+/g, ' ').trim();
   if (norm(inner) !== norm(want)) {
-    assert.fail(`index.html and the en dictionary disagree on "${key}", so the text changes the first time someone switches language\n` +
+    assert.fail(`south-africa.html and the en dictionary disagree on "${key}", so the text changes the first time someone switches language\n` +
       `  markup: ${norm(inner).slice(0, 110)}\n  en:     ${norm(want).slice(0, 110)}`);
   }
   mirrored++;
@@ -173,7 +173,7 @@ assert.ok(menu.includes('name="robots" content="noindex, nofollow"'),
 assert.ok(!out.get('sitemap.xml').includes('/menu'), 'menu is in the sitemap but marked noindex');
 // A link Kabelo sends directly, not a destination on the site.
 assert.doesNotMatch(index, /href="\/menu"|navTo\('menu'\)|showPage\('menu'\)/,
-  'index.html links to the menu — it is meant to stay out of the site navigation');
+  'south-africa.html links to the menu — it is meant to stay out of the site navigation');
 
 assert.match(menu, /@page\s*{\s*size:\s*A4 portrait/, 'menu.html has no A4 portrait page rule');
 assert.ok(menu.includes('.m-svc { break-before:page;'), 'services no longer start on a fresh page');
@@ -191,7 +191,7 @@ assert.match(printCss, /\.bar[^{]*{[^}]*display:none/, 'the toolbar prints');
 for (const [sel, what] of [['.bar-btn', 'the Save as PDF button'], ['.m-index', 'the on-screen contents list']]) {
   assert.ok(menu.includes(sel), `menu.html lost ${what}`);
 }
-// index.html owns the currency and language toggles; the menu has neither, so
+// south-africa.html owns the currency and language toggles; the menu has neither, so
 // there is nothing to hide rather than a rule that hides nothing.
 assert.doesNotMatch(menu, /currency-selector|lang-selector|toggleCurrency|setLangAll/,
   'the menu grew a currency or language toggle — it is ZAR and English by design');
@@ -224,7 +224,7 @@ const resolves = href => {
   if (path === '' || path === '/') return true;                 // homepage
   if (redirects.some(r => r.source === path)) return true;
   const rel = path.replace(/^\//, '');
-  return exists(rel) || (cleanUrls && exists(rel + '.html')) || exists(rel + '/index.html');
+  return exists(rel) || (cleanUrls && exists(rel + '.html')) || exists(rel + '/south-africa.html');
 };
 
 const linkSources = [...out].map(([p, b]) => [p, b]).concat(
@@ -235,7 +235,7 @@ const linkSources = [...out].map(([p, b]) => [p, b]).concat(
 let links = 0;
 for (const [page, raw] of linkSources) {
   if (!page.endsWith('.html')) continue;
-  // Commented-out markup is not a link. index.html parks a founder-photo
+  // Commented-out markup is not a link. south-africa.html parks a founder-photo
   // <img src="/kabelo.jpg"> in a TODO comment against a file that does not
   // exist yet, which is fine precisely because it never renders.
   const html = raw.replace(/<!--[\s\S]*?-->/g, '');
@@ -276,3 +276,79 @@ for (const svc of SERVICES) {
 console.log(tbc.length
   ? `ok prices: packages and retainers match lib/pricing.js; ${tbc.length} still marked PRICE_TBC`
   : 'ok prices: packages and retainers match lib/pricing.js, no placeholders left');
+
+/* ── the international homepage (/) ──
+   The homepage has to read as a studio that works internationally; everything
+   written for South African trades lives on /south-africa. These are the
+   repositioning brief's acceptance checks, so a string pasted back from the old
+   page fails here rather than in front of a client in London. */
+const home = out.get('index.html');
+const saPage = out.get('south-africa.html');
+// The two places the homepage names the country on purpose: the FAQ that says
+// plainly where the studio is based, and the quiet footer link to /south-africa.
+const abroadQ = 'Do you work with clients outside South Africa?';
+const abroadA = 'Yes. We are based in Cape Town and work with clients across the UK, Europe and North America.';
+assert.ok(home.includes(abroadQ) && home.includes(abroadA), 'the homepage lost the "clients outside South Africa" FAQ');
+const footerLink = '<a href="/south-africa">South Africa →</a>';
+assert.ok(home.includes(footerLink), 'the homepage footer lost its "South Africa →" link');
+const homeRest = home.replaceAll(abroadQ, '').replaceAll(abroadA, '').replaceAll(footerLink, '');
+for (const banned of ['South Africa', 'Cape Town', 'Johannesburg', 'Paystack', 'ZAR', 'en_ZA', 'geo.', 'name="ICBM"', 'name="keywords"',
+                      'currency-selector', 'lang-selector', 'Lead-Generating Machine', 'twitter:site']) {
+  assert.ok(!homeRest.includes(banned), `the homepage contains "${banned}", which belongs on /south-africa or nowhere`);
+}
+assert.doesNotMatch(homeRest, /\bR\d{1,3}(,\d{3})+|\bR\d{4,}/, 'the homepage shows a rand figure');
+for (const m of home.matchAll(/SAST/g)) {
+  assert.equal(home.slice(m.index, m.index + 12), 'SAST (UTC+2)', 'the homepage names SAST without its UTC offset');
+}
+assert.doesNotMatch(home, /optimiz|specializ|Absolutely!|Yes!/, 'the homepage has American spelling or an exclamation mark the brief cut');
+assert.ok(home.includes('<meta property="og:locale" content="en_GB">'), 'the homepage og:locale is not en_GB');
+
+const contactBlock = home.slice(home.indexOf('id="contact"'));
+const [book, mail, whatsapp] = ['>Book a call<', 'mailto:hello@prismaticsyntax.com', 'wa.me/'].map(s => contactBlock.indexOf(s));
+assert.ok(book >= 0 && book < mail && mail < whatsapp, 'the homepage contact block must offer a call, then email, then WhatsApp');
+assert.ok(home.includes('href="/south-africa"'), 'the homepage footer lost its link to /south-africa');
+assert.doesNotMatch(home.slice(home.indexOf('<nav'), home.indexOf('</nav>')), /south-africa/, '/south-africa belongs in the footer, not the main nav');
+
+for (const tag of ['name="keywords"', 'name="geo.region"', 'name="geo.placename"', 'name="geo.position"', 'name="ICBM"',
+                   '<meta property="og:locale" content="en_ZA">', '<link rel="canonical" href="https://www.prismaticsyntax.com/south-africa">']) {
+  assert.ok(saPage.includes(tag), `/south-africa is missing ${tag}`);
+}
+assert.doesNotMatch(saPage, /name="robots" content="noindex/, '/south-africa must stay indexable; it is the local SEO asset');
+assert.ok(out.get('sitemap.xml').includes('<loc>https://www.prismaticsyntax.com/south-africa</loc>'), 'sitemap.xml does not list /south-africa');
+
+// prismaticsyntax.com does not resolve yet, so every canonical points at a dead
+// address. Noindexing the vercel.app host keeps the preview out of Google
+// without a tag anyone has to remember to delete on launch day.
+const { headers: vercelHeaders = [] } = JSON.parse(readFileSync('vercel.json', 'utf8'));
+assert.ok(vercelHeaders.some(h => h.has?.some(c => c.type === 'host') &&
+  h.headers.some(x => x.key.toLowerCase() === 'x-robots-tag' && x.value.includes('noindex'))),
+  'vercel.json no longer noindexes the vercel.app host');
+for (const [page, body] of linkSources) {
+  assert.ok(!body.includes('@ElevateDigitals'), `${page} still references @ElevateDigitals`);
+}
+console.log('ok homepage: international copy only, call/email/WhatsApp order, /south-africa carries the local tags, preview host noindexed');
+
+/* ── homepage USD prices ── set by hand in lib/pricing-usd.js, whole dollars, and
+   actually on the page. A missing figure is allowed: the build then shows the
+   quote-on-call line instead of a partial sheet. */
+const { USD_PACKAGES } = await import('./lib/pricing-usd.js');
+const usdSet = Object.entries(USD_PACKAGES).filter(([, v]) => v != null);
+for (const [name, price] of usdSet) {
+  assert.ok(Number.isInteger(price) && price > 0, `lib/pricing-usd.js: ${name} is not a whole number of dollars`);
+  assert.ok(home.includes(`<div class="p-amount">$${String(price).replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`),
+    `the homepage does not show ${name} at the price in lib/pricing-usd.js`);
+}
+if (usdSet.length === Object.keys(USD_PACKAGES).length) {
+  assert.doesNotMatch(home, /quote-line/, 'every USD price is set but the homepage still shows the quote-on-call line');
+}
+console.log(usdSet.length ? `ok usd: ${usdSet.length} homepage prices match lib/pricing-usd.js` : 'ok usd: no prices set, homepage shows the quote-on-call line');
+
+/* ── no currency converter, and the FAQ collapses ── the ZAR/USD toggle priced
+   the rand sheet at offshore rates for anyone abroad, and the homepage now has
+   its own USD sheet. Both FAQs collapse under their heading. */
+assert.doesNotMatch(saPage, /currency-selector|setCurrencyAll|data-rate=/, '/south-africa has the ZAR/USD converter again');
+for (const [name, page] of [['index.html', home], ['south-africa.html', saPage]]) {
+  assert.ok(page.includes('class="faq-toggle" aria-expanded="false" aria-controls="faq-panel"') && page.includes('<div class="faq-panel" id="faq-panel">'),
+    `${name}: the FAQ heading no longer collapses the list`);
+}
+console.log('ok faq and currency: no converter on /south-africa, both FAQs collapse under their heading');

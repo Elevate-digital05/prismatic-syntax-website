@@ -2,18 +2,125 @@
   "cleanUrls": true,
   "trailingSlash": false,
   "redirects": [
-    { "source": "/website-cost-south-africa-2026", "destination": "/blog/website-cost-south-africa-2026", "permanent": true },
-    { "source": "/website-cost-south-africa-2026.html", "destination": "/blog/website-cost-south-africa-2026", "permanent": true },
-    { "source": "/whatsapp-marketing-website", "destination": "/blog/whatsapp-marketing-website", "permanent": true },
-    { "source": "/whatsapp-marketing-website.html", "destination": "/blog/whatsapp-marketing-website", "permanent": true },
-    { "source": "/mobile-first-web-design-south-africa", "destination": "/blog/mobile-first-web-design-south-africa", "permanent": true },
-    { "source": "/mobile-first-web-design-south-africa.html", "destination": "/blog/mobile-first-web-design-south-africa", "permanent": true }
+    {
+      "source": "/website-cost-south-africa-2026",
+      "destination": "/blog/website-cost-south-africa-2026",
+      "permanent": true
+    },
+    {
+      "source": "/website-cost-south-africa-2026.html",
+      "destination": "/blog/website-cost-south-africa-2026",
+      "permanent": true
+    },
+    {
+      "source": "/whatsapp-marketing-website",
+      "destination": "/blog/whatsapp-marketing-website",
+      "permanent": true
+    },
+    {
+      "source": "/whatsapp-marketing-website.html",
+      "destination": "/blog/whatsapp-marketing-website",
+      "permanent": true
+    },
+    {
+      "source": "/mobile-first-web-design-south-africa",
+      "destination": "/blog/mobile-first-web-design-south-africa",
+      "permanent": true
+    },
+    {
+      "source": "/mobile-first-web-design-south-africa.html",
+      "destination": "/blog/mobile-first-web-design-south-africa",
+      "permanent": true
+    },
+    {
+      "source": "/:path*",
+      "has": [
+        {
+          "type": "host",
+          "value": "prismaticsyntax.com"
+        }
+      ],
+      "destination": "https://www.prismaticsyntax.com/:path*",
+      "statusCode": 301
+    },
+    {
+      "source": "/services/:slug",
+      "has": [
+        {
+          "type": "host",
+          "value": {
+            "suf": "elevatedigitals.co.za"
+          }
+        }
+      ],
+      "destination": "https://www.prismaticsyntax.com/services/:slug",
+      "statusCode": 301
+    },
+    {
+      "source": "/blog/:slug",
+      "has": [
+        {
+          "type": "host",
+          "value": {
+            "suf": "elevatedigitals.co.za"
+          }
+        }
+      ],
+      "destination": "https://www.prismaticsyntax.com/blog/:slug",
+      "statusCode": 301
+    },
+    {
+      "source": "/:page(privacy|terms|refund-policy|menu)",
+      "has": [
+        {
+          "type": "host",
+          "value": {
+            "suf": "elevatedigitals.co.za"
+          }
+        }
+      ],
+      "destination": "https://www.prismaticsyntax.com/:page",
+      "statusCode": 301
+    },
+    {
+      "source": "/:path*",
+      "has": [
+        {
+          "type": "host",
+          "value": {
+            "suf": "elevatedigitals.co.za"
+          }
+        }
+      ],
+      "destination": "https://www.prismaticsyntax.com/",
+      "statusCode": 301
+    }
   ],
   "headers": [
     {
       "source": "/.well-known/apple-developer-merchantid-domain-association",
       "headers": [
-        { "key": "Content-Type", "value": "text/plain; charset=utf-8" }
+        {
+          "key": "Content-Type",
+          "value": "text/plain; charset=utf-8"
+        }
+      ]
+    },
+    {
+      "source": "/(.*)",
+      "has": [
+        {
+          "type": "host",
+          "value": {
+            "suf": ".vercel.app"
+          }
+        }
+      ],
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow"
+        }
       ]
     }
   ]

@@ -5,7 +5,7 @@
    load, which fixed the drift but shipped four empty <ul>s to the crawler on
    the one page that has to rank.
 
-   Both surfaces are now baked into index.html by build.mjs from
+   Both surfaces are now baked into south-africa.html by build.mjs from
    lib/packages.js. This checks the baked HTML against that data, so neither
    the drift nor the empty-lists regression can come back quietly.
    Run: node check-packages.mjs */
@@ -13,7 +13,7 @@ import { readFileSync } from 'node:fs';
 import assert from 'node:assert/strict';
 import { PACKAGES } from './lib/packages.js';
 
-const html = readFileSync('index.html', 'utf8');
+const html = readFileSync('south-africa.html', 'utf8');
 // The New badge is a sibling span inside the <li>, so it has to come out
 // before tags are stripped or it concatenates onto the label it decorates.
 const strip = s => s
@@ -24,7 +24,7 @@ const strip = s => s
 const between = (key) => {
   const open = `<!--BUILD:${key}-->`, close = `<!--/BUILD:${key}-->`;
   const i = html.indexOf(open), j = html.indexOf(close);
-  assert.ok(i > 0 && j > i, `index.html has no ${open} … ${close} block — run: node build.mjs`);
+  assert.ok(i > 0 && j > i, `south-africa.html has no ${open} … ${close} block — run: node build.mjs`);
   return html.slice(i + open.length, j);
 };
 
@@ -70,7 +70,7 @@ assert.ok(PACKAGES.Pro.features.includes('Direct access to the people doing the 
 
 /* ── the renderer is gone; nothing should be filling these in at runtime ── */
 assert.doesNotMatch(html, /renderPackageFeatures|const PACKAGES\s*=/,
-  'index.html renders package features at runtime again — they belong in the HTML source');
+  'south-africa.html renders package features at runtime again — they belong in the HTML source');
 
 /* ── every plan the markup names has data behind it ── */
 for (const [, name] of html.matchAll(/class="(?:p-card|pay-plan-item)[^"]*"[^>]*data-plan="([^"]+)"/g)) {

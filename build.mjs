@@ -1,5 +1,5 @@
 // Renders every service page from lib/services.js, then injects the derived
-// bits back into index.html and sitemap.xml between BUILD markers.
+// bits back into south-africa.html and sitemap.xml between BUILD markers.
 //
 // Adding or changing a service is a change to lib/services.js and a re-run of
 // this. Nothing is hand-maintained in two places, which is the whole reason
@@ -12,6 +12,7 @@ import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { pathToFileURL } from 'node:url';
 import { SERVICES, HOURS } from './lib/services.js';
 import { PACKAGES } from './lib/packages.js';
+import { USD_PACKAGES } from './lib/pricing-usd.js';
 
 const SITE = 'https://www.prismaticsyntax.com';
 const WA = '27650858437';
@@ -20,7 +21,7 @@ const PHONE = '+27 65 085 8437';
 
 /* ── icons ──────────────────────────────────────────────────────────────
    Lucide-style, 24x24, 1.75 stroke — the same set already inlined in
-   index.html, kept here once instead of per page. */
+   south-africa.html, kept here once instead of per page. */
 const STROKE = 'fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"';
 const ICONS = {
   globe: '<circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/>',
@@ -135,7 +136,7 @@ function renderPage(svc, all) {
         description: svc.metaDescription,
         serviceType: svc.name,
         url,
-        provider: { '@type': 'LocalBusiness', '@id': `${SITE}/#business`, name: 'Prismatic Syntax' },
+        provider: { '@type': 'LocalBusiness', '@id': `${SITE}/south-africa#business`, name: 'Prismatic Syntax' },
         areaServed: [
           { '@type': 'State', name: 'Western Cape' },
           { '@type': 'State', name: 'Gauteng' },
@@ -146,7 +147,7 @@ function renderPage(svc, all) {
         '@type': 'BreadcrumbList',
         itemListElement: [
           { '@type': 'ListItem', position: 1, name: 'Home', item: `${SITE}/` },
-          { '@type': 'ListItem', position: 2, name: 'Services', item: `${SITE}/#services` },
+          { '@type': 'ListItem', position: 2, name: 'Services', item: `${SITE}/south-africa#services` },
           { '@type': 'ListItem', position: 3, name: svc.name, item: url },
         ],
       },
@@ -189,7 +190,7 @@ function renderPage(svc, all) {
 <meta property="og:url" content="${url}">
 <meta property="og:title" content="${attr(svc.metaTitle)}">
 <meta property="og:description" content="${attr(svc.metaDescription)}">
-<meta property="og:image" content="${SITE}/og-image-1200x630.png">
+<meta property="og:image" content="${SITE}/og-image-south-africa-1200x630.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="Prismatic Syntax - Web Design South Africa">
@@ -197,7 +198,7 @@ function renderPage(svc, all) {
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="${attr(svc.metaTitle)}">
 <meta name="twitter:description" content="${attr(svc.metaDescription)}">
-<meta name="twitter:image" content="${SITE}/og-image-1200x630.png">
+<meta name="twitter:image" content="${SITE}/og-image-south-africa-1200x630.png">
 <script type="application/ld+json">
 ${JSON.stringify(jsonLd, null, 2)}
 </script>
@@ -215,7 +216,7 @@ ${JSON.stringify(jsonLd, null, 2)}
     <a href="/" class="logo" aria-label="Prismatic Syntax - go to homepage">
       <img src="/brand/logo-on-dark.svg" alt="Prismatic Syntax" width="270" height="62">
     </a>
-    <a href="/#services" class="head-back">All services</a>
+    <a href="/south-africa#services" class="head-back">All services</a>
   </div>
 </header>
 
@@ -300,11 +301,11 @@ ${otherLinks}
     <div>
       <div class="foot-h">Company</div>
       <ul class="foot-links">
-        <li><a href="/">Home</a></li>
-        <li><a href="/#services">Services</a></li>
-        <li><a href="/#packages">Packages</a></li>
-        <li><a href="/#blog">Blog</a></li>
-        <li><a href="/#contact">Contact</a></li>
+        <li><a href="/south-africa">Home</a></li>
+        <li><a href="/south-africa#services">Services</a></li>
+        <li><a href="/south-africa#packages">Packages</a></li>
+        <li><a href="/south-africa#blog">Blog</a></li>
+        <li><a href="/south-africa#contact">Contact</a></li>
       </ul>
     </div>
     <div>
@@ -352,7 +353,7 @@ function renderMenu(all) {
       <div class="m-contact">
         <span><strong>WhatsApp</strong> <a href="https://wa.me/${WA}">${PHONE}</a></span>
         <span><strong>Email</strong> <a href="mailto:${EMAIL}">${EMAIL}</a></span>
-        <span><strong>Web</strong> <a href="${SITE}">prismaticsyntax.com</a></span>
+        <span><strong>Web</strong> <a href="${SITE}/south-africa">prismaticsyntax.com/south-africa</a></span>
       </div>`;
 
   const sections = all.map(svc => {
@@ -627,6 +628,47 @@ const sitemapEntries = SERVICES.map(s => `  <url>
     <priority>0.9</priority>
   </url>`).join('\n');
 
+/* ── the international homepage ─────────────────────────────────────────
+   index.html is the international studio page; everything written for South
+   African trades lives on south-africa.html. The services are listed without
+   links or prices: the /services pages still quote in rand and speak to South
+   African trades, so they stay reachable from /south-africa only until they
+   are rewritten. */
+const intlServices = SERVICES.map(s =>
+  `        <div class="svc-card reveal-card"><div class="svc-icon" aria-hidden="true">${icon(s.icon, 22)}</div>` +
+  `<div class="svc-name">${esc(s.name)}</div><div class="svc-desc">${esc(s.cardDesc)}</div>` +
+  `<ul class="svc-list">${s.cardList.map(l => `<li>${esc(l)}</li>`).join('')}</ul></div>`).join('\n');
+
+// USD figures are Kabelo's to set in lib/pricing-usd.js, never converted from
+// the rand sheet. Until every one is filled in, the section is one quote-on-call
+// line: shipping no price beats shipping a converted or half-finished one.
+const usdMissing = Object.entries(USD_PACKAGES).filter(([, v]) => v == null).map(([k]) => k);
+const usd = n => '$' + String(n).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+const featLabel = f => Array.isArray(f) ? f[0] : f;
+const intlPricing = usdMissing.length
+  ? `      <div class="sec-lbl reveal-section">Pricing</div>
+      <h2 class="sec-h reveal-section quote-line">Every project is quoted after a short call.</h2>
+      <div class="reveal-section"><a class="btn-primary" href="#contact">Book a call</a></div>`
+  : `      <div class="sec-top">
+        <div>
+          <div class="sec-lbl reveal-section">Pricing</div>
+          <h2 class="sec-h reveal-section">Starting prices, <span class="hl">in USD</span></h2>
+        </div>
+        <p class="sec-sub reveal-section">Once-off, per project. Every project is quoted after a short call, and you see your homepage concept before you pay anything.</p>
+      </div>
+      <div class="price-grid">
+${Object.entries(USD_PACKAGES).map(([name, price]) => {
+  const tier = SERVICES.find(s => s.slug === 'web-design').pricing.tiers.find(x => x.name === name);
+  return `        <div class="p-card${tier.rec ? ' pop' : ''} reveal-card">` +
+    (tier.rec ? '<div class="pop-tag">Recommended</div>' : '') +
+    `<div class="p-name">${esc(name)}</div>` +
+    `<div class="p-amount">${usd(price)}${tier.plus ? '<span style="font-size:18px;">+</span>' : ''}</div>` +
+    `<div class="p-period">${esc(tier.period)}</div><p class="p-best-for">${esc(tier.desc)}</p>` +
+    `<ul class="p-feats">${PACKAGES[name].features.map(f => `<li>${esc(featLabel(f))}</li>`).join('')}</ul>` +
+    `<a class="btn-p${tier.rec ? ' pop-btn' : ''}" href="#contact">Book a call</a></div>`;
+}).join('\n')}
+      </div>`;
+
 /* ── run ── */
 export function build({ write = true } = {}) {
   tbc.clear();
@@ -635,13 +677,18 @@ export function build({ write = true } = {}) {
   for (const svc of SERVICES) out.set(`services/${svc.slug}.html`, renderPage(svc, SERVICES));
   out.set('menu.html', renderMenu(SERVICES));
 
-  let index = readFileSync('index.html', 'utf8');
-  index = inject(index, 'svc-grid', homeCards, 'index.html');
-  index = inject(index, 'foot-services', footerServices, 'index.html');
-  index = inject(index, 'nav-services', navServices, 'index.html');
-  index = inject(index, 'mob-services', mobServices, 'index.html');
-  for (const [key, body] of packageBlocks) index = inject(index, key, body, 'index.html');
-  out.set('index.html', index);
+  let index = readFileSync('south-africa.html', 'utf8');
+  index = inject(index, 'svc-grid', homeCards, 'south-africa.html');
+  index = inject(index, 'foot-services', footerServices, 'south-africa.html');
+  index = inject(index, 'nav-services', navServices, 'south-africa.html');
+  index = inject(index, 'mob-services', mobServices, 'south-africa.html');
+  for (const [key, body] of packageBlocks) index = inject(index, key, body, 'south-africa.html');
+  out.set('south-africa.html', index);
+
+  let intl = readFileSync('index.html', 'utf8');
+  intl = inject(intl, 'intl-services', intlServices, 'index.html');
+  intl = inject(intl, 'intl-pricing', intlPricing, 'index.html');
+  out.set('index.html', intl);
 
   let sitemap = readFileSync('sitemap.xml', 'utf8');
   sitemap = inject(sitemap, 'services', sitemapEntries, 'sitemap.xml');
@@ -651,13 +698,13 @@ export function build({ write = true } = {}) {
     mkdirSync('services', { recursive: true });
     for (const [path, body] of out) writeFileSync(path, body);
   }
-  return { out, tbc: [...tbc] };
+  return { out, tbc: [...tbc], usdMissing };
 }
 
 // pathToFileURL, not a template string: the repo path contains spaces, and a
 // raw `file://${argv[1]}` never matches the percent-encoded import.meta.url.
 if (import.meta.url === pathToFileURL(process.argv[1]).href) {
-  const { out, tbc } = build();
+  const { out, tbc, usdMissing } = build();
   for (const path of out.keys()) console.log('wrote', path);
   if (tbc.length) {
     console.log(`\n⚠  ${tbc.length} price placeholder${tbc.length === 1 ? '' : 's'} still to fill in before publishing:`);
@@ -666,4 +713,5 @@ if (import.meta.url === pathToFileURL(process.argv[1]).href) {
   } else {
     console.log('\nno price placeholders outstanding');
   }
+  if (usdMissing.length) console.log(`homepage pricing: no USD figure yet for ${usdMissing.join(', ')} (lib/pricing-usd.js), so it shows the quote-on-call line`);
 }

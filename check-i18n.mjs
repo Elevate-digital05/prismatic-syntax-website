@@ -7,7 +7,7 @@ import { readFileSync } from 'node:fs';
 const ENABLED = ['en', 'af', 'zu', 'xh'];
 const DISABLED = [];
 
-const html = readFileSync(new URL('./index.html', import.meta.url), 'utf8');
+const html = readFileSync(new URL('./south-africa.html', import.meta.url), 'utf8');
 
 const used = new Set(
   [...html.matchAll(/data-i18n(?:-html|-ph)?="([^"]+)"/g)].map(m => m[1])

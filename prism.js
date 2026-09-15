@@ -4,8 +4,10 @@
    through it bends, and splits into a spectrum at the edges, over a studio lit in the
    site's own colours (--ink, --blue and --blue-light in theme.css).
    It renders only while the hero is on screen, lowers its resolution on a GPU that
-   can't keep up, holds one still frame for reduced motion, and leaves just the glow
-   behind where WebGL2 is not available. */
+   can't keep up, and leaves just the glow behind where WebGL2 is not available.
+   For reduced motion it moves at half pace and ignores the pointer rather than
+   freezing: Windows reports reduced motion whenever its "Animation effects" switch
+   is off, and a still frame left the glass looking broken on those PCs. */
 (function () {
   const canvas = document.querySelector('.prism-canvas');
   if (!canvas) return;
@@ -211,7 +213,7 @@ void main() {
     if (last && now - start > 2000) slow = now - last > 24 ? slow + 1 : Math.max(0, slow - 1);
     if (slow > 20 && quality > 0.4) { quality = Math.max(0.4, quality * 0.75); slow = 0; }
     last = now;
-    const t = reduced ? 9 : (now - start) / 1000;
+    const t = (now - start) / 1000 * (reduced ? 0.5 : 1);
     // as sharp as the screen, within a budget of about 800,000 traced pixels
     const cw = canvas.clientWidth, ch = canvas.clientHeight;
     const scale = Math.min(window.devicePixelRatio || 1, Math.sqrt(8e5 / (cw * ch || 1))) * quality;
@@ -237,7 +239,7 @@ void main() {
     gl.uniform4fv(loc.drop, drops);
     gl.drawArrays(gl.TRIANGLES, 0, 3);
     canvas.classList.add('is-drawn');
-    if (!reduced && visible) frame = requestAnimationFrame(draw);
+    if (visible) frame = requestAnimationFrame(draw);
     else last = 0;
   };
   const kick = function () { if (!frame) frame = requestAnimationFrame(draw); };
@@ -245,7 +247,7 @@ void main() {
     visible = entries[0].isIntersecting;
     if (visible) kick();
   }).observe(canvas);
-  // reduced motion draws one still frame, so redraw it when the size changes
+  // the first frame can come before layout has sized the canvas; start again once it has
   new ResizeObserver(kick).observe(canvas);
   kick();
 })();

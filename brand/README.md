@@ -47,6 +47,18 @@ Four triangles split along a shallow diagonal: two in blue, two in ink (or white
 
 Inter Tight for display — headings set in uppercase at weight 800 with slightly tight tracking, labels and buttons at 500–600 with open tracking. Manrope for body copy at 400–500. Both free on Google Fonts.
 
+## Shape and material
+
+Since September 2026 the site follows iOS 27's Liquid Glass, matched against a screen recording of the system. The tokens live at the top of `home.css`.
+
+- **Glass is clear, with a bright rim.** Floating things (the nav bar, mobile menu, WhatsApp button) and the cards on dark bands are blurred glass with a 1px rim that is brightest at the corners, not a flat tint or a drop shadow.
+- **Glass follows what is behind it.** The nav is dark glass over dark sections and frosted white over light ones (`home.js` switches it). Dark bands carry a soft blue light for the glass to pick up.
+- **Switched on means bright.** The current nav item is a white pill with dark text, like an iOS toggle that is on.
+- **Corners nest and curve.** Cards and panels use `--r-lg`, things inside them `--r-md` or `--r-sm`; buttons, tags and nav controls are capsules; icon buttons are circles. Browsers that support `corner-shape` draw Apple's continuous curves.
+- **Controls speak in sentence case.** Buttons, nav, tags, form labels and card titles are not uppercase; only small section labels keep capitals, like widget labels.
+- **One tint.** Blue fills the primary action and the Recommended card; secondary buttons are grey capsules.
+- **Always a solid fallback** for reduced transparency, increased contrast and browsers without `backdrop-filter`.
+
 ## Clear space
 
 Leave at least the width of one triangle as clear space on all sides of the lockup. Don't stretch it, don't add a shadow, and don't recolour the triangles to anything outside the palette.

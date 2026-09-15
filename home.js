@@ -52,3 +52,28 @@ document.querySelectorAll('.faq-toggle').forEach(function (btn) {
     a.addEventListener('click', function () { set(true); });
   });
 });
+
+/* The nav flips between dark and frosted-white glass with whatever is under it,
+   the way iOS 27 flips its small glass controls, so it never turns into a grey
+   smear over a white section. */
+(function () {
+  const nav = document.querySelector('nav');
+  if (!nav) return;
+  const DARK = '.hero, .band-ink, .cta-banner, footer, .foot-bottom, #page-contact, .mobile-menu';
+  let queued = false;
+  const update = function () {
+    queued = false;
+    // offset* rather than getBoundingClientRect: the bar slides in on load, and
+    // mid-animation its box sits above the viewport, which read as "light".
+    const under = document.elementsFromPoint(nav.offsetLeft + nav.offsetWidth / 2, nav.offsetTop + nav.offsetHeight / 2)
+      .find(function (el) { return !nav.contains(el); });
+    nav.classList.toggle('on-light', Boolean(under) && !under.closest(DARK));
+  };
+  const queue = function () { if (!queued) { queued = true; requestAnimationFrame(update); } };
+  addEventListener('scroll', queue, { passive: true });
+  addEventListener('resize', queue);
+  addEventListener('hashchange', queue);
+  // showPage() and the menu change what sits under the bar without scrolling
+  document.addEventListener('click', queue);
+  update();
+})();

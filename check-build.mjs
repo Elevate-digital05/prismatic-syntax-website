@@ -367,3 +367,14 @@ for (const [name, page] of [['index.html', home], ['south-africa.html', saPage]]
   assert.ok(page.includes('name="_gotcha"'), `${name}: the contact form lost its spam honeypot`);
 }
 console.log('ok audit: dev server local-only, security headers set, hash parsing safe, tooling not deployed, forms trap spam');
+
+/* ── the glass stays accessible ── the nav, menu and WhatsApp button are glass,
+   and must turn solid for visitors who ask for less transparency or more
+   contrast, and in browsers that cannot blur what is behind them. */
+const homeCss = readFileSync('home.css', 'utf8');
+for (const [needle, what] of [['prefers-reduced-transparency:reduce', 'its reduced-transparency fallback'],
+                              ['prefers-contrast:more', 'its increased-contrast fallback'],
+                              ['@supports not ((-webkit-backdrop-filter', 'its fallback for browsers without backdrop-filter']]) {
+  assert.ok(homeCss.includes(needle), `home.css lost ${what} for the glass`);
+}
+console.log('ok glass: solid fallbacks for reduced transparency, increased contrast and no backdrop-filter');

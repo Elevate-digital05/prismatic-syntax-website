@@ -589,18 +589,14 @@ const homeCards = SERVICES.map(s => {
 const footerServices = SERVICES.map(s =>
   `      <li><a href="/services/${s.slug}">${esc(s.nav)}</a></li>`).join('\n');
 
-/* Package features, baked into both surfaces rather than rendered at runtime.
-   They used to be filled in by JavaScript on load, which meant the packages
-   page — the one that has to rank — shipped four empty <ul>s to the crawler
-   and only grew its selling points on a second, queued render pass. */
-const packageBlocks = Object.entries(PACKAGES).flatMap(([name, pkg]) => {
+/* Package features, baked into the package cards rather than rendered at
+   runtime. They used to be filled in by JavaScript on load, which meant the
+   packages page — the one that has to rank — shipped four empty <ul>s to the
+   crawler and only grew its selling points on a second, queued render pass. */
+const packageBlocks = Object.entries(PACKAGES).map(([name, pkg]) => {
   const label = f => Array.isArray(f) ? f[0] : f;
   const badge = f => Array.isArray(f) ? '<span class="p-feat-new">New</span>' : '';
-  return [
-    [`feats-${name}`, pkg.features.map(f => `<li>${esc(label(f))}${badge(f)}</li>`).join('')],
-    [`pay-${name}`, `<div class="pay-plan-desc">${esc(pkg.summary)}</div>` +
-      `<div class="pay-plan-features">${pkg.features.map(f => `<span>${esc(label(f))}</span>`).join('')}</div>`],
-  ];
+  return [`feats-${name}`, pkg.features.map(f => `<li>${esc(label(f))}${badge(f)}</li>`).join('')];
 });
 
 // Desktop nav dropdown. Opened on hover and on :focus-within, so it is reachable

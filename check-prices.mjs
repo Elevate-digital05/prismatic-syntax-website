@@ -1,17 +1,12 @@
-// The deposit allowlist in lib/pricing.js is a hardcoded copy of the
-// prices in south-africa.html. When they drift, Paystack takes the money and the
-// verification call rejects it — which is exactly what happened between the
-// 2025 prices and the current ones. This fails loudly instead.
+// The rand prices on /south-africa are hand-written in the package and retainer
+// cards; lib/pricing.js holds them once, and check-build.mjs holds the service
+// pages to the same figures. This fails loudly if the cards drift from it.
 // Run: node check-prices.mjs
 import { readFileSync } from 'node:fs';
-import { PACKAGES_ZAR, RETAINERS_ZAR, VALID_DEPOSIT_AMOUNTS_ZAR, RETAINER_PLANS, NON_SUBSCRIBABLE_RETAINERS_ZAR } from './lib/pricing.js';
+import { PACKAGES_ZAR, RETAINERS_ZAR } from './lib/pricing.js';
 
 const html = readFileSync(new URL('./south-africa.html', import.meta.url), 'utf8');
-
-const pull = (re) => [...html.matchAll(re)].map(m => parseInt(m[1], 10));
-const packages = [...new Set(pull(/class="pay-plan-item[^"]*"[^>]*data-price="(\d+)"/g))];
-const retainers = [...new Set(pull(/class="pay-addon-toggle[^"]*"[^>]*data-price="(\d+)"/g))];
-const subscribable = RETAINERS_ZAR.filter(r => !NON_SUBSCRIBABLE_RETAINERS_ZAR.includes(r));
+const pull = (re) => [...new Set([...html.matchAll(re)].map(m => parseInt(m[1], 10)))];
 
 let bad = 0;
 const compare = (name, found, expected) => {
@@ -22,23 +17,6 @@ const compare = (name, found, expected) => {
   else console.log(`ok ${name}: [${a}]`);
 };
 
-compare('packages', packages, PACKAGES_ZAR);
-// only the fixed-price retainers are toggles on the pay page
-compare('subscribable retainers', retainers, subscribable);
-compare('retainer plans', subscribable, Object.values(RETAINER_PLANS).map(p => p.zar));
-for (const zar of NON_SUBSCRIBABLE_RETAINERS_ZAR) {
-  if (Object.values(RETAINER_PLANS).some(p => p.zar === zar)) {
-    console.error(`FAIL: R${zar} is negotiated but has a fixed subscription plan`); bad++;
-  } else console.log(`ok R${zar} retainer is not auto-billed`);
-}
-
-// The deposit is 50% of the package alone. A retainer must never change it —
-// that was the bug that billed half a month once and never recurred.
-if (!VALID_DEPOSIT_AMOUNTS_ZAR.has(4250)) { console.error('FAIL Starter deposit R4250 would be rejected'); bad++; }
-else console.log('ok Starter deposit: R4250 accepted');
-if (VALID_DEPOSIT_AMOUNTS_ZAR.has(Math.round((8500 + 799) / 2))) {
-  console.error('FAIL: a deposit with a retainer folded in is still accepted'); bad++;
-} else console.log('ok retainer is not folded into the deposit');
-
-console.log(`${VALID_DEPOSIT_AMOUNTS_ZAR.size} deposit amounts allowed`);
+compare('packages', pull(/<div class="p-amount" data-price="(\d+)"/g), PACKAGES_ZAR);
+compare('retainers', pull(/<div class="m-price" data-price="(\d+)"/g), RETAINERS_ZAR);
 process.exit(bad ? 1 : 0);

@@ -6,7 +6,7 @@
    links on every page, no invented social proof, and no support claim wider
    than the hours actually worked.
    Run: node check-build.mjs */
-import { readFileSync, statSync } from 'node:fs';
+import { existsSync, readFileSync, statSync } from 'node:fs';
 import assert from 'node:assert/strict';
 import { build } from './build.mjs';
 import { SERVICES, HOURS } from './lib/services.js';
@@ -184,15 +184,14 @@ for (const [page, raw] of linkSources) {
 }
 console.log(`ok links: ${links} internal links across ${linkSources.length} pages all resolve`);
 
-/* ── package and retainer prices must match what the server will accept ──
-   A service page quoting a package at a figure lib/pricing.js does not allow
-   means Paystack takes the money and verify-payment rejects it — the exact
-   failure check-prices.mjs was written for, one surface further out. Standalone
-   service prices are Kabelo's to set and are only sanity-checked. */
+/* ── package and retainer prices match the rand price list ──
+   A service page quoting a package at a figure lib/pricing.js does not list
+   would quote a client one price there and another on the packages view.
+   Standalone service prices are Kabelo's to set and are only sanity-checked. */
 const { PACKAGES_ZAR, RETAINERS_ZAR } = await import('./lib/pricing.js');
-const server = { Starter: 8500, Business: 18500, Pro: 34999, Premium: 75000 };
-for (const [name, zar] of Object.entries(server)) {
-  assert.ok(PACKAGES_ZAR.includes(zar), `lib/pricing.js no longer allows R${zar} for ${name}`);
+const listed = { Starter: 8500, Business: 18500, Pro: 34999, Premium: 75000 };
+for (const [name, zar] of Object.entries(listed)) {
+  assert.ok(PACKAGES_ZAR.includes(zar), `lib/pricing.js no longer lists R${zar} for ${name}`);
 }
 
 for (const svc of SERVICES) {
@@ -201,9 +200,9 @@ for (const svc of SERVICES) {
     assert.ok(Number.isInteger(t.price) && t.price > 0,
       `${svc.slug}: "${t.name}" has a price that is not a whole number of rands`);
 
-    if (server[t.name]) {
-      assert.equal(t.price, server[t.name],
-        `${svc.slug}: "${t.name}" is priced R${t.price} but the payment API only accepts R${server[t.name]}`);
+    if (listed[t.name]) {
+      assert.equal(t.price, listed[t.name],
+        `${svc.slug}: "${t.name}" is priced R${t.price} but the packages view sells it at R${listed[t.name]}`);
     }
     if (t.name.endsWith('Care')) {
       assert.ok(RETAINERS_ZAR.includes(t.price),
@@ -335,3 +334,14 @@ for (const [name, page] of [['index.html', home], ['south-africa.html', saPage]]
     `${name}: opens WhatsApp through window.open, which gets blocked as a popup; link to wa.me instead`);
 }
 console.log('ok whatsapp: every WhatsApp button is a plain link, nothing relies on window.open');
+
+/* ── no payments on the site ── Paystack was removed in September 2026: clients
+   are invoiced directly. Nothing may take a card or call a payment API again. */
+for (const [name, page] of [['index.html', home], ['south-africa.html', saPage]]) {
+  assert.doesNotMatch(page, /js\.paystack\.co|PaystackPop|pk_(?:live|test)_|\/api\/|id="page-pay"/,
+    `${name}: takes payments on the site again; clients are invoiced directly`);
+}
+for (const gone of ['api', 'lib/paystack.js', 'setup-paystack-plans.mjs', '.well-known/apple-developer-merchantid-domain-association']) {
+  assert.ok(!existsSync(gone), `${gone} is back; the site no longer takes payments`);
+}
+console.log('ok no payments: no Paystack checkout, payment API or Apple Pay file');

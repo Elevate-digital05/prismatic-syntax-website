@@ -4,12 +4,12 @@ Static site. No framework, no dependencies. Two entry pages share one stylesheet
 (`home.css`) and the hero motion (`home.js`):
 
 - `index.html` is the international homepage. English only, one long page, no
-  rand prices, no Paystack, no currency or language switch. Contact offers a
-  call first, then email, then WhatsApp.
+  rand prices, no currency or language switch. Contact offers a call first, then
+  email, then WhatsApp.
 - `south-africa.html` (`/south-africa`) is the site for South African trades and
   service businesses, and was the homepage until September 2026. Via
-  `showPage()` it is also the services / packages / pay / blog / contact views,
-  with the ZAR prices and the Paystack deposit calculator.
+  `showPage()` it is also the services / packages / blog / contact views, with
+  the ZAR prices.
 
 Alongside them are the generated service pages, three blog posts and three legal
 pages. The service pages and blog posts still speak to South African trades, so
@@ -27,18 +27,15 @@ homepage's services list, deliberately without links or prices) and into
 edit.
 
 `lib/packages.js` does the same for the four website packages: `build.mjs` bakes
-each feature list into the package cards *and* the payment calculator, so both
-surfaces come from one source and a crawler reads them in the HTML rather than
-after a script runs. They were hand-written in two places once and drifted far
+each feature list into the package cards, so a crawler reads them in the HTML
+rather than after a script runs. They were hand-written in two places once and drifted far
 enough to sell an account manager who did not exist.
 
 The homepage's prices are separate and in USD: `lib/pricing-usd.js`. They are set
 by hand, never converted from the rand sheet, because at the exchange rate the
 ZAR prices read as offshore template work to a UK or US buyer. While any figure
 is `TBD`, `build.mjs` renders "Every project is quoted after a short call."
-instead of a price sheet and says so in its output. Homepage clients are
-invoiced directly rather than paying on the site; Paystack stays on
-`/south-africa`, where it charges ZAR.
+instead of a price sheet and says so in its output.
 
 ```
 node build.mjs
@@ -104,9 +101,9 @@ code change on launch day:
 Run these before pushing. They exist because each one has already caught a live bug.
 
 ```
-node check-prices.mjs      # south-africa.html prices match what the server will accept
+node check-prices.mjs      # the rand package and retainer cards match lib/pricing.js
 node check-menu-scroll.mjs # tapping a mobile menu link lands at the top of the new page
-node check-packages.mjs    # package cards and the pay calculator render the same features
+node check-packages.mjs    # package cards render the features in lib/packages.js
 node check-build.mjs       # generated pages are current, and keep the promises we can keep
 ```
 
@@ -141,44 +138,10 @@ price in the wrong currency first: "South Africa →" on the homepage and
 
 ## Payments
 
-Paystack. Card entry happens in Paystack's own popup; no card data touches this site.
-
-- `api/verify-payment.js` — confirms a deposit server-side before we act on it
-- `api/start-retainer.js` — turns a monthly retainer into a Paystack subscription,
-  charged against the card authorisation left behind by the deposit
-- `lib/pricing.js` — prices, valid deposit amounts, retainer plan lookup
-
-The deposit is 50% of the package **only**. Retainers are subscriptions and must
-never be folded into it.
-
-### Environment variables (Vercel → Settings → Environment Variables)
-
-```
-PAYSTACK_SECRET_KEY           sk_live_...
-PAYSTACK_PLAN_STARTER_CARE    PLN_...
-PAYSTACK_PLAN_BUSINESS_CARE   PLN_...
-PAYSTACK_PLAN_PRO_CARE        PLN_...
-```
-
-Premium Care has no plan on purpose: it is priced "from R3,500" and settled in
-consultation, so a fixed monthly plan would bill the wrong amount. The pay page
-shows it as a note, not a toggle. Set those subscriptions up by hand.
-
-The four plan codes come from a one-time script. Put the secret key in
-`.env.local` (gitignored) so it stays out of your shell history:
-
-```
-echo 'PAYSTACK_SECRET_KEY=sk_live_...' > .env.local
-node setup-paystack-plans.mjs --list   # what already exists
-node setup-paystack-plans.mjs          # create the four plans
-```
-
-It creates three monthly ZAR plans and prints the env lines. Running it twice
-creates duplicates — Paystack does not dedupe by name, so check `--list` first.
-
-Until those four variables are set, `start-retainer` returns "Retainer plans are
-not configured" and the deposit still works: the client is told the retainer was
-not started and to message on WhatsApp.
+The site takes no payments. Clients are invoiced directly and pay by EFT: a 50%
+deposit once they approve the concept, the balance before launch, and retainers
+monthly. `tools/invoice.html` is the invoice. Paystack was removed in September
+2026, and `check-build.mjs` fails if a checkout or payment API comes back.
 
 ## Brand
 

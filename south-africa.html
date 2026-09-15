@@ -137,7 +137,7 @@
           "name": "What payment methods do you accept?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "We accept secure online card payments (Visa, Mastercard) via Paystack. We require a 50% deposit to start, with the balance due before we launch the site to your domain."
+            "text": "We invoice you directly and you pay by EFT: a 50% deposit once you approve the concept, and the balance before we launch the site to your domain."
           }
         },
         {
@@ -521,7 +521,7 @@
       </div>
       <div class="faq-item-accordion" onclick="toggleFaq(this)" role="listitem" tabindex="0" aria-expanded="false">
         <div class="faq-q-accordion">What payment methods do you accept?</div>
-        <div class="faq-a-accordion">We accept secure online card payments (Visa, Mastercard) via Paystack. We require a 50% deposit to start, with the balance due before we launch the site to your domain.</div>
+        <div class="faq-a-accordion">We invoice you directly and you pay by EFT: a 50% deposit once you approve the concept, and the balance before we launch the site to your domain.</div>
       </div>
       <div class="faq-item-accordion" onclick="toggleFaq(this)" role="listitem" tabindex="0" aria-expanded="false">
         <div class="faq-q-accordion">Do you offer SEO services?</div>
@@ -666,111 +666,6 @@
         <h2>Ready to Get Started?</h2>
         <p>Tell me what you need and I'll come back with a plan and a price.</p>
         <a class="btn-primary" href="https://wa.me/27650858437?text=Hi%20Kabelo%2C%20I%27d%20like%20a%20website%20for%20my%20business." target="_blank" rel="noopener noreferrer">Chat on WhatsApp →</a>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ══════════ PAY ══════════ -->
-<section class="page" id="page-pay">
-  <div class="sec" style="padding-top:60px;">
-    <h2 class="sec-h" style="margin-bottom:8px;">Already spoken to us? Pay your deposit here</h2>
-    <p class="sec-sub">Select the plan we agreed on to calculate your 50% deposit. All prices shown in <span id="payCurrencyNote">ZAR</span>. Not spoken to us yet? <a href="#contact" onclick="event.preventDefault(); showPage('contact');">Start here</a>. The first concept is free.</p>
-    <div class="pay-section-grid">
-      <div class="pay-plans-col">
-        <div class="pay-section-h">Website Packages</div>
-        <div class="pay-plan-list">
-          <div class="pay-plan-item active" data-plan="Starter" data-price="8500" onclick="selectPayPlan(this)">
-            <div class="pay-plan-info"><div class="pay-plan-title">Starter</div><!--BUILD:pay-Starter-->
-<div class="pay-plan-desc">3–5 pages · Custom branding · Contact form · Basic SEO · WhatsApp</div><div class="pay-plan-features"><span>3–5 pages</span><span>Custom brand colours &amp; typography</span><span>Mobile-responsive design</span><span>WhatsApp chat integration</span><span>Professional contact form</span><span>Google Business Profile setup</span><span>Basic on-page SEO</span><span>1 round of revisions</span></div>
-<!--/BUILD:pay-Starter--></div>
-            <div class="pay-plan-price" data-price="8500">R8,500</div>
-          </div>
-          <div class="pay-plan-item" data-plan="Business" data-price="18500" onclick="selectPayPlan(this)">
-            <div class="pay-plan-info"><div class="pay-plan-title">Business</div><!--BUILD:pay-Business-->
-<div class="pay-plan-desc">6–8 pages · Full on-page SEO · Copywriting for 3 pages · Maps &amp; Analytics</div><div class="pay-plan-features"><span>Everything in Starter</span><span>6–8 pages</span><span>Copywriting for 3 pages</span><span>Full on-page SEO</span><span>Google Maps + Analytics</span><span>Speed &amp; Core Web Vitals optimisation</span><span>Priority support: same-day reply on weekdays</span><span>2 rounds of revisions</span></div>
-<!--/BUILD:pay-Business--></div>
-            <div class="pay-plan-price" data-price="18500">R18,500</div>
-          </div>
-          <div class="pay-plan-item" data-plan="Pro" data-price="34999" onclick="selectPayPlan(this)">
-            <div class="pay-plan-info"><div class="pay-plan-title">Pro</div><!--BUILD:pay-Pro-->
-<div class="pay-plan-desc">Up to 12 pages · E-commerce or booking · Payment gateway · Full copywriting</div><div class="pay-plan-features"><span>Everything in Business</span><span>Up to 12 pages</span><span>E-commerce or booking system</span><span>Payment gateway setup</span><span>Full copywriting</span><span>Blog setup + training</span><span>Direct access to the people doing the work</span><span>3 rounds of revisions</span></div>
-<!--/BUILD:pay-Pro--></div>
-            <div class="pay-plan-price" data-price="34999">R34,999</div>
-          </div>
-          <div class="pay-plan-item" data-plan="Premium" data-price="75000" onclick="selectPayPlan(this)">
-            <div class="pay-plan-info"><div class="pay-plan-title">Premium</div><!--BUILD:pay-Premium-->
-<div class="pay-plan-desc">Discovery workshop · Unlimited pages · Custom functionality &amp; API integrations · Priority support</div><div class="pay-plan-features"><span>Discovery &amp; strategy workshop</span><span>Unlimited pages</span><span>Custom functionality / API integrations</span><span>Full SEO dominance strategy</span><span>Direct line to the founder throughout</span><span>Priority support, replies within 24h on weekdays</span></div>
-<!--/BUILD:pay-Premium--></div>
-            <div class="pay-plan-price" data-price="75000">R75,000+</div>
-          </div>
-        </div>
-        <div class="pay-section-h" style="margin-top:40px;">Add Monthly Retainer</div>
-        <div class="pay-addon-list">
-          <div class="pay-addon-toggle rec" data-plan="Starter Care" data-pairs="Starter" data-price="799" onclick="toggleMaintenance(this)">
-            <div class="pay-addon-info"><div class="pay-addon-title">Starter Care <span class="pay-addon-tag">R799/mo</span><span class="pay-addon-rec">Recommended for you</span></div><div class="pay-addon-desc">Hosting, weekly backups, SSL monitoring and 1hr of changes a month · Pairs with Starter</div></div>
-            <div class="pay-addon-check"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg></div>
-          </div>
-          <div class="pay-addon-toggle" data-plan="Business Care" data-pairs="Business" data-price="1299" onclick="toggleMaintenance(this)">
-            <div class="pay-addon-info"><div class="pay-addon-title">Business Care <span class="pay-addon-tag">R1,299/mo</span><span class="pay-addon-rec">Recommended for you</span></div><div class="pay-addon-desc">Everything in Starter Care, plus 2hr of changes, a monthly ranking report and same-day replies on weekdays · Pairs with Business</div></div>
-            <div class="pay-addon-check"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg></div>
-          </div>
-          <div class="pay-addon-toggle" data-plan="Pro Care" data-pairs="Pro" data-price="1999" onclick="toggleMaintenance(this)">
-            <div class="pay-addon-info"><div class="pay-addon-title">Pro Care <span class="pay-addon-tag">R1,999/mo</span><span class="pay-addon-rec">Recommended for you</span></div><div class="pay-addon-desc">Everything in Business Care, plus 4hr of changes and support for your shop or booking system · Pairs with Pro</div></div>
-            <div class="pay-addon-check"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg></div>
-          </div>
-          <div class="pay-addon-note" data-plan="Premium Care">
-            <div class="pay-addon-info"><div class="pay-addon-title">Premium Care <span class="pay-addon-tag">from R3,500/mo</span></div><div class="pay-addon-desc">Fully managed · Agreed response times · Direct technical contact · Pairs with Premium. The price is agreed in consultation, so we set this one up by hand after launch rather than billing it automatically.</div></div>
-          </div>
-        </div>
-      </div>
-      <div class="pay-summary-col">
-        <div class="pay-details-card">
-          <div class="pay-details-h">Step 1: Your Details</div>
-          <div class="pay-details-form">
-            <div class="pay-form-row">
-              <div class="pay-form-group"><label>First Name *</label><input type="text" id="buyerFirstName" placeholder="John" required></div>
-              <div class="pay-form-group"><label>Last Name *</label><input type="text" id="buyerLastName" placeholder="Doe" required></div>
-            </div>
-            <div class="pay-form-group"><label>Email Address *</label><input type="email" id="buyerEmail" placeholder="john@example.com" required></div>
-            <div class="pay-form-group"><label>Phone Number *</label><input type="tel" id="buyerPhone" placeholder="+27 ..." required></div>
-            <div class="pay-form-group"><label>Business Name (Optional)</label><input type="text" id="buyerBusiness" placeholder="Your Business Name"></div>
-            <div class="pay-form-group"><label>Payment Method</label>
-              <div class="pay-method-selector">
-                <div class="pay-method-option active" data-method="paystack" style="flex:1;cursor:default;">
-                  <div class="pay-method-icon" style="background:var(--line);border-radius:50%;width:28px;height:28px;display:flex;align-items:center;justify-content:center;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--text)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="20" height="14" x="2" y="5" rx="2"/><line x1="2" x2="22" y1="10" y2="10"/></svg></div>
-                  <div class="pay-method-name">Secure Card Payment</div>
-                  <div class="pay-method-desc">Powered by Paystack · Visa & Mastercard</div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="pay-summary-card">
-          <div class="pay-details-h">Step 2: Review Payment</div>
-          <div class="pay-selected-plan" id="paySelectedPlan">Starter</div>
-          <div class="pay-type-label" id="payTypeLabel">One-time Payment</div>
-          <div class="pay-summary-rows">
-            <div class="pay-summary-row"><span>Website Package</span><span id="paySumPackage" data-price="8500">R8,500</span></div>
-            <div class="pay-summary-row"><span>Total Price</span><span id="paySumTotal" data-price="8500">R8,500</span></div>
-            <div class="pay-summary-row"><span>Deposit (50%)</span><span id="paySumDeposit" data-price="4250">R4,250</span></div>
-            <div class="pay-summary-row balance"><span>Pay today (deposit)</span><span id="paySumBalance" data-price="4250">R4,250</span></div>
-            <div class="pay-summary-row" id="payMaintRow" style="display:none;"><span>Then monthly, from launch</span><span id="paySumMaint" data-price="0">R0</span></div>
-          </div>
-          <label class="retainer-consent" id="retainerConsent" style="display:none;">
-            <input type="checkbox" id="retainerAgree">
-            <span>I authorise Prismatic Syntax to charge this card <strong id="retainerAmount">R0</strong> a month for <strong id="retainerName">the retainer</strong>, with the first debit 30 days from today. Cancel any time with 30 days' notice.</span>
-          </label>
-          <div class="pay-summary-note"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg> Secure payment · The balance is due before launch</div>
-          <div class="pay-accepted-cards"><span>Accepted:</span><div class="pay-card-icons"><span class="pay-card-icon">VISA</span><span class="pay-card-icon">MC</span></div></div>
-        </div>
-        <button class="btn-pay-full" onclick="processPaystackPayment()">Pay Deposit with Card →</button>
-        <div class="pay-success" id="paySuccess">Thank you! Your payment is being processed.</div>
-        <div class="pay-contact-card">
-          <div class="pay-contact-h">Need Help?</div>
-          <p>Contact us for custom payment arrangements or questions about your plan.</p>
-          <button class="btn-pay-ghost" onclick="showPage('contact')">Contact Us →</button>
-        </div>
       </div>
     </div>
   </div>
@@ -931,10 +826,6 @@ function showPage(id, anchor) {
     const a = document.getElementById(anchor);
     if (a) a.scrollIntoView({ behavior: 'auto', block: 'start' });
   });
-  if (id === 'pay') {
-    updatePaySummary();
-    loadPaystack().catch(function(){ /* will retry on click */ });
-  }
 }
 
 // Every link back from a standalone page (/services/*, /blog/*, the legal
@@ -942,7 +833,7 @@ function showPage(id, anchor) {
 // of them silently landed on the homepage hero instead of the page they named —
 // the blog posts' own "Back to Blog" link included. hashchange makes the
 // browser's back button work across those in-page switches too.
-const PAGE_IDS = ['home', 'services', 'packages', 'pay', 'blog', 'contact'];
+const PAGE_IDS = ['home', 'services', 'packages', 'blog', 'contact'];
 function pageFromHash() {
   const id = decodeURIComponent(location.hash.slice(1));
   return PAGE_IDS.includes(id) ? id : null;
@@ -985,211 +876,6 @@ function toggleFaq(el) { el.classList.toggle('open'); el.setAttribute('aria-expa
 function updateNav(){ document.querySelector('nav').classList.toggle('scrolled',window.scrollY>20); }
 window.addEventListener('scroll',updateNav,{passive:true});
 updateNav();
-
-
-/* ═══════════════════════
-   PRICES
-   Rand only. The ZAR/USD toggle converted this sheet live, which priced the
-   packages at offshore rates for anyone outside South Africa; the homepage
-   carries its own USD sheet instead.
-═══════════════════════ */
-function formatPrice(zarPrice) {
-  return 'R'+Math.round(zarPrice).toLocaleString();
-}
-
-
-/* ═══════════════════════
-   PAYMENT CALCULATOR
-═══════════════════════ */
-let selectedMaintenance=null;
-function selectPayPlan(el){
-  document.querySelectorAll('.pay-plan-item').forEach(i=>i.classList.remove('active'));
-  el.classList.add('active');
-  const pkg=el.dataset.plan;
-  document.querySelectorAll('.pay-addon-toggle').forEach(t=>{t.classList.toggle('rec', t.dataset.pairs===pkg);});
-  updatePaySummary();
-}
-function selectPayPlanByName(name){document.querySelectorAll('.pay-plan-item').forEach(el=>{if(el.dataset.plan===name)selectPayPlan(el);});}
-function toggleMaintenance(el){
-  if(el.classList.contains('selected')){el.classList.remove('selected');selectedMaintenance=null;}
-  else{document.querySelectorAll('.pay-addon-toggle').forEach(t=>t.classList.remove('selected'));el.classList.add('selected');selectedMaintenance={plan:el.dataset.plan,price:parseInt(el.dataset.price)};}
-  updatePaySummary();
-}
-function toggleMaintenanceByName(name){
-  const el=document.querySelector('.pay-addon-toggle[data-plan="'+name+'"]');
-  if(el && !el.classList.contains('selected'))toggleMaintenance(el);
-}
-function updatePaySummary(){
-  const activeItem=document.querySelector('.pay-plan-item.active');
-  if(!activeItem)return;
-  const planName=activeItem.dataset.plan;
-  const packageZAR=parseInt(activeItem.dataset.price);
-  const maintZAR=selectedMaintenance?selectedMaintenance.price:0;
-  // The retainer is a monthly subscription, not part of the once-off total.
-  const depositZAR=Math.round(packageZAR*0.5);
-  const balanceZAR=packageZAR-depositZAR;
-  document.getElementById('paySelectedPlan').textContent=planName;
-  document.getElementById('payTypeLabel').textContent=maintZAR>0?'Deposit + monthly retainer':'One-time Payment';
-  const set=(id,zar)=>{const el=document.getElementById(id);if(!el)return;el.dataset.price=zar;el.textContent=formatPrice(zar);};
-  set('paySumPackage',packageZAR);set('paySumTotal',packageZAR);set('paySumDeposit',depositZAR);set('paySumBalance',balanceZAR);
-  const maintRow=document.getElementById('payMaintRow');
-  const consent=document.getElementById('retainerConsent');
-  if(maintZAR>0){
-    maintRow.style.display='flex';
-    set('paySumMaint',maintZAR);
-    document.getElementById('retainerName').textContent=selectedMaintenance.plan;
-    document.getElementById('retainerAmount').textContent=formatPrice(maintZAR);
-    consent.style.display='flex';
-  } else {
-    maintRow.style.display='none';
-    consent.style.display='none';
-    document.getElementById('retainerAgree').checked=false;
-  }
-}
-
-const PAYSTACK_PUBLIC_KEY = /(^|\.)prismaticsyntax\.com$/i.test(location.hostname)
-  ? 'pk_live_4a8801e83b9b31bca48cb0b9a167ec32f8e72624'
-  : 'pk_test_73772bcccae3e25941e474b60299d7a080a2f384';
-
-let _paystackLoader = null;
-function loadPaystack() {
-  if (typeof PaystackPop !== 'undefined') return Promise.resolve();
-  if (_paystackLoader) return _paystackLoader;
-  _paystackLoader = new Promise(function(resolve, reject){
-    const s = document.createElement('script');
-    s.src = 'https://js.paystack.co/v2/inline.js';
-    s.async = true;
-    s.onload = function(){ resolve(); };
-    s.onerror = function(){ _paystackLoader = null; reject(new Error('Paystack failed to load')); };
-    document.head.appendChild(s);
-  });
-  return _paystackLoader;
-}
-
-async function processPaystackPayment() {
-  const firstName = document.getElementById('buyerFirstName').value.trim();
-  const lastName  = document.getElementById('buyerLastName').value.trim();
-  const email     = document.getElementById('buyerEmail').value.trim();
-  const phone     = document.getElementById('buyerPhone').value.trim();
-  if (!firstName || !lastName || !email || !phone) {
-    alert('Please fill in your name, email and phone before paying.');
-    return;
-  }
-  try { await loadPaystack(); } catch (e) {
-    alert('Card payment is unavailable right now. Please check your connection and try again.');
-    return;
-  }
-  if (selectedMaintenance && !document.getElementById('retainerAgree').checked) {
-    alert('Please tick the box authorising the monthly retainer, or deselect it to pay the deposit only.');
-    return;
-  }
-  const activeItem = document.querySelector('.pay-plan-item.active');
-  const planName   = activeItem ? activeItem.dataset.plan : 'Starter';
-  const depositZAR = parseInt(document.getElementById('paySumDeposit').dataset.price, 10);
-  if (!depositZAR || depositZAR < 1) {
-    alert('Please select a plan first.');
-    return;
-  }
-  const maintLabel = selectedMaintenance
-    ? selectedMaintenance.plan + ' (R' + selectedMaintenance.price + '/mo subscription)'
-    : 'None';
-  const reference = 'PS-' + Date.now() + '-' + Math.random().toString(36).slice(2, 8).toUpperCase();
-
-  const paystack = new PaystackPop();
-  paystack.newTransaction({
-    key: PAYSTACK_PUBLIC_KEY,
-    email: email,
-    amount: depositZAR * 100,
-    currency: 'ZAR',
-    reference: reference,
-    firstname: firstName,
-    lastname: lastName,
-    phone: phone,
-    metadata: {
-      custom_fields: [
-        { display_name: 'Plan',         variable_name: 'plan',         value: planName },
-        { display_name: 'Retainer',     variable_name: 'retainer',     value: maintLabel },
-        { display_name: 'Business',     variable_name: 'business',     value: document.getElementById('buyerBusiness').value || 'N/A' },
-        { display_name: 'Payment Type', variable_name: 'payment_type', value: '50% deposit' }
-      ]
-    },
-    onSuccess: function(tx) {
-      const successEl = document.getElementById('paySuccess');
-      successEl.style.display = 'block';
-      successEl.textContent = 'Verifying your payment…';
-      const renderResult = function(headline, notify, ctaLabel) {
-        successEl.textContent = '';
-        const msg = document.createElement('div');
-        msg.textContent = headline;
-        successEl.appendChild(msg);
-        const cta = document.createElement('a');
-        cta.href = 'https://wa.me/27650858437?text=' + encodeURIComponent(notify);
-        cta.target = '_blank';
-        cta.rel = 'noopener noreferrer';
-        cta.textContent = ctaLabel;
-        cta.style.cssText = 'display:inline-flex;align-items:center;justify-content:center;gap:8px;margin-top:12px;padding:12px 20px;background:var(--blue); color:var(--surface);text-decoration:none;font-weight:600;';
-        successEl.appendChild(cta);
-      };
-      fetch('/api/verify-payment', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ reference: tx.reference })
-      })
-      .then(function(r) { return r.json().then(function(j) { return { ok: r.ok, body: j }; }); })
-      .then(function(result) {
-        if (result.ok && result.body && result.body.status) {
-          const done = function (retainerLine) {
-            const notify = `Paystack Deposit Verified\n\nName: ${firstName} ${lastName}\nEmail: ${email}\nPhone: ${phone}\nPlan: ${planName}\nRetainer: ${retainerLine}\nDeposit: R${depositZAR}\nReference: ${tx.reference}`;
-            renderResult(
-              'Payment verified! Reference: ' + result.body.reference + '. We will be in touch shortly.',
-              notify,
-              'Send confirmation via WhatsApp →'
-            );
-          };
-          if (!selectedMaintenance) { done('None'); return; }
-          // The deposit leaves a reusable card authorisation behind, so the
-          // subscription needs no second card entry.
-          fetch('/api/start-retainer', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ reference: tx.reference, plan: selectedMaintenance.plan })
-          })
-          .then(function (r) { return r.json(); })
-          .then(function (sub) {
-            if (sub && sub.status) {
-              const from = (sub.first_debit || '').slice(0, 10);
-              done(`${sub.plan} R${sub.amount_zar}/mo · ${sub.subscription_code} · first debit ${from}`);
-            } else {
-              done(`${selectedMaintenance.plan} NOT STARTED: ${(sub && sub.message) || 'unknown error'}. Set this up by hand`);
-            }
-          })
-          .catch(function () {
-            done(`${selectedMaintenance.plan} NOT STARTED: could not reach the server. Set this up by hand`);
-          });
-        } else {
-          const detail = (result.body && result.body.message) ? result.body.message : 'pending';
-          const notify = `Paystack Deposit: Needs Manual Check (${detail})\n\nName: ${firstName} ${lastName}\nEmail: ${email}\nPhone: ${phone}\nPlan: ${planName}\nMaintenance: ${maintLabel}\nReference: ${tx.reference}`;
-          renderResult(
-            'Payment received but verification is ' + detail + '. Please tap below to confirm manually with your reference ' + tx.reference + '.',
-            notify,
-            'Notify us via WhatsApp →'
-          );
-        }
-      })
-      .catch(function() {
-        const notify = `Paystack Deposit: Confirmation\n\nName: ${firstName} ${lastName}\nEmail: ${email}\nPhone: ${phone}\nPlan: ${planName}\nReference: ${tx.reference}`;
-        renderResult(
-          'Payment received. Please tap below to confirm with your reference ' + tx.reference + '.',
-          notify,
-          'Notify us via WhatsApp →'
-        );
-      });
-    },
-    onCancel: function() {}
-  });
-}
-
-
 </script>
 
 <script src="/home.js" defer></script>

@@ -1,18 +1,19 @@
-/* The homepage hero's prism: a form of liquid glass rendered live in WebGL, not an image.
+/* The prism: a form of liquid glass rendered live in WebGL, not an image.
    It is a distance field traced per pixel: a core and four droplets that each orbit,
    swell and pull away on their own rhythm, melting together where they meet. Light
    through it bends, and splits into a spectrum at the edges, over a studio lit in the
    site's own colours (--ink, --blue and --blue-light in theme.css).
-   It renders only while the hero is on screen, lowers its resolution on a GPU that
-   can't keep up, and leaves just the glow behind where WebGL2 is not available.
+   Every .prism-canvas on the page gets one, but each only builds itself the first time
+   it comes into view and only draws while it is on screen, so the pair on an entry page
+   (the hero, then the band further down) costs about what a single one costs: you can
+   never see both at once. It also lowers its resolution on a GPU that can't keep up,
+   and leaves just the glow behind where WebGL2 is not available.
    For reduced motion it moves at half pace and ignores the pointer rather than
    freezing: Windows reports reduced motion whenever its "Animation effects" switch
    is off, and a still frame left the glass looking broken on those PCs. */
 (function () {
-  const canvas = document.querySelector('.prism-canvas');
-  if (!canvas) return;
-  const gl = canvas.getContext('webgl2', { antialias: false, alpha: true, premultipliedAlpha: true });
-  if (!gl) { canvas.hidden = true; return; }
+  const canvases = document.querySelectorAll('.prism-canvas');
+  if (!canvases.length) return;
 
   const VERTEX = `#version 300 es
 in vec2 aPos;
@@ -133,36 +134,6 @@ void main() {
   outColor = vec4(pow(col, vec3(1.0 / 2.2)) * cover, cover);
 }`;
 
-  const shader = function (type, source) {
-    const s = gl.createShader(type);
-    gl.shaderSource(s, source);
-    gl.compileShader(s);
-    if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) throw new Error(gl.getShaderInfoLog(s));
-    return s;
-  };
-  let program;
-  try {
-    program = gl.createProgram();
-    gl.attachShader(program, shader(gl.VERTEX_SHADER, VERTEX));
-    gl.attachShader(program, shader(gl.FRAGMENT_SHADER, FRAGMENT));
-    gl.linkProgram(program);
-    if (!gl.getProgramParameter(program, gl.LINK_STATUS)) throw new Error(gl.getProgramInfoLog(program));
-  } catch (err) {
-    canvas.hidden = true;
-    return;
-  }
-  gl.useProgram(program);
-
-  // one triangle over the whole canvas; the fragment shader does the rest
-  gl.bindVertexArray(gl.createVertexArray());
-  gl.bindBuffer(gl.ARRAY_BUFFER, gl.createBuffer());
-  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 3, -1, -1, 3]), gl.STATIC_DRAW);
-  const aPos = gl.getAttribLocation(program, 'aPos');
-  gl.enableVertexAttribArray(aPos);
-  gl.vertexAttribPointer(aPos, 2, gl.FLOAT, false, 0, 0);
-
-  const u = name => gl.getUniformLocation(program, name);
-  const loc = { res: u('uRes'), time: u('uTime'), drop: u('uDrop') };
   const css = getComputedStyle(document.documentElement);
   // the tokens are sRGB; the shader lights in linear colour
   const linear = function (name) {
@@ -170,10 +141,7 @@ void main() {
     const n = parseInt(hex.length === 3 ? hex.replace(/./g, '$&$&') : hex, 16);
     return [n >> 16 & 255, n >> 8 & 255, n & 255].map(function (c) { return Math.pow(c / 255, 2.2); });
   };
-  gl.uniform3fv(u('uInk'), linear('--ink'));
-  gl.uniform3fv(u('uBlue'), linear('--blue'));
-  gl.uniform3fv(u('uSky'), linear('--blue-light'));
-  gl.clearColor(0, 0, 0, 0);
+  const INK = linear('--ink'), BLUE = linear('--blue'), SKY = linear('--blue-light');
 
   // four droplets around the core: [orbit speed, phase, orbit lean, reach, radius]
   const DROPS = [
@@ -182,72 +150,122 @@ void main() {
     [0.19, 4.0, 1.4, 0.8, 0.27],
     [-0.27, 5.2, 2.3, 0.95, 0.21],
   ];
-  const drops = new Float32Array(20);
-  const tilt = { x: 0, y: 0, tx: 0, ty: 0 };
-  // turn the whole form about the vertical, lean it towards the pointer, and store it
-  const place = function (i, x, y, z, r, spin) {
-    const ca = Math.cos(spin + tilt.y), sa = Math.sin(spin + tilt.y);
-    const x1 = x * ca + z * sa, z1 = z * ca - x * sa;
-    const cb = Math.cos(tilt.x), sb = Math.sin(tilt.x);
-    drops.set([x1, y * cb - z1 * sb, y * sb + z1 * cb, r], i * 4);
-  };
-
   const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const hero = canvas.closest('.hero');
-  if (hero && !reduced) {
-    hero.addEventListener('pointermove', function (e) {
-      const r = hero.getBoundingClientRect();
-      tilt.tx = ((e.clientY - r.top) / r.height - 0.5) * 0.4;
-      tilt.ty = ((e.clientX - r.left) / r.width - 0.5) * 0.6;
-    });
-    hero.addEventListener('pointerleave', function () { tilt.tx = 0; tilt.ty = 0; });
-  }
-
-  // ponytail: quality only ever steps down; a GPU that struggled once keeps the lighter load
-  let quality = 1, slow = 0, last = 0;
-  let visible = true, frame = 0;
   const start = performance.now();
-  const draw = function (now) {
-    frame = 0;
-    // frames slower than ~40fps, once the page has finished loading, count against the GPU
-    if (last && now - start > 2000) slow = now - last > 24 ? slow + 1 : Math.max(0, slow - 1);
-    if (slow > 20 && quality > 0.4) { quality = Math.max(0.4, quality * 0.75); slow = 0; }
-    last = now;
-    const t = (now - start) / 1000 * (reduced ? 0.5 : 1);
-    // as sharp as the screen, within a budget of about 800,000 traced pixels
-    const cw = canvas.clientWidth, ch = canvas.clientHeight;
-    const scale = Math.min(window.devicePixelRatio || 1, Math.sqrt(8e5 / (cw * ch || 1))) * quality;
-    const w = Math.round(cw * scale), h = Math.round(ch * scale);
-    if (!w || !h) return;
-    if (canvas.width !== w || canvas.height !== h) { canvas.width = w; canvas.height = h; gl.viewport(0, 0, w, h); }
 
-    tilt.x += (tilt.tx - tilt.x) * 0.05;
-    tilt.y += (tilt.ty - tilt.y) * 0.05;
-    const spin = t * 0.12;
-    place(0, 0.06 * Math.sin(t * 0.4), 0.05 * Math.sin(t * 0.33), 0.06 * Math.cos(t * 0.37), 0.56 + 0.03 * Math.sin(t * 0.7), spin);
-    DROPS.forEach(function (d, i) {
-      const a = t * d[0] + d[1];
-      const reach = d[3] * (0.62 + 0.38 * (0.5 + 0.5 * Math.sin(t * 0.41 + d[1] * 1.7)));
-      const x = Math.cos(a) * reach, y = 0.12 * Math.sin(t * 0.5 + d[1]), z = Math.sin(a) * reach;
-      const cl = Math.cos(d[2]), sl = Math.sin(d[2]);
-      place(i + 1, x * cl - y * sl, x * sl + y * cl, z, d[4] * (0.9 + 0.1 * Math.sin(t * 0.6 + d[1])), spin);
-    });
+  // One canvas: its own GL context, its own pace, its own idea of how hard it may work.
+  const build = function (canvas, offset) {
+    const gl = canvas.getContext('webgl2', { antialias: false, alpha: true, premultipliedAlpha: true });
+    if (!gl) { canvas.hidden = true; return null; }
+    const shader = function (type, source) {
+      const s = gl.createShader(type);
+      gl.shaderSource(s, source);
+      gl.compileShader(s);
+      if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) throw new Error(gl.getShaderInfoLog(s));
+      return s;
+    };
+    let program;
+    try {
+      program = gl.createProgram();
+      gl.attachShader(program, shader(gl.VERTEX_SHADER, VERTEX));
+      gl.attachShader(program, shader(gl.FRAGMENT_SHADER, FRAGMENT));
+      gl.linkProgram(program);
+      if (!gl.getProgramParameter(program, gl.LINK_STATUS)) throw new Error(gl.getProgramInfoLog(program));
+    } catch (err) {
+      canvas.hidden = true;
+      return null;
+    }
+    gl.useProgram(program);
 
-    gl.clear(gl.COLOR_BUFFER_BIT);
-    gl.uniform2f(loc.res, w, h);
-    gl.uniform1f(loc.time, t);
-    gl.uniform4fv(loc.drop, drops);
-    gl.drawArrays(gl.TRIANGLES, 0, 3);
-    canvas.classList.add('is-drawn');
-    if (visible) frame = requestAnimationFrame(draw);
-    else last = 0;
+    // one triangle over the whole canvas; the fragment shader does the rest
+    gl.bindVertexArray(gl.createVertexArray());
+    gl.bindBuffer(gl.ARRAY_BUFFER, gl.createBuffer());
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 3, -1, -1, 3]), gl.STATIC_DRAW);
+    const aPos = gl.getAttribLocation(program, 'aPos');
+    gl.enableVertexAttribArray(aPos);
+    gl.vertexAttribPointer(aPos, 2, gl.FLOAT, false, 0, 0);
+
+    const u = name => gl.getUniformLocation(program, name);
+    const loc = { res: u('uRes'), time: u('uTime'), drop: u('uDrop') };
+    gl.uniform3fv(u('uInk'), INK);
+    gl.uniform3fv(u('uBlue'), BLUE);
+    gl.uniform3fv(u('uSky'), SKY);
+    gl.clearColor(0, 0, 0, 0);
+
+    const drops = new Float32Array(20);
+    const tilt = { x: 0, y: 0, tx: 0, ty: 0 };
+    // turn the whole form about the vertical, lean it towards the pointer, and store it
+    const place = function (i, x, y, z, r, spin) {
+      const ca = Math.cos(spin + tilt.y), sa = Math.sin(spin + tilt.y);
+      const x1 = x * ca + z * sa, z1 = z * ca - x * sa;
+      const cb = Math.cos(tilt.x), sb = Math.sin(tilt.x);
+      drops.set([x1, y * cb - z1 * sb, y * sb + z1 * cb, r], i * 4);
+    };
+    // only the one in the hero follows the pointer; the rest are scenery
+    const hero = canvas.closest('.hero');
+    if (hero && !reduced) {
+      hero.addEventListener('pointermove', function (e) {
+        const r = hero.getBoundingClientRect();
+        tilt.tx = ((e.clientY - r.top) / r.height - 0.5) * 0.4;
+        tilt.ty = ((e.clientX - r.left) / r.width - 0.5) * 0.6;
+      });
+      hero.addEventListener('pointerleave', function () { tilt.tx = 0; tilt.ty = 0; });
+    }
+
+    // ponytail: quality only ever steps down; a GPU that struggled once keeps the lighter load
+    let quality = 1, slow = 0, last = 0;
+    return function (now, visible) {
+      // frames slower than ~40fps, once the page has finished loading, count against the GPU
+      if (last && now - start > 2000) slow = now - last > 24 ? slow + 1 : Math.max(0, slow - 1);
+      if (slow > 20 && quality > 0.4) { quality = Math.max(0.4, quality * 0.75); slow = 0; }
+      last = visible ? now : 0;
+      // each canvas is the same form seen at a different moment, so no two match
+      const t = (now - start) / 1000 * (reduced ? 0.5 : 1) + offset;
+      // as sharp as the screen, within a budget of about 800,000 traced pixels
+      const cw = canvas.clientWidth, ch = canvas.clientHeight;
+      const scale = Math.min(window.devicePixelRatio || 1, Math.sqrt(8e5 / (cw * ch || 1))) * quality;
+      const w = Math.round(cw * scale), h = Math.round(ch * scale);
+      if (!w || !h) return;
+      if (canvas.width !== w || canvas.height !== h) { canvas.width = w; canvas.height = h; gl.viewport(0, 0, w, h); }
+
+      tilt.x += (tilt.tx - tilt.x) * 0.05;
+      tilt.y += (tilt.ty - tilt.y) * 0.05;
+      const spin = t * 0.12;
+      place(0, 0.06 * Math.sin(t * 0.4), 0.05 * Math.sin(t * 0.33), 0.06 * Math.cos(t * 0.37), 0.56 + 0.03 * Math.sin(t * 0.7), spin);
+      DROPS.forEach(function (d, i) {
+        const a = t * d[0] + d[1];
+        const reach = d[3] * (0.62 + 0.38 * (0.5 + 0.5 * Math.sin(t * 0.41 + d[1] * 1.7)));
+        const x = Math.cos(a) * reach, y = 0.12 * Math.sin(t * 0.5 + d[1]), z = Math.sin(a) * reach;
+        const cl = Math.cos(d[2]), sl = Math.sin(d[2]);
+        place(i + 1, x * cl - y * sl, x * sl + y * cl, z, d[4] * (0.9 + 0.1 * Math.sin(t * 0.6 + d[1])), spin);
+      });
+
+      gl.clear(gl.COLOR_BUFFER_BIT);
+      gl.uniform2f(loc.res, w, h);
+      gl.uniform1f(loc.time, t);
+      gl.uniform4fv(loc.drop, drops);
+      gl.drawArrays(gl.TRIANGLES, 0, 3);
+      canvas.classList.add('is-drawn');
+    };
   };
-  const kick = function () { if (!frame) frame = requestAnimationFrame(draw); };
-  new IntersectionObserver(function (entries) {
-    visible = entries[0].isIntersecting;
-    if (visible) kick();
-  }).observe(canvas);
-  // the first frame can come before layout has sized the canvas; start again once it has
-  new ResizeObserver(kick).observe(canvas);
-  kick();
+
+  canvases.forEach(function (canvas, i) {
+    // 37 seconds apart, so the hero and the one further down are never the same shape
+    let render = null, built = false, visible = false, frame = 0;
+    const draw = function (now) {
+      frame = 0;
+      if (render) render(now, visible);
+      if (visible) frame = requestAnimationFrame(draw);
+    };
+    const kick = function () { if (!frame && render) frame = requestAnimationFrame(draw); };
+    new IntersectionObserver(function (entries) {
+      visible = entries[0].isIntersecting;
+      // nothing is built until it is first needed: a visitor who never scrolls this far
+      // never pays for the context or the shader
+      if (visible && !built) { built = true; render = build(canvas, i * 37); }
+      if (visible) kick();
+    }, { rootMargin: '200px' }).observe(canvas);
+    // the first frame can come before layout has sized the canvas; start again once it has
+    new ResizeObserver(kick).observe(canvas);
+  });
 })();

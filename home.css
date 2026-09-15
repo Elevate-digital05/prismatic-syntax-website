@@ -104,7 +104,13 @@ body:has(.mobile-menu.open) .hamburger span:nth-child(3){transform:translateY(-7
 
 /* ── SECTIONS ── bands paint full width; .sec is the measured column inside */
 .band-mist{background:var(--mist);}
-.band-ink{background:var(--ink-glow);color:var(--surface);}
+.band-ink{position:relative;overflow:hidden;background:var(--ink-glow);color:var(--surface);}
+/* The second glass form sits low on the left of this band, in the gap under the heading
+   column. The step cards are only 6% white, so anything behind them shows through and
+   fights their text: it has to go where there is no card. The band is far enough down
+   the page that it and the hero's can never share a screen, so only one is ever drawing.
+   The content needs no z-index here; .sec already carries one. */
+.band-prism{position:absolute;left:max(-120px,calc((100% - 1400px) / 2 - 120px));bottom:-90px;width:clamp(300px,30vw,460px);aspect-ratio:1;}
 .sec{position:relative;z-index:1;max-width:1400px;margin:0 auto;padding:clamp(64px,7vw,112px) var(--pad);}
 .sec:has(>.cta-banner:last-child){padding-bottom:0;}
 .sec-lbl{margin-bottom:20px;font:500 12.5px/1 var(--f-display);letter-spacing:.08em;text-transform:uppercase;color:var(--grey);}
@@ -121,11 +127,14 @@ body:has(.mobile-menu.open) .hamburger span:nth-child(3){transform:translateY(-7
 
 /* ── HERO ── */
 .hero{position:relative;overflow:hidden;display:flex;align-items:center;min-height:clamp(640px,54vw,880px);padding:calc(var(--nav-h) + 48px) var(--pad) 80px;background:var(--ink);color:var(--surface);}
-/* Both entry pages float a form of liquid glass beside the headline. prism.js renders
-   it live in WebGL so every part moves on its own; the blue glow behind it is plain
-   CSS and stays if WebGL is unavailable. */
-.hero-media{position:absolute;top:50%;right:max(-24px,calc((100% - 1400px) / 2 - 24px));width:clamp(380px,42vw,660px);aspect-ratio:1;translate:calc(var(--px,0) * -22px) calc(-50% + var(--py,0) * -16px);transition:translate 1.2s var(--ease);}
+/* Both entry pages float a form of liquid glass behind the headline, big enough that
+   the words cross it. prism.js renders it live in WebGL so every part moves on its
+   own; the blue glow behind it is plain CSS and stays if WebGL is unavailable.
+   The text keeps z-index 1 and the hero's ::after lays a wash of ink between the two,
+   so the headline reads over the glass instead of fighting it. */
+.hero-media{position:absolute;top:50%;right:max(-40px,calc((100% - 1400px) / 2 - 40px));width:clamp(440px,58vw,900px);aspect-ratio:1;translate:calc(var(--px,0) * -22px) calc(-50% + var(--py,0) * -16px);transition:translate 1.2s var(--ease);}
 .hero-media::before{content:'';position:absolute;inset:6%;border-radius:50%;background:radial-gradient(closest-side,color-mix(in srgb,var(--blue) 34%,transparent),transparent 72%);}
+.hero::after{content:'';position:absolute;inset:0;pointer-events:none;background:linear-gradient(90deg,var(--ink) 16%,color-mix(in srgb,var(--ink) 78%,transparent) 44%,color-mix(in srgb,var(--ink) 40%,transparent) 62%,transparent 78%);}
 .prism-canvas{position:relative;display:block;width:100%;height:100%;opacity:0;transition:opacity 1.4s var(--ease);}
 .prism-canvas.is-drawn{opacity:1;}
 /* The tiles only fade in place, so they run for reduced motion too. */
@@ -142,7 +151,12 @@ body:has(.mobile-menu.open) .hamburger span:nth-child(3){transform:translateY(-7
    glass, so on desktop widths it narrows with the viewport. */
 @media (min-width:1081px){
   .hero-in>*{max-width:min(620px,52vw);}
-  .hero-in>h1{max-width:min(720px,54vw);}
+  /* the headline alone runs on into the glass, the way the reference site does; the
+     lines below it stay in the clear column */
+  .hero-in>h1{max-width:min(1020px,70vw);}
+  /* except on /south-africa, whose headline ends in the blue highlight: blue words on
+     blue glass is the one pairing the brand rules rule out, so it keeps clear of it */
+  #page-home .hero-in>h1{max-width:min(720px,54vw);}
 }
 .eyebrow{display:flex;align-items:center;font:500 12.5px/1 var(--f-display);letter-spacing:.08em;text-transform:uppercase;animation:fadeUp .8s var(--ease) .2s backwards;}
 .hero h1{margin-top:22px;font:700 clamp(40px,4.8vw,76px)/1.02 var(--f-display);letter-spacing:-.035em;overflow-wrap:break-word;animation:wipeUp 1.2s var(--ease) .3s backwards;}
@@ -360,6 +374,11 @@ footer{position:relative;z-index:1;display:grid;grid-template-columns:1.6fr 1fr 
   .hero{display:block;min-height:0;padding:0 var(--pad) 64px;}
   .hero-media{position:relative;top:auto;right:auto;width:auto;aspect-ratio:auto;margin:0 calc(-1 * var(--pad));padding:calc(var(--nav-h) + 4px) var(--pad) 44px;translate:none;}
   .hero-media .prism-canvas{width:min(100%,460px);height:auto;aspect-ratio:1;margin:0 auto;}
+  /* stacked, nothing crosses the headline, so the wash of ink over the glass comes off */
+  .hero::after{display:none;}
+  /* stacked, the band is one column of cards with no gap to put it in, and a phone is
+     the last device that should trace a second one: the hero's is the only one */
+  .band-prism{display:none;}
   .hero-in{margin-top:-32px;}
   .sec-work,.contact-wrap{grid-template-columns:1fr;}
   .cta-inner{grid-template-columns:1fr;}

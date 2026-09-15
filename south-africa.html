@@ -724,6 +724,7 @@
       </div>
       <div class="contact-form">
         <form action="https://formspree.io/f/mqegrkbj" method="POST" id="contact-form">
+          <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" style="display:none">
           <div class="form-group"><label>Your Name *</label><input type="text" name="name" placeholder="Your Name" required></div>
           <div class="form-group"><label>WhatsApp Number *</label><input type="tel" name="whatsapp" placeholder="+27 ..." required></div>
           <div class="form-group"><label>Email <span class="opt">(optional)</span></label><input type="email" name="email" placeholder="you@example.com"></div>
@@ -835,7 +836,9 @@ function showPage(id, anchor) {
 // browser's back button work across those in-page switches too.
 const PAGE_IDS = ['home', 'services', 'packages', 'blog', 'contact'];
 function pageFromHash() {
-  const id = decodeURIComponent(location.hash.slice(1));
+  // No decodeURIComponent: the page ids are plain words, and a malformed escape in
+  // a shared link (#%E0) threw here, before the menu was set up, and broke the page.
+  const id = location.hash.slice(1);
   return PAGE_IDS.includes(id) ? id : null;
 }
 function routeFromHash() { const id = pageFromHash(); if (id) showPage(id); }

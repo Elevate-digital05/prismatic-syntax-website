@@ -72,7 +72,10 @@ node dev-server.mjs
 
 Serves the repo on http://localhost:4321, resolving URLs the way Vercel does —
 it reads `cleanUrls`, `trailingSlash` and the redirects straight out of
-`vercel.json` rather than restating them.
+`vercel.json` rather than restating them. It also sends the site-wide headers
+from `vercel.json`, so the security headers can be tested before a push, and it
+only listens on this machine and refuses hidden files like `.git` and
+`.env.local`, because it serves straight out of the repo.
 
 Use this rather than `python -m http.server`, which has no concept of clean
 URLs: under it every extensionless link on the site (`/services/web-design`,
@@ -95,6 +98,18 @@ code change on launch day:
   only takes effect once that domain is added to this Vercel project.
 
 `dev-server.mjs` matches redirects by exact path, so it ignores these host rules.
+
+## Security headers
+
+`vercel.json` sends a Content-Security-Policy on every page: scripts and styles
+only from this site (inline allowed, because the pages use inline handlers),
+fonts from Google Fonts, form posts only to Formspree, and no framing by other
+sites. **Adding a third-party script, embed, font, image host or form endpoint
+means adding it to that policy first**, or browsers silently block it; a booking
+calendar embed is the next thing that will need it. `.vercelignore` keeps build
+scripts, `lib/`, `tools/` and `.claude/` out of the deployment, because Vercel
+serves every file it uploads. Both contact forms carry Formspree's `_gotcha`
+honeypot, so bots that fill every field are dropped.
 
 ## Checks
 
@@ -151,4 +166,5 @@ og-image; `brand/README.md` is the source of truth for usage.
 
 ## Tools
 
-`tools/invoice.html` — fillable, printable invoice. Not linked from the site.
+`tools/invoice.html` — fillable, printable invoice. Not deployed (see
+`.vercelignore`); open it locally at http://localhost:4321/tools/invoice.

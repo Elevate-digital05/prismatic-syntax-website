@@ -13,8 +13,12 @@ import { join, normalize, extname, resolve, sep } from 'node:path';
 
 const root = resolve(process.cwd());
 const port = Number(process.argv[2] || 4321);
-const { cleanUrls = false, trailingSlash, redirects = [] } =
+const { cleanUrls = false, trailingSlash, redirects = [], headers = [] } =
   JSON.parse(await readFile(join(root, 'vercel.json'), 'utf8'));
+// ponytail: only the site-wide "/(.*)" rules without a host condition apply here,
+// which is where the security headers live; host-scoped rules are ignored.
+const siteHeaders = Object.fromEntries(headers.filter(h => h.source === '/(.*)' && !h.has)
+  .flatMap(h => h.headers.map(x => [x.key, x.value])));
 
 const TYPES = {
   '.html': 'text/html; charset=utf-8', '.css': 'text/css; charset=utf-8',
@@ -26,18 +30,19 @@ const TYPES = {
 };
 
 const read = async p => {
-  // Refuse anything that escapes the repo, however it was encoded.
+  // Refuse anything that escapes the repo, however it was encoded, and hidden
+  // files: .git and .env.local sit in the same folder as the site.
   const full = resolve(root, '.' + p);
   if (full !== root && !full.startsWith(root + sep)) return null;
+  if (full.slice(root.length).split(sep).some(part => part.startsWith('.'))) return null;
   try { return await readFile(full); } catch { return null; }
 };
 
 createServer(async (req, res) => {
   const url = new URL(req.url, `http://localhost:${port}`);
-  let path = normalize(decodeURIComponent(url.pathname));
 
   const send = (code, body, type) => {
-    res.writeHead(code, { 'content-type': type, 'cache-control': 'no-store' });
+    res.writeHead(code, { ...siteHeaders, 'content-type': type, 'cache-control': 'no-store' });
     res.end(body);
     console.log(`${code} ${url.pathname}`);
   };
@@ -46,6 +51,11 @@ createServer(async (req, res) => {
     res.end();
     console.log(`${code} ${url.pathname} -> ${to}`);
   };
+
+  // A malformed escape (/%E0) used to throw here and take the whole server down.
+  let path;
+  try { path = normalize(decodeURIComponent(url.pathname)); }
+  catch { return send(400, 'Bad request: malformed URL encoding\n', 'text/plain; charset=utf-8'); }
 
   const rule = redirects.find(r => r.source === path);
   if (rule) return redirect(rule.permanent ? 308 : 307, rule.destination);
@@ -69,7 +79,8 @@ createServer(async (req, res) => {
     if (body) return send(200, body, TYPES[extname(t)] || 'application/octet-stream');
   }
   send(404, `404 — no file for ${url.pathname}\n`, 'text/plain; charset=utf-8');
-}).listen(port, () => {
+// Loopback only: on shared Wi-Fi anyone could otherwise browse the repo, .git included.
+}).listen(port, '127.0.0.1', () => {
   console.log(`serving ${root} on http://localhost:${port}`);
   console.log(`cleanUrls=${cleanUrls} trailingSlash=${trailingSlash} redirects=${redirects.length}`);
 });

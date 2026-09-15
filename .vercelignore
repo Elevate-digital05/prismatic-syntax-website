@@ -1,0 +1,9 @@
+# Build scripts, checks, data sources and internal tools. The pages never load
+# them, and Vercel serves every file it uploads, so anything not listed here is
+# downloadable from the live site.
+*.mjs
+lib/
+tools/
+.claude/
+README.md
+brand/README.md

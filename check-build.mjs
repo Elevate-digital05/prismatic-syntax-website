@@ -345,3 +345,25 @@ for (const gone of ['api', 'lib/paystack.js', 'setup-paystack-plans.mjs', '.well
   assert.ok(!existsSync(gone), `${gone} is back; the site no longer takes payments`);
 }
 console.log('ok no payments: no Paystack checkout, payment API or Apple Pay file');
+
+/* ── audit fixes stay fixed ── the September 2026 audit found the dev server open
+   to the whole network and serving .git, no security headers, a garbled link
+   that broke /south-africa, build files downloadable from the live site, and no
+   spam trap on the contact forms. */
+const devServer = readFileSync('dev-server.mjs', 'utf8');
+assert.match(devServer, /\.listen\(port, '127\.0\.0\.1'/, 'dev-server.mjs listens beyond this machine again');
+assert.match(devServer, /startsWith\('\.'\)/, 'dev-server.mjs serves hidden files like .git and .env.local again');
+const siteWide = vercelHeaders.filter(h => h.source === '/(.*)' && !h.has).flatMap(h => h.headers);
+const header = key => (siteWide.find(x => x.key.toLowerCase() === key) || {}).value || '';
+assert.match(header('content-security-policy'), /frame-ancestors 'none'/, 'vercel.json lost the CSP that stops other sites framing ours');
+assert.equal(header('x-frame-options'), 'DENY', 'vercel.json lost X-Frame-Options');
+assert.equal(header('x-content-type-options'), 'nosniff', 'vercel.json lost X-Content-Type-Options');
+assert.doesNotMatch(saPage, /decodeURIComponent\(location\.hash/, 'south-africa.html decodes the hash again; a malformed link throws and stops the page script');
+const ignored = readFileSync('.vercelignore', 'utf8').split('\n').map(l => l.trim());
+for (const entry of ['*.mjs', 'lib/', 'tools/', '.claude/']) {
+  assert.ok(ignored.includes(entry), `.vercelignore no longer keeps ${entry} out of the deployment`);
+}
+for (const [name, page] of [['index.html', home], ['south-africa.html', saPage]]) {
+  assert.ok(page.includes('name="_gotcha"'), `${name}: the contact form lost its spam honeypot`);
+}
+console.log('ok audit: dev server local-only, security headers set, hash parsing safe, tooling not deployed, forms trap spam');

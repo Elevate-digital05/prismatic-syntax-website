@@ -412,3 +412,13 @@ for (const [sheet, selectors] of [['home.css', ['.sec-h{', '.hero h1{', '.path-v
   }
 }
 console.log('ok headlines: display headings are sentence case in home.css, site.css and article.css');
+
+/* ── PCs get the animations too ── Windows sets prefers-reduced-motion whenever
+   "Animation effects" is off, and a blanket rule that zeroed every transition gave
+   those PCs a site with no animation at all. Reduced motion may hold movement still,
+   never switch every transition off. */
+for (const sheet of ['home.css', 'site.css', 'article.css']) {
+  assert.doesNotMatch(readFileSync(sheet, 'utf8'), /transition-duration:\s*\.01ms/,
+    `${sheet}: reduced motion switches every transition off again; hold movement still instead`);
+}
+console.log('ok motion: reduced motion stills movement without switching every transition off');

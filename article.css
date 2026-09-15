@@ -95,6 +95,7 @@ footer a { color:var(--surface); text-decoration:underline; text-decoration-colo
   nav.on-light { background:var(--surface); box-shadow:0 0 0 1px var(--text); }
   :is(.stat-box, .cta-box, .callout, table) { border-color:var(--text); }
 }
+/* Reduced motion holds still what travels; fades and colour changes still animate. */
 @media (prefers-reduced-motion:reduce) {
-  *, *::before, *::after { transition-duration:.01ms !important; }
+  .btn:hover { transform:none; }
 }

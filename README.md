@@ -9,7 +9,7 @@ Static site. No framework, no dependencies. Two entry pages share one stylesheet
 - `south-africa.html` (`/south-africa`) is the site for South African trades and
   service businesses, and was the homepage until September 2026. Via
   `showPage()` it is also the services / packages / pay / blog / contact views,
-  in four languages, with the ZAR prices and the Paystack deposit calculator.
+  with the ZAR prices and the Paystack deposit calculator.
 
 Alongside them are the generated service pages, three blog posts and three legal
 pages. The service pages and blog posts still speak to South African trades, so
@@ -38,12 +38,6 @@ ZAR prices read as offshore template work to a UK or US buyer. While any figure
 is `TBD`, `build.mjs` renders "Every project is quoted after a short call."
 instead of a price sheet and says so in its output. Before filling them in,
 confirm how an overseas client pays the deposit: the Paystack flow charges ZAR.
-
-One thing is **not** generated: the four language dictionaries. A new service
-needs an `i18n` key (`svc9`, …) plus `svcN_name` / `svcN_desc` in all four
-dictionaries in `south-africa.html`, or its card stays English while the other
-seven translate. `check-build.mjs` fails if the key is missing and
-`check-i18n.mjs` fails if any dictionary is.
 
 ```
 node build.mjs
@@ -109,7 +103,6 @@ code change on launch day:
 Run these before pushing. They exist because each one has already caught a live bug.
 
 ```
-node check-i18n.mjs        # every data-i18n key exists in all four dictionaries
 node check-prices.mjs      # south-africa.html prices match what the server will accept
 node check-menu-scroll.mjs # tapping a mobile menu link lands at the top of the new page
 node check-packages.mjs    # package cards and the pay calculator render the same features
@@ -132,6 +125,11 @@ a rand figure, carry the geo or keywords tags, or name SAST without `(UTC+2)`.
 Contact must offer a call, then email, then WhatsApp; `/south-africa` must keep
 its geo tags, `en_ZA` locale and its own canonical; and the vercel.app host must
 stay noindexed.
+
+Both entry pages are also held to the September 2026 decluttering: the hero is the
+only thing that moves, only its headline carries the blue highlight, the homepage
+FAQ stays at six questions or fewer, and each FAQ's structured data lists exactly
+the questions on the page.
 
 ## Payments
 

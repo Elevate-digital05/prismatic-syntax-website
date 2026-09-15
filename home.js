@@ -1,6 +1,6 @@
 /* Shared by the homepage (/) and /south-africa. */
-/* Home hero and composition: dark tiles dissolve off the portrait on load,
-   the word lists step through, and both images drift with the pointer. */
+/* Home hero: dark tiles dissolve off the portrait on load and the portrait
+   drifts with the pointer. The hero is the only part of either page that moves. */
 (function () {
   const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const start = function () {
@@ -21,19 +21,6 @@
   Promise.race([document.fonts.ready, new Promise(function (r) { setTimeout(r, 800); })])
     .then(function () { requestAnimationFrame(function () { requestAnimationFrame(start); }); });
 
-  if (!reduced) document.querySelectorAll('.words').forEach(function (list) {
-    const items = list.querySelectorAll('li');
-    let i = 0;
-    const tick = function () {
-      items.forEach(function (li, j) { li.classList.toggle('is-on', j === i); });
-      list.style.setProperty('--w', i);
-      i = (i + 1) % items.length;
-    };
-    list.classList.add('is-cycling');
-    tick();
-    setInterval(tick, 2200);
-  });
-
   const parallax = function (area, target) {
     if (reduced || !area || !target || !matchMedia('(hover: hover) and (pointer: fine)').matches) return;
     area.addEventListener('pointermove', function (e) {
@@ -47,8 +34,6 @@
     });
   };
   parallax(document.querySelector('.hero'), document.querySelector('.hero-media'));
-  const art = document.querySelector('.art');
-  parallax(art && art.closest('.band'), art);
 })();
 
 /* The FAQ collapses under its heading. It opens from the heading, from any link

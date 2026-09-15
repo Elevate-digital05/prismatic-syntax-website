@@ -305,3 +305,23 @@ for (const [name, page] of [['index.html', home], ['south-africa.html', saPage]]
 }
 assert.ok(home.match(/class="faq-q-accordion"/g).length <= 6, 'the homepage FAQ is back over six questions');
 console.log('ok calm: no scroll reveals or cycling words, one highlight per page, FAQ structured data matches the page');
+
+/* ── each audience stays on its own page ── the two entry pages carry the same
+   hreflang set, so Google shows South African searchers /south-africa and
+   everyone else the homepage; hreflang is ignored unless both pages list it.
+   The service pages and blog posts are written for South African trades, so
+   none of their links may drop a reader onto dollar pricing at /. */
+const hreflang = ['<link rel="alternate" hreflang="en" href="https://www.prismaticsyntax.com/">',
+                  '<link rel="alternate" hreflang="en-ZA" href="https://www.prismaticsyntax.com/south-africa">',
+                  '<link rel="alternate" hreflang="x-default" href="https://www.prismaticsyntax.com/">'];
+for (const [name, page] of [['index.html', home], ['south-africa.html', saPage]]) {
+  for (const tag of hreflang) assert.ok(page.includes(tag), `${name} is missing ${tag}`);
+}
+for (const [page, body] of linkSources.filter(([p]) => /^(services|blog)\//.test(p))) {
+  assert.doesNotMatch(body.replace(/<!--[\s\S]*?-->/g, ''), /href="\/(?:#[^"]*)?"/,
+    `${page} links to the international homepage; pages for South African trades lead back to /south-africa`);
+}
+// The one way across, each way: a quiet footer link, never the main nav.
+assert.ok(saPage.includes('<a href="/">International →</a>'), '/south-africa lost its "International →" footer link to the homepage');
+assert.doesNotMatch(saPage.slice(saPage.indexOf('<nav'), saPage.indexOf('</nav>')), /href="\/"/, 'the homepage belongs in the /south-africa footer, not its main nav');
+console.log('ok audiences: matching hreflang and footer links both ways, service pages and blog posts never link to /');

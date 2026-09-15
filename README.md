@@ -36,8 +36,9 @@ The homepage's prices are separate and in USD: `lib/pricing-usd.js`. They are se
 by hand, never converted from the rand sheet, because at the exchange rate the
 ZAR prices read as offshore template work to a UK or US buyer. While any figure
 is `TBD`, `build.mjs` renders "Every project is quoted after a short call."
-instead of a price sheet and says so in its output. Before filling them in,
-confirm how an overseas client pays the deposit: the Paystack flow charges ZAR.
+instead of a price sheet and says so in its output. Homepage clients are
+invoiced directly rather than paying on the site; Paystack stays on
+`/south-africa`, where it charges ZAR.
 
 ```
 node build.mjs
@@ -93,7 +94,7 @@ code change on launch day:
   applies to prismaticsyntax.com, so there is no tag to remember to remove.
 - `prismaticsyntax.com` (apex) 301s to `www`.
 - `elevatedigitals.co.za` 301s to `www`: `/services/*`, `/blog/*`, the legal
-  pages and `/menu` keep their path, everything else goes to the homepage. This
+  pages and `/menu` keep their path, everything else goes to `/south-africa`. This
   only takes effect once that domain is added to this Vercel project.
 
 `dev-server.mjs` matches redirects by exact path, so it ignores these host rules.
@@ -130,6 +131,12 @@ Both entry pages are also held to the September 2026 decluttering: the hero is t
 only thing that moves, only its headline carries the blue highlight, the homepage
 FAQ stays at six questions or fewer, and each FAQ's structured data lists exactly
 the questions on the page.
+
+The two entry pages also carry matching hreflang tags (`en` and `x-default` for
+the homepage, `en-ZA` for `/south-africa`), and the service pages and blog posts,
+which are written for South African trades, never link to the homepage. The only
+way across is a footer link on each entry page: "South Africa →" on the homepage
+and "International →" on `/south-africa`.
 
 ## Payments
 

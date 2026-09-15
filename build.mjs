@@ -146,7 +146,7 @@ function renderPage(svc, all) {
       {
         '@type': 'BreadcrumbList',
         itemListElement: [
-          { '@type': 'ListItem', position: 1, name: 'Home', item: `${SITE}/` },
+          { '@type': 'ListItem', position: 1, name: 'Home', item: `${SITE}/south-africa` },
           { '@type': 'ListItem', position: 2, name: 'Services', item: `${SITE}/south-africa#services` },
           { '@type': 'ListItem', position: 3, name: svc.name, item: url },
         ],
@@ -213,7 +213,7 @@ ${JSON.stringify(jsonLd, null, 2)}
 
 <header class="site-head">
   <div class="wrap">
-    <a href="/" class="logo" aria-label="Prismatic Syntax - go to homepage">
+    <a href="/south-africa" class="logo" aria-label="Prismatic Syntax - go to homepage">
       <img src="/brand/logo-on-dark.svg" alt="Prismatic Syntax" width="270" height="62">
     </a>
     <a href="/south-africa#services" class="head-back">All services</a>

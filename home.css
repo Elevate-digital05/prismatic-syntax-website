@@ -4,7 +4,10 @@
 /* Prismatic Syntax. Colour and type come from /theme.css; nothing here carries
    a literal colour. Reduced-motion handling lives in the block at the end. */
 :root{--pad:clamp(20px,4.9vw,96px);--nav-h:84px;}
-html{scroll-behavior:smooth;background:var(--paper);}
+/* Ink, not paper: this is the colour a phone shows when you scroll past either end of
+   the page, and every page on the site ends in the dark footer. On paper it left a blank
+   white gap under the footer, and a white strip above the hero inside the safe area. */
+html{scroll-behavior:smooth;background:var(--ink);}
 body{font-family:var(--f-body);background:var(--paper);color:var(--text);overflow-x:hidden;min-height:100vh;-webkit-font-smoothing:antialiased;}
 img{display:block;max-width:100%;}
 :focus-visible{outline:2px solid var(--blue);outline-offset:3px;}

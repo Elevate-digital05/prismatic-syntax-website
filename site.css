@@ -8,7 +8,9 @@
 
 *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
 
-html { scroll-behavior:smooth; }
+/* Ink is what shows past either end of the page on a phone; this page opens on the ink
+   hero and closes on the ink footer, so both ends match. */
+html { scroll-behavior:smooth; background:var(--ink); }
 @media (prefers-reduced-motion:reduce) { html { scroll-behavior:auto; } }
 
 body {

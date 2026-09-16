@@ -2,6 +2,10 @@
    near-identical inline copies of this. Colour, type, corners and glass come from
    theme.css; nothing here may carry a literal colour value. */
 *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+/* Ink is what shows past either end of the page on a phone, and these pages end in the
+   ink footer. They open light, so pulling down at the top shows ink above the article:
+   the trade is worth it to lose the blank white slab under the footer. */
+html { background:var(--ink); }
 body { font-family:var(--f-body); background:var(--paper); color:var(--text); min-height:100vh; -webkit-font-smoothing:antialiased; }
 :where(a,button,summary,[tabindex]):focus-visible { outline:2px solid var(--blue); outline-offset:3px; }
 

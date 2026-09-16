@@ -109,8 +109,22 @@ body:has(.mobile-menu.open) .hamburger span:nth-child(3){transform:translateY(-7
    column. The step cards are only 6% white, so anything behind them shows through and
    fights their text: it has to go where there is no card. The band is far enough down
    the page that it and the hero's can never share a screen, so only one is ever drawing.
+   It sits clear of every edge of the band rather than bleeding off any of them: a shape
+   sliced by an edge reads as broken, and the narrower the window the worse the slice got.
    The content needs no z-index here; .sec already carries one. */
-.band-prism{position:absolute;left:max(-120px,calc((100% - 1400px) / 2 - 120px));bottom:-90px;width:clamp(300px,30vw,460px);aspect-ratio:1;}
+.band-prism{position:absolute;left:max(20px,calc((100% - 1400px) / 2 + 20px));bottom:16px;width:clamp(260px,24vw,310px);aspect-ratio:1;}
+/* The third sits in the contact band, in the corner the info column leaves free below
+   it and left of the form panel, which is another 6% white and would show it through.
+   The offsets are percentages of its own size, so the crop holds as the column narrows.
+   It is 2450px from the one in the band above: they can never share a screen. */
+/* The contact corner only leaves 197-254px under the details column, so this one is
+   smaller than the band's. The page keeps the spacing it had: the shape fits the room
+   that is there rather than the band growing to suit the shape. */
+.contact-prism{position:absolute;left:max(20px,calc((100% - 1400px) / 2 + 20px));bottom:10px;width:clamp(180px,15vw,235px);aspect-ratio:1;}
+/* On /south-africa contact is its own view rather than a band, so it needs the same
+   frame to hang the shape in. Only one view is ever displayed, so that one can never
+   be on screen with the hero's or the band's at all. */
+#page-contact{position:relative;overflow:hidden;}
 .sec{position:relative;z-index:1;max-width:1400px;margin:0 auto;padding:clamp(64px,7vw,112px) var(--pad);}
 .sec:has(>.cta-banner:last-child){padding-bottom:0;}
 .sec-lbl{margin-bottom:20px;font:500 12.5px/1 var(--f-display);letter-spacing:.08em;text-transform:uppercase;color:var(--grey);}
@@ -376,9 +390,10 @@ footer{position:relative;z-index:1;display:grid;grid-template-columns:1.6fr 1fr 
   .hero-media .prism-canvas{width:min(100%,460px);height:auto;aspect-ratio:1;margin:0 auto;}
   /* stacked, nothing crosses the headline, so the wash of ink over the glass comes off */
   .hero::after{display:none;}
-  /* stacked, the band is one column of cards with no gap to put it in, and a phone is
-     the last device that should trace a second one: the hero's is the only one */
-  .band-prism{display:none;}
+  /* Stacked, there is no room behind the content to hide a shape in, so they leave the
+     corner and sit in the flow instead: a centred square opening each section. A phone
+     still only ever draws one, and still only builds each when it is first reached. */
+  .band-prism,.contact-prism{position:relative;left:auto;bottom:auto;width:min(62vw,240px);margin:44px auto 0;}
   .hero-in{margin-top:-32px;}
   .sec-work,.contact-wrap{grid-template-columns:1fr;}
   .cta-inner{grid-template-columns:1fr;}

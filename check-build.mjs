@@ -329,13 +329,18 @@ assert.ok(saPage.slice(saPage.indexOf('<nav'), saPage.indexOf('</nav>')).include
   '/south-africa lost its "International →" link at the top');
 console.log('ok audiences: matching hreflang, a link across at the top of both entry pages, service pages and blog posts never link to /');
 
-/* ── the glass ── both entry pages carry two of the live WebGL form (prism.js): one
-   in the hero, one in the dark band much further down. Each is a ray tracer, so the
-   pair is only affordable because they are far enough apart never to share a screen
-   and prism.js builds and draws one only while it is in view. A third would break
-   that. The portrait the hero replaced is gone. */
+/* ── the glass ── both entry pages carry three of the live WebGL form (prism.js): the
+   hero, the dark band much further down, and the contact one. Each is a ray tracer, so
+   this is only affordable because no two can share a screen and prism.js builds and
+   draws one only while it is in view. On index.html the gaps are measured: hero to band
+   1567px, band to contact 2454px, against a reach of about a screen height plus the
+   400px of rootMargin. On south-africa.html the third sits in the contact view, which
+   is only displayed when the home view is not. Adding a fourth in the footer or the CTA
+   banner would break it: those sit 629px and 734px from their neighbours.
+   The portrait the hero replaced is gone. */
 for (const [name, page] of [['index.html', home], ['south-africa.html', saPage]]) {
-  assert.equal(page.match(/class="prism-canvas"/g)?.length, 2, `${name}: two prism canvases, the hero and the band`);
+  assert.equal(page.match(/class="prism-canvas"/g)?.length, 3, `${name}: three prism canvases, the hero, the band and contact`);
+  assert.match(page, /<div class="contact-prism" aria-hidden="true"><canvas class="prism-canvas"><\/canvas><\/div>/, `${name}: the contact canvas moved`);
   assert.match(page, /<div class="hero-media" aria-hidden="true">\s*<canvas class="prism-canvas">/, `${name}: the hero canvas moved`);
   assert.match(page, /<div class="band-prism" aria-hidden="true"><canvas class="prism-canvas"><\/canvas><\/div>/, `${name}: the band canvas moved`);
   assert.ok(page.includes('<script src="/prism.js" defer></script>'), `${name} does not load prism.js`);
@@ -343,7 +348,7 @@ for (const [name, page] of [['index.html', home], ['south-africa.html', saPage]]
 }
 assert.match(readFileSync('prism.js', 'utf8'), /querySelectorAll\('\.prism-canvas'\)/, 'prism.js drives only one canvas');
 assert.ok(!existsSync('assets/hero-portrait.jpg'), 'assets/hero-portrait.jpg came back');
-console.log('ok prism: both entry pages render the glass form twice, in the hero and the band, and the portrait is gone');
+console.log('ok prism: both entry pages render the glass form three times, in the hero, the band and contact, and the portrait is gone');
 
 /* ── WhatsApp buttons are plain links ── the package and retainer buttons called
    window.open, which in-app browsers and some phones block as a popup, so

@@ -670,7 +670,11 @@ ${Object.entries(USD_PACKAGES).map(([name, price]) => {
     `<div class="p-name">${esc(name)}</div>` +
     `<div class="p-amount">${usd(price)}${tier.plus ? '<span style="font-size:18px;">+</span>' : ''}</div>` +
     `<div class="p-period">${esc(tier.period)}</div><p class="p-best-for">${esc(tier.desc)}</p>` +
-    `<ul class="p-feats">${homeFeats(name)}</ul></div>`;
+    `<ul class="p-feats">${homeFeats(name)}</ul>` +
+    // Each card names its own package in its call to action, the way the ZAR package
+    // buttons carry the tier in their WhatsApp message: the enquiry arrives already
+    // saying which tier it is about. This page books calls rather than opening chats.
+    `<a class="p-cta" href="#contact">Book a call about ${esc(name)} →</a></div>`;
 }).join('\n')}
       </div>`;
 

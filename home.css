@@ -280,6 +280,10 @@ a.svc-card:hover .svc-more{transform:translateX(6px);}
 .p-feats{list-style:none;margin-bottom:24px;}
 .p-feats li{display:flex;align-items:baseline;gap:10px;padding:8px 0;border-top:1px solid var(--line);font-size:13.5px;color:var(--text);}
 .p-feats li::before{content:'';width:6px;height:6px;flex-shrink:0;border-radius:50%;background:var(--blue);transform:translateY(-2px);}
+/* Sits at the foot of the card whatever the feature list does, so the four cards line
+   their calls to action up with each other. */
+.p-cta{margin-top:auto;display:inline-flex;align-items:center;gap:8px;font:600 13.5px/1 var(--f-display);letter-spacing:-.005em;color:var(--blue);text-decoration:none;transition:gap .3s var(--ease);}
+.p-cta:hover{gap:12px;}
 .p-feat-new{display:inline-block;padding:3px 7px;border:1px solid var(--blue);border-radius:var(--r-pill);color:var(--blue);font:600 9px/1 var(--f-display);letter-spacing:.08em;text-transform:uppercase;}
 .p-retainer{margin-top:auto;padding:16px 16px 14px;border:1px dashed color-mix(in srgb,var(--grey) 55%,transparent);border-radius:var(--r-sm);}
 .p-retainer-lbl{margin-bottom:8px;font:600 10px/1 var(--f-display);letter-spacing:.12em;text-transform:uppercase;color:var(--blue);}

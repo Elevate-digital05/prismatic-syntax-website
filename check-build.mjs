@@ -376,6 +376,17 @@ for (const [name, page] of [['index.html', home], ['south-africa.html', saPage],
 }
 console.log('ok fonts: the typefaces are served from this domain, not a third-party host');
 
+/* ── VAT at the point of display ── terms.html quotes ZAR prices exclusive of VAT, and
+   a price shown without saying so reads as the total. Every place a ZAR price appears
+   has to carry it: the /south-africa packages and retainers, every service page's
+   pricing block, and each service in the printed menu. */
+assert.ok((saPage.match(/exclude VAT/g) || []).length >= 2, '/south-africa pricing no longer says prices exclude VAT');
+for (const svc of SERVICES) {
+  assert.ok(out.get(`services/${svc.slug}.html`).includes('Prices exclude VAT.'), `services/${svc.slug}: the pricing block does not say prices exclude VAT`);
+}
+assert.equal((menu.match(/Prices exclude VAT\./g) || []).length, SERVICES.length, 'menu.html: not every service states that prices exclude VAT');
+console.log('ok vat: every ZAR pricing section says prices exclude VAT');
+
 /* ── WhatsApp buttons are plain links ── the package and retainer buttons called
    window.open, which in-app browsers and some phones block as a popup, so
    "Get Started" did nothing. A link to wa.me opens WhatsApp everywhere. */

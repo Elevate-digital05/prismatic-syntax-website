@@ -19,6 +19,9 @@ const SITE = 'https://www.prismaticsyntax.com';
 const WA = '27650858437';
 const EMAIL = 'hello@prismaticsyntax.com';
 const PHONE = '+27 65 085 8437';
+// terms.html quotes every ZAR price exclusive of VAT, so each place a ZAR price is
+// shown says so at the point of display rather than only in the small print.
+const VAT_NOTE = 'Prices exclude VAT.';
 
 /* ── icons ──────────────────────────────────────────────────────────────
    Lucide-style, 24x24, 1.75 stroke — the same set already inlined in
@@ -247,7 +250,7 @@ ${who}
 
     <section class="sec" id="pricing">
       <h2>Pricing</h2>
-      <p class="sec-sub">${esc(svc.pricing.lead)}</p>
+      <p class="sec-sub">${esc(svc.pricing.lead)} ${VAT_NOTE}</p>
       <div class="tiers t${svc.pricing.cols}">${tiers}
       </div>
       ${svc.pricing.note ? `<p class="price-note">${svc.pricing.note}</p>` : ''}
@@ -383,7 +386,7 @@ function renderMenu(all) {
 
       <div class="m-pricing">
         <h3>Pricing</h3>
-        <p class="m-pricing-lead">${esc(svc.pricing.lead)}</p>
+        <p class="m-pricing-lead">${esc(svc.pricing.lead)} ${VAT_NOTE}</p>
         ${tiers}
       </div>
 ${contact}

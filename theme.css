@@ -52,8 +52,8 @@
   /* Dark bands get a soft blue light behind them, so the glass on them has colour to pick up. */
   --ink-glow:radial-gradient(55% 60% at 88% 0%,color-mix(in srgb,var(--blue) 24%,transparent),transparent 72%),radial-gradient(45% 55% at 0% 100%,color-mix(in srgb,var(--blue) 12%,transparent),transparent 70%),var(--ink);
   --glass-rim-light:linear-gradient(150deg,var(--surface),color-mix(in srgb,var(--surface) 30%,transparent) 40%,color-mix(in srgb,var(--surface) 70%,transparent));
-  /* light-band cards as clear glass: bright where the light comes in, thinner and a shade
-     cooler where it leaves. The pointer light is not a token: it reads each card's --gx/--gy. */
+  /* light-band cards as glass: bright where the light comes in, thinner and a shade
+     cooler where it leaves */
   --glass-card:linear-gradient(155deg,var(--surface) 12%,color-mix(in srgb,var(--surface) 40%,transparent) 68%,color-mix(in srgb,var(--line) 50%,transparent));
   --glass-card-rec:linear-gradient(155deg,color-mix(in srgb,var(--blue) 4%,var(--surface)) 12%,color-mix(in srgb,var(--blue) 7%,transparent) 68%,color-mix(in srgb,var(--blue) 13%,transparent));
   --glass-card-edge:color-mix(in srgb,var(--ink) 8%,transparent);
@@ -64,4 +64,30 @@
    corner-shape. */
 @supports (corner-shape:squircle) {
   :root { --r-lg:46px; --r-md:34px; --r-sm:24px; --r-xs:16px; }
+  .glass-stage :is(.p-card,.m-card,.svc-card,.blog-card,.path-card,.team-row,.founder,.incl,.tier,.stat-box,.cta-box)::before { corner-shape:squircle; }
+}
+
+/* ── CLEAR GLASS ── iOS's clear glass: you see what is behind it, a little softened and
+   bent at the edges, under a lit bezel. A light section is flat, so each one that holds
+   cards gets a still of the prism to sit over (.glass-wall, a different angle per
+   section). Every card shows its own copy of that still (::before), lined up with the
+   real one by home.js and bent at the edges by the SVG #glass-lens that build.mjs writes
+   into the page, under a frosted middle (::after). The copy never changes once drawn,
+   so scrolling re-blurs nothing: blurring on every scroll frame is what made PCs
+   choppy. A section's cards are listed in GLASS in home.js as well as here. */
+.glass-stage { position:relative; }
+.band.glass-stage { overflow:clip; }
+.glass-defs { position:absolute; }
+.glass-wall { position:absolute; left:var(--x,50%); top:var(--y,55%); width:var(--w,clamp(320px,30vw,460px)); height:auto; transform:translate(-50%,-50%); pointer-events:none; user-select:none; }
+@media (max-width:760px) { .glass-wall { left:var(--xm,50%); top:var(--ym,var(--y,55%)); width:var(--wm,min(80vw,340px)); } }
+.glass-stage :is(.p-card,.m-card,.svc-card,.blog-card,.path-card,.team-row,.founder,.incl,.tier,.stat-box,.cta-box) { overflow:hidden; border-color:color-mix(in srgb,var(--surface) 85%,transparent); box-shadow:0 0 0 1px color-mix(in srgb,var(--ink) 9%,transparent),var(--lift); }
+.glass-stage :is(.p-card,.m-card,.svc-card,.blog-card,.path-card,.team-row,.founder,.incl,.tier,.stat-box,.cta-box)::before { content:''; position:absolute; inset:-4px; z-index:-2; border-radius:inherit; pointer-events:none; background:var(--wall) no-repeat calc(var(--wx) + 4px) calc(var(--wy) + 4px) / var(--ww) var(--wh); filter:url(#glass-lens); }
+/* The frost sits inside the rim: text always has near-white behind it (grey and blue
+   text need about 86% white over the prism's darkest blue to stay readable), while the
+   outer edge stays clear, so that is where the prism shows, bent. */
+.glass-stage :is(.p-card,.m-card,.svc-card,.blog-card,.path-card,.team-row,.founder,.incl,.tier,.stat-box,.cta-box)::after { inset:10px; padding:0; -webkit-mask:none; mask:none; background:color-mix(in srgb,var(--surface) 86%,transparent); box-shadow:none; filter:blur(9px); }
+.glass-stage :is(.p-card.pop,.m-card.rec,.tier.rec)::after { background:color-mix(in srgb,color-mix(in srgb,var(--blue) 6%,var(--surface)) 86%,transparent); }
+/* solid again wherever the glass cannot do its job */
+@media (prefers-reduced-transparency:reduce), (prefers-contrast:more) {
+  .glass-wall, .glass-stage :is(.p-card,.m-card,.svc-card,.blog-card,.path-card,.team-row,.founder,.incl,.tier,.stat-box,.cta-box)::before { display:none; }
 }

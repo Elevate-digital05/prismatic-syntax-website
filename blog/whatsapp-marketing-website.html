@@ -54,9 +54,12 @@
 
   <p>WhatsApp is used by over 90% of South African smartphone users. It's the communication channel your customers are most comfortable with, and adding it to your website is one of the simplest, highest-impact things you can do to increase enquiries and sales.</p>
 
-  <div class="stat-box">
-    <strong>3–5x</strong>
-    Businesses that add a WhatsApp chat button to their website typically see 3–5x more customer enquiries compared to contact forms alone.
+  <div class="glass-stage">
+    <img class="glass-wall" src="/assets/glass/prism-13.webp" alt="" loading="lazy" decoding="async" style="--x:86%;--y:50%;--w:150px;--xm:84%;--wm:120px">
+    <div class="stat-box">
+      <strong>3–5x</strong>
+      Businesses that add a WhatsApp chat button to their website typically see 3–5x more customer enquiries compared to contact forms alone.
+    </div>
   </div>
 
   <h2>Why WhatsApp works so well in South Africa</h2>
@@ -98,16 +101,35 @@
   <h2>What we do at Prismatic Syntax</h2>
   <p>Every website we build includes a properly configured WhatsApp chat button, with your number, a pre-filled message, and smart positioning that gets clicks without being annoying. It's included in every package, not an add-on.</p>
 
-  <div class="cta-box">
-    <h3>Want WhatsApp built into your site?</h3>
-    <p>We include WhatsApp integration in every website we build, plus all the other tools to turn visitors into customers.</p>
-    <a href="/south-africa#contact" class="btn">Chat with us →</a>
+  <div class="glass-stage">
+    <img class="glass-wall" src="/assets/glass/prism-12.webp" alt="" loading="lazy" decoding="async" style="--x:93%;--y:72%;--w:210px;--xm:86%;--ym:78%;--wm:170px">
+    <div class="cta-box">
+      <h3>Want WhatsApp built into your site?</h3>
+      <p>We include WhatsApp integration in every website we build, plus all the other tools to turn visitors into customers.</p>
+      <a href="/south-africa#contact" class="btn">Chat with us →</a>
+    </div>
   </div>
 </article>
 <footer>
   <p>© 2026 <a href="/south-africa">Prismatic Syntax</a> · Web Design South Africa · <a href="/south-africa#blog">Blog</a> · <a href="/south-africa#services">Services</a></p>
   <p class="foot-legal"><a href="/privacy">Privacy</a> · <a href="/terms">Terms</a> · <a href="/refund-policy">Refund Policy</a></p>
 </footer>
+<!--BUILD:glass-lens-->
+<svg class="glass-defs" width="0" height="0" aria-hidden="true" focusable="false">
+  <filter id="glass-lens" x="0" y="0" width="100%" height="100%" color-interpolation-filters="sRGB">
+    <feFlood flood-color="#fff"/>
+    <feGaussianBlur stdDeviation="11"/>
+    <feColorMatrix values="0 0 0 1 0  0 0 0 1 0  0 0 0 1 0  0 0 0 0 1" result="shape"/>
+    <feConvolveMatrix in="shape" order="3" kernelMatrix="-1 0 1 -2 0 2 -1 0 1" divisor="1" bias="0.5" edgeMode="duplicate" preserveAlpha="true"/>
+    <feColorMatrix values="1 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0 1" result="dx"/>
+    <feConvolveMatrix in="shape" order="3" kernelMatrix="-1 -2 -1 0 0 0 1 2 1" divisor="1" bias="0.5" edgeMode="duplicate" preserveAlpha="true"/>
+    <feColorMatrix values="0 0 0 0 0  0 1 0 0 0  0 0 0 0 0  0 0 0 0 1"/>
+    <feComposite in2="dx" operator="arithmetic" k2="1" k3="1" result="map"/>
+    <feDisplacementMap in="SourceGraphic" in2="map" scale="150" xChannelSelector="R" yChannelSelector="G"/>
+    <feGaussianBlur stdDeviation="4"/>
+  </filter>
+</svg>
+<!--/BUILD:glass-lens-->
 <script src="/home.js" defer></script>
 </body>
 </html>

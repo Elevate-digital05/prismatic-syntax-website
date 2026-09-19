@@ -188,6 +188,30 @@ for (const [page, raw] of linkSources) {
 }
 console.log(`ok links: ${links} internal links across ${linkSources.length} pages all resolve`);
 
+/* ── clear glass ──
+   A .glass-stage draws its cards' glass from one prism still (its .glass-wall) bent by
+   the #glass-lens filter. Without the filter the edges go flat; without the wall there is
+   nothing to show; and a card class missing from GLASS in home.js is never lined up. */
+{
+  const css = readFileSync('theme.css', 'utf8');
+  const js = readFileSync('home.js', 'utf8');
+  const cssList = css.match(/\.glass-stage :is\(([^)]*)\) \{ overflow:hidden/)[1].split(',').map(c => c.trim()).sort();
+  const jsList = js.match(/const GLASS = '([^']*)'/)[1].split(',').map(c => c.trim()).sort();
+  assert.deepEqual(jsList, cssList, 'GLASS in home.js and the CLEAR GLASS cards in theme.css list different cards');
+  let stages = 0;
+  for (const [page, raw] of linkSources) {
+    if (!page.endsWith('.html')) continue;
+    const html = raw.replace(/<!--[\s\S]*?-->/g, '');
+    const n = (html.match(/class="[^"]*\bglass-stage\b/g) || []).length;
+    if (!n) continue;
+    stages += n;
+    assert.ok(html.includes('id="glass-lens"'), `${page} has clear glass but no #glass-lens filter`);
+    assert.equal((html.match(/class="glass-wall"/g) || []).length, n, `${page}: every .glass-stage needs exactly one .glass-wall`);
+    for (const [img] of html.matchAll(/<img class="glass-wall"[^>]*>/g)) assert.match(img, /alt=""/, `${page}: a glass wall is decoration and needs alt=""`);
+  }
+  console.log(`ok glass: ${stages} glass stages, each with its prism and the lens filter`);
+}
+
 /* ── package and retainer prices match the rand price list ──
    A service page quoting a package at a figure lib/pricing.js does not list
    would quote a client one price there and another on the packages view.

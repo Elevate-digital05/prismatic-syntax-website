@@ -186,13 +186,10 @@ body {
 }
 
 /* ── LIGHT GLASS ── the cards as clear glass, as on the entry pages (home.css): a dark
-   hairline outside, a lit rim inside, and on a mouse a pool of light that follows the
-   pointer (home.js sets --gx/--gy). Keep this list in step with GLASS in home.js. */
+   hairline outside and a lit rim inside. */
 :is(.incl, .tier, .assure) { position:relative; isolation:isolate; background:var(--glass-card); border-color:var(--glass-card-edge); }
 .tier.rec { background:var(--glass-card-rec); }
-:is(.incl, .tier, .assure)::before, :is(.incl, .tier, .assure)::after { content:''; position:absolute; inset:0; z-index:-1; border-radius:inherit; pointer-events:none; }
-:is(.incl, .tier, .assure)::before { background:radial-gradient(360px circle at var(--gx,24%) var(--gy,0%), color-mix(in srgb, var(--surface) 85%, transparent), color-mix(in srgb, var(--blue) 9%, transparent) 42%, transparent 68%); opacity:0; transition:opacity .5s var(--ease); }
-:is(.incl, .tier, .assure):hover::before { opacity:1; }
+:is(.incl, .tier, .assure)::after { content:''; position:absolute; inset:0; z-index:-1; border-radius:inherit; pointer-events:none; }
 :is(.incl, .tier, .assure)::after { padding:1px; background:var(--glass-rim-light); -webkit-mask:linear-gradient(var(--ink) 0 0) content-box, linear-gradient(var(--ink) 0 0); -webkit-mask-composite:xor; mask:linear-gradient(var(--ink) 0 0) content-box, linear-gradient(var(--ink) 0 0); mask-composite:exclude; }
 /* hairlines and the grey capsule are tinted rather than grey inside the glass, so they
    hold where it thins and cools; solid grey vanished against the foot of the card */
@@ -202,7 +199,7 @@ body {
 /* Apple's continuous corners, where the browser can draw them (radii in theme.css). */
 @supports (corner-shape:squircle) {
   :is(.incl, .incl-ico, .tier, .price-note, .assure, .faqs, .svc-links) { corner-shape:squircle; }
-  :is(.incl, .tier, .assure)::before, :is(.incl, .tier, .assure)::after { corner-shape:squircle; }
+  :is(.incl, .tier, .assure)::after { corner-shape:squircle; }
 }
 
 /* ── GLASS FALLBACKS ── solid wherever the glass cannot do its job: less
@@ -218,14 +215,13 @@ body {
   .wa-float { background:var(--whatsapp); }
   :is(.incl, .tier, .assure) { background:var(--surface); }
   .tier.rec { background:color-mix(in srgb, var(--blue) 5%, var(--surface)); }
-  :is(.incl, .tier, .assure)::before { display:none; }
 }
 @media (prefers-contrast:more) {
   .site-head { background:var(--ink); }
   .site-head.on-light { background:var(--surface); box-shadow:0 0 0 1px var(--text); }
   :is(.incl, .tier, .assure, .faqs, .svc-links) { border-color:var(--text); }
   :is(.incl, .tier, .assure) { background:var(--surface); }
-  :is(.incl, .tier, .assure)::before, :is(.incl, .tier, .assure)::after { display:none; }
+  :is(.incl, .tier, .assure)::after { display:none; }
 }
 
 /* Reduced motion holds still what travels; fades and colour changes still animate. */

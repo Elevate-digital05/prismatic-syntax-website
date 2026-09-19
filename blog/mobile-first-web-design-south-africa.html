@@ -54,7 +54,8 @@
 
   <p>South Africa has one of the highest rates of mobile-only internet users in the world. While businesses in Europe and North America often have a split between desktop and mobile browsing, in South Africa the picture is dramatically different, and it has huge implications for how websites should be built.</p>
 
-  <div class="stat-grid">
+  <div class="stat-grid glass-stage">
+    <img class="glass-wall" src="/assets/glass/prism-11.webp" alt="" loading="lazy" decoding="async" style="--x:50%;--y:50%;--w:250px;--wm:220px">
     <div class="stat-box"><div class="stat-num">80%+</div><div class="stat-label">of SA internet users browse primarily on mobile</div></div>
     <div class="stat-box"><div class="stat-num">53%</div><div class="stat-label">of mobile visitors abandon sites that take 3+ seconds to load</div></div>
     <div class="stat-box"><div class="stat-num">#1</div><div class="stat-label">Google now uses mobile-first indexing for all websites</div></div>
@@ -100,16 +101,35 @@
   <p>Every website we build is designed mobile-first. We start with the smallest screen and work up, not the other way around. We test every build on real devices across the screen sizes most common in South Africa, including mid-range Android phones that represent the majority of the market.</p>
   <p>We also optimise load times specifically for South African mobile networks: compressing images, minimising scripts, and ensuring fast performance even on 3G connections.</p>
 
-  <div class="cta-box">
-    <h3>Is your website mobile-ready?</h3>
-    <p>Get a free website review and find out how your current site performs on mobile, and what we'd do differently.</p>
-    <a href="/south-africa#contact" class="btn">Get a free review →</a>
+  <div class="glass-stage">
+    <img class="glass-wall" src="/assets/glass/prism-12.webp" alt="" loading="lazy" decoding="async" style="--x:93%;--y:72%;--w:210px;--xm:86%;--ym:78%;--wm:170px">
+    <div class="cta-box">
+      <h3>Is your website mobile-ready?</h3>
+      <p>Get a free website review and find out how your current site performs on mobile, and what we'd do differently.</p>
+      <a href="/south-africa#contact" class="btn">Get a free review →</a>
+    </div>
   </div>
 </article>
 <footer>
   <p>© 2026 <a href="/south-africa">Prismatic Syntax</a> · Web Design South Africa · <a href="/south-africa#blog">Blog</a> · <a href="/south-africa#services">Services</a></p>
   <p class="foot-legal"><a href="/privacy">Privacy</a> · <a href="/terms">Terms</a> · <a href="/refund-policy">Refund Policy</a></p>
 </footer>
+<!--BUILD:glass-lens-->
+<svg class="glass-defs" width="0" height="0" aria-hidden="true" focusable="false">
+  <filter id="glass-lens" x="0" y="0" width="100%" height="100%" color-interpolation-filters="sRGB">
+    <feFlood flood-color="#fff"/>
+    <feGaussianBlur stdDeviation="11"/>
+    <feColorMatrix values="0 0 0 1 0  0 0 0 1 0  0 0 0 1 0  0 0 0 0 1" result="shape"/>
+    <feConvolveMatrix in="shape" order="3" kernelMatrix="-1 0 1 -2 0 2 -1 0 1" divisor="1" bias="0.5" edgeMode="duplicate" preserveAlpha="true"/>
+    <feColorMatrix values="1 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0 1" result="dx"/>
+    <feConvolveMatrix in="shape" order="3" kernelMatrix="-1 -2 -1 0 0 0 1 2 1" divisor="1" bias="0.5" edgeMode="duplicate" preserveAlpha="true"/>
+    <feColorMatrix values="0 0 0 0 0  0 1 0 0 0  0 0 0 0 0  0 0 0 0 1"/>
+    <feComposite in2="dx" operator="arithmetic" k2="1" k3="1" result="map"/>
+    <feDisplacementMap in="SourceGraphic" in2="map" scale="150" xChannelSelector="R" yChannelSelector="G"/>
+    <feGaussianBlur stdDeviation="4"/>
+  </filter>
+</svg>
+<!--/BUILD:glass-lens-->
 <script src="/home.js" defer></script>
 </body>
 </html>

@@ -94,16 +94,35 @@
   <p>A good rule of thumb: your website should be treated like a member of staff. If it's going to be your primary sales tool, budget accordingly. For most small businesses, R8,500–R15,000 is the sweet spot, enough to get a quality professional result without over-investing.</p>
   <p>If you're unsure what you need, we offer free consultations with no pressure and no jargon. We'll tell you honestly what makes sense for your business and budget.</p>
 
-  <div class="cta-box">
-    <h3>Ready to get a quote?</h3>
-    <p>Tell us about your business and we'll get back to you within 24 hours with a free consultation and honest pricing.</p>
-    <a href="/south-africa#contact" class="btn">Get a free quote →</a>
+  <div class="glass-stage">
+    <img class="glass-wall" src="/assets/glass/prism-12.webp" alt="" loading="lazy" decoding="async" style="--x:93%;--y:72%;--w:210px;--xm:86%;--ym:78%;--wm:170px">
+    <div class="cta-box">
+      <h3>Ready to get a quote?</h3>
+      <p>Tell us about your business and we'll get back to you within 24 hours with a free consultation and honest pricing.</p>
+      <a href="/south-africa#contact" class="btn">Get a free quote →</a>
+    </div>
   </div>
 </article>
 <footer>
   <p>© 2026 <a href="/south-africa">Prismatic Syntax</a> · Web Design South Africa · <a href="/south-africa#blog">Blog</a> · <a href="/south-africa#services">Services</a></p>
   <p class="foot-legal"><a href="/privacy">Privacy</a> · <a href="/terms">Terms</a> · <a href="/refund-policy">Refund Policy</a></p>
 </footer>
+<!--BUILD:glass-lens-->
+<svg class="glass-defs" width="0" height="0" aria-hidden="true" focusable="false">
+  <filter id="glass-lens" x="0" y="0" width="100%" height="100%" color-interpolation-filters="sRGB">
+    <feFlood flood-color="#fff"/>
+    <feGaussianBlur stdDeviation="11"/>
+    <feColorMatrix values="0 0 0 1 0  0 0 0 1 0  0 0 0 1 0  0 0 0 0 1" result="shape"/>
+    <feConvolveMatrix in="shape" order="3" kernelMatrix="-1 0 1 -2 0 2 -1 0 1" divisor="1" bias="0.5" edgeMode="duplicate" preserveAlpha="true"/>
+    <feColorMatrix values="1 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0 1" result="dx"/>
+    <feConvolveMatrix in="shape" order="3" kernelMatrix="-1 -2 -1 0 0 0 1 2 1" divisor="1" bias="0.5" edgeMode="duplicate" preserveAlpha="true"/>
+    <feColorMatrix values="0 0 0 0 0  0 1 0 0 0  0 0 0 0 0  0 0 0 0 1"/>
+    <feComposite in2="dx" operator="arithmetic" k2="1" k3="1" result="map"/>
+    <feDisplacementMap in="SourceGraphic" in2="map" scale="150" xChannelSelector="R" yChannelSelector="G"/>
+    <feGaussianBlur stdDeviation="4"/>
+  </filter>
+</svg>
+<!--/BUILD:glass-lens-->
 <script src="/home.js" defer></script>
 </body>
 </html>

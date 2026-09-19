@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
 <title>Prismatic Syntax | Custom Website Design &amp; Development</title>
-<meta name="description" content="Hand-built custom websites for service businesses. No templates, no lock-in, no page builders. Most projects launch in about two weeks. See your homepage concept free.">
+<meta name="description" content="A full-stack creative agency: websites, brand identity, copy and video for service businesses. Hand-built, no templates, no lock-in. See your homepage concept free.">
 <meta name="author" content="Prismatic Syntax">
 <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
 <meta name="theme-color" content="#05090d">
@@ -19,7 +19,7 @@
 <meta property="og:locale" content="en_GB">
 <meta property="og:url" content="https://www.prismaticsyntax.com/">
 <meta property="og:title" content="Prismatic Syntax | Custom Website Design &amp; Development">
-<meta property="og:description" content="Hand-built custom websites for service businesses. No templates, no lock-in. Most projects launch in about two weeks. See your homepage concept free.">
+<meta property="og:description" content="A full-stack creative agency: websites, brand identity, copy and video for service businesses. Hand-built, no templates, no lock-in. See your homepage concept free.">
 <meta property="og:image" content="https://www.prismaticsyntax.com/og-image-1200x630.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
@@ -27,7 +27,7 @@
 <meta property="og:site_name" content="Prismatic Syntax">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Prismatic Syntax | Custom Website Design &amp; Development">
-<meta name="twitter:description" content="Hand-built custom websites for service businesses. No templates, no lock-in.">
+<meta name="twitter:description" content="A full-stack creative agency: websites, brand, copy and video. Hand-built, no templates, no lock-in.">
 <meta name="twitter:image" content="https://www.prismaticsyntax.com/og-image-1200x630.png">
 <link rel="sitemap" type="application/xml" title="Sitemap" href="https://www.prismaticsyntax.com/sitemap.xml">
 <script type="application/ld+json">
@@ -166,9 +166,9 @@
       <div class="hero-tiles"></div>
     </div>
     <div class="hero-in">
-      <p class="eyebrow"><span>Web Design &amp; Development Studio</span></p>
-      <h1>Custom websites. Built by hand. <span class="hl">Yours to keep.</span></h1>
-      <p class="hero-sub">We design and build sites for service businesses — trades, clinics, studios and consultancies. No templates, no page builders, no proprietary CMS you can never leave. Most projects launch in about two weeks, and at handover the files, the content and the domain are all yours.</p>
+      <p class="eyebrow"><span>No templates. No lock-in.</span></p>
+      <h1>A full-stack creative agency. <span class="hl">Built&nbsp;by&nbsp;hand.</span></h1>
+      <p class="hero-sub">Websites, brand identity, copy and video from one team, for service businesses — trades, clinics, studios and consultancies. No page builders and no proprietary CMS you can never leave. Most sites launch in about two weeks, and at handover the files, the content and the domain are all yours.</p>
       <div class="hero-ctas">
         <a href="#contact" class="btn-primary">Book a call</a>
         <a href="#process" class="btn-link">See how we work</a>
@@ -240,7 +240,8 @@
   </div>
 
   <!-- team -->
-  <div class="band" id="team">
+  <div class="band glass-stage" id="team">
+    <img class="glass-wall" src="/assets/glass/prism-2.webp" alt="" loading="lazy" decoding="async" style="--x:70%;--y:60%;--w:clamp(380px,38vw,560px)">
     <div class="sec">
       <div class="sec-top">
         <div>
@@ -263,7 +264,8 @@
   </div>
 
   <!-- pricing -->
-  <div class="band band-mist" id="pricing">
+  <div class="band band-mist glass-stage" id="pricing">
+    <img class="glass-wall" src="/assets/glass/prism-1.webp" alt="" loading="lazy" decoding="async" style="--x:64%;--y:62%;--w:clamp(320px,30vw,450px)">
     <div class="sec">
 <!--BUILD:intl-pricing-->
       <div class="sec-top">
@@ -409,5 +411,21 @@
 </script>
 <script src="/home.js" defer></script>
 <script src="/prism.js" defer></script>
+<!--BUILD:glass-lens-->
+<svg class="glass-defs" width="0" height="0" aria-hidden="true" focusable="false">
+  <filter id="glass-lens" x="0" y="0" width="100%" height="100%" color-interpolation-filters="sRGB">
+    <feFlood flood-color="#fff"/>
+    <feGaussianBlur stdDeviation="11"/>
+    <feColorMatrix values="0 0 0 1 0  0 0 0 1 0  0 0 0 1 0  0 0 0 0 1" result="shape"/>
+    <feConvolveMatrix in="shape" order="3" kernelMatrix="-1 0 1 -2 0 2 -1 0 1" divisor="1" bias="0.5" edgeMode="duplicate" preserveAlpha="true"/>
+    <feColorMatrix values="1 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0 1" result="dx"/>
+    <feConvolveMatrix in="shape" order="3" kernelMatrix="-1 -2 -1 0 0 0 1 2 1" divisor="1" bias="0.5" edgeMode="duplicate" preserveAlpha="true"/>
+    <feColorMatrix values="0 0 0 0 0  0 1 0 0 0  0 0 0 0 0  0 0 0 0 1"/>
+    <feComposite in2="dx" operator="arithmetic" k2="1" k3="1" result="map"/>
+    <feDisplacementMap in="SourceGraphic" in2="map" scale="150" xChannelSelector="R" yChannelSelector="G"/>
+    <feGaussianBlur stdDeviation="4"/>
+  </filter>
+</svg>
+<!--/BUILD:glass-lens-->
 </body>
 </html>

@@ -160,26 +160,31 @@ document.querySelectorAll('.faq-toggle').forEach(function (btn) {
   strip.after(pause);
 })();
 
-/* The light in the glass: on a mouse or trackpad, a soft blue pool follows the pointer
-   through whichever light-band card it is over (home.css draws it from --gx/--gy). One
-   listener for the page and one card updated per frame. For reduced motion the pool
-   stays at the top left instead of travelling. Keep GLASS in step with the LIGHT GLASS
-   blocks in home.css, site.css and article.css. */
+/* Clear glass: every card on a .glass-stage shows the prism still behind it (its
+   .glass-wall). theme.css draws each card's copy; this lines the copy up with the real
+   still, and again whenever the layout moves or a hidden page of /south-africa opens.
+   Keep GLASS in step with the CLEAR GLASS block in theme.css. */
 (function () {
-  if (!matchMedia('(hover: hover) and (pointer: fine)').matches || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-  const GLASS = '.p-card, .m-card, .svc-card, .blog-card, .path-card, .team-row, .work-item, .founder, .incl, .tier, .assure, .stat-box, .cta-box, .callout';
-  let card = null, x = 0, y = 0, queued = false;
-  const paint = function () {
-    queued = false;
-    if (!card) return;
-    const r = card.getBoundingClientRect();
-    card.style.setProperty('--gx', Math.round(x - r.left) + 'px');
-    card.style.setProperty('--gy', Math.round(y - r.top) + 'px');
-  };
-  addEventListener('pointermove', function (e) {
-    card = e.target instanceof Element ? e.target.closest(GLASS) : null;
-    if (!card) return;
-    x = e.clientX; y = e.clientY;
-    if (!queued) { queued = true; requestAnimationFrame(paint); }
-  }, { passive: true });
+  const GLASS = '.p-card, .m-card, .svc-card, .blog-card, .path-card, .team-row, .founder, .incl, .tier, .stat-box, .cta-box';
+  document.querySelectorAll('.glass-stage').forEach(function (stage) {
+    const wall = stage.querySelector(':scope > .glass-wall');
+    if (!wall) return;
+    const cards = stage.querySelectorAll(GLASS);
+    const place = function () {
+      const w = wall.getBoundingClientRect();
+      if (!wall.naturalWidth || !w.width) return; // not loaded, or on a page not showing yet
+      cards.forEach(function (card) {
+        const r = card.getBoundingClientRect();
+        card.style.setProperty('--wall', 'url("' + wall.currentSrc + '")');
+        card.style.setProperty('--wx', (w.left - r.left - card.clientLeft) + 'px');
+        card.style.setProperty('--wy', (w.top - r.top - card.clientTop) + 'px');
+        card.style.setProperty('--ww', w.width + 'px');
+        card.style.setProperty('--wh', w.height + 'px');
+      });
+    };
+    wall.addEventListener('load', place);
+    const watch = new ResizeObserver(place);
+    watch.observe(stage);
+    cards.forEach(function (card) { watch.observe(card); });
+  });
 })();

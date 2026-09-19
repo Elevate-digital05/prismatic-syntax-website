@@ -81,17 +81,14 @@ footer a { color:var(--surface); text-decoration:underline; text-decoration-colo
 }
 
 /* ── LIGHT GLASS ── the cards as clear glass, as on the entry pages (home.css): a dark
-   hairline outside, a lit rim inside, and on a mouse a pool of light that follows the
-   pointer (home.js sets --gx/--gy). Keep this list in step with GLASS in home.js. */
-:is(.stat-box, .cta-box, .callout)::before, :is(.stat-box, .cta-box, .callout)::after { content:''; position:absolute; inset:0; z-index:-1; border-radius:inherit; pointer-events:none; }
-:is(.stat-box, .cta-box, .callout)::before { background:radial-gradient(360px circle at var(--gx,24%) var(--gy,0%), color-mix(in srgb, var(--surface) 85%, transparent), color-mix(in srgb, var(--blue) 9%, transparent) 42%, transparent 68%); opacity:0; transition:opacity .5s var(--ease); }
-:is(.stat-box, .cta-box, .callout):hover::before { opacity:1; }
+   hairline outside and a lit rim inside. */
+:is(.stat-box, .cta-box, .callout)::after { content:''; position:absolute; inset:0; z-index:-1; border-radius:inherit; pointer-events:none; }
 :is(.stat-box, .cta-box, .callout)::after { padding:1px; background:var(--glass-rim-light); -webkit-mask:linear-gradient(var(--ink) 0 0) content-box, linear-gradient(var(--ink) 0 0); -webkit-mask-composite:xor; mask:linear-gradient(var(--ink) 0 0) content-box, linear-gradient(var(--ink) 0 0); mask-composite:exclude; }
 
 /* Apple's continuous corners, where the browser can draw them (radii in theme.css). */
 @supports (corner-shape:squircle) {
   :is(.stat-box, .cta-box, .callout, .tip-box, .highlight, table) { corner-shape:squircle; }
-  :is(.stat-box, .cta-box, .callout)::before, :is(.stat-box, .cta-box, .callout)::after { corner-shape:squircle; }
+  :is(.stat-box, .cta-box, .callout)::after { corner-shape:squircle; }
 }
 
 /* ── GLASS FALLBACKS ── solid wherever the glass cannot do its job. */
@@ -103,14 +100,13 @@ footer a { color:var(--surface); text-decoration:underline; text-decoration-colo
   nav { -webkit-backdrop-filter:none; backdrop-filter:none; background:var(--ink); }
   nav.on-light { background:var(--surface); }
   :is(.stat-box, .cta-box, .callout) { background:var(--surface); }
-  :is(.stat-box, .cta-box, .callout)::before { display:none; }
 }
 @media (prefers-contrast:more) {
   nav { background:var(--ink); }
   nav.on-light { background:var(--surface); box-shadow:0 0 0 1px var(--text); }
   :is(.stat-box, .cta-box, .callout, table) { border-color:var(--text); }
   :is(.stat-box, .cta-box, .callout) { background:var(--surface); }
-  :is(.stat-box, .cta-box, .callout)::before, :is(.stat-box, .cta-box, .callout)::after { display:none; }
+  :is(.stat-box, .cta-box, .callout)::after { display:none; }
 }
 /* Reduced motion holds still what travels; fades and colour changes still animate. */
 @media (prefers-reduced-motion:reduce) {

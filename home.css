@@ -479,15 +479,10 @@ footer{position:relative;z-index:1;display:grid;grid-template-columns:1.6fr 1fr 
    where the light comes in (top left), thinner and a shade cooler where it leaves, edged
    with a dark hairline outside and a lit rim inside, which is what makes glass read on a
    light page. No backdrop blur: nothing scrolls behind these, so blur would only cost a
-   PC frames for no visible change.
-   The signature is the light itself. On a mouse or trackpad a pool of light follows the
-   pointer through the glass, bright in the middle with a blue fringe, the way the prism
-   splits it (home.js sets --gx/--gy). */
+   PC frames for no visible change. */
 :is(.p-card,.m-card,.svc-card,.blog-card,.path-card,.team-row,.work-item,.founder){position:relative;isolation:isolate;background:var(--glass-card);border:1px solid var(--glass-card-edge);box-shadow:var(--lift);}
 :is(.p-card.pop,.m-card.rec){background:var(--glass-card-rec);border-color:var(--blue);}
-:is(.p-card,.m-card,.svc-card,.blog-card,.path-card,.team-row,.work-item,.founder)::before,:is(.p-card,.m-card,.svc-card,.blog-card,.path-card,.team-row,.work-item,.founder)::after{content:'';position:absolute;inset:0;z-index:-1;border-radius:inherit;pointer-events:none;}
-:is(.p-card,.m-card,.svc-card,.blog-card,.path-card,.team-row,.work-item,.founder)::before{background:radial-gradient(360px circle at var(--gx,24%) var(--gy,0%),color-mix(in srgb,var(--surface) 85%,transparent),color-mix(in srgb,var(--blue) 9%,transparent) 42%,transparent 68%);opacity:0;transition:opacity .5s var(--ease);}
-:is(.p-card,.m-card,.svc-card,.blog-card,.path-card,.team-row,.work-item,.founder):hover::before{opacity:1;}
+:is(.p-card,.m-card,.svc-card,.blog-card,.path-card,.team-row,.work-item,.founder)::after{content:'';position:absolute;inset:0;z-index:-1;border-radius:inherit;pointer-events:none;}
 :is(.p-card,.m-card,.svc-card,.blog-card,.path-card,.team-row,.work-item,.founder)::after{padding:1px;background:var(--glass-rim-light);-webkit-mask:linear-gradient(var(--ink) 0 0) content-box,linear-gradient(var(--ink) 0 0);-webkit-mask-composite:xor;mask:linear-gradient(var(--ink) 0 0) content-box,linear-gradient(var(--ink) 0 0);mask-composite:exclude;}
 /* hairlines inside the glass are tinted, not grey, so they hold on the blue card too */
 :is(.p-card,.m-card,.svc-card,.blog-card,.path-card,.team-row,.work-item,.founder) .p-feats li{border-top-color:var(--glass-card-edge);}
@@ -515,7 +510,7 @@ nav.on-light .nav-sub-all a{color:var(--blue);}
 @supports (corner-shape:squircle){
   :is(.p-card,.m-card,.svc-card,.blog-card,.path-card,.faq-accordion,.svc-rows,.team-row,.founder,.step,.contact-form,.hero-assure,.deposit-note,.p-retainer,.svc-icon,.form-group input,.form-group textarea){corner-shape:squircle;}
   :is(.hero-assure,.step,.contact-form)::after,.nav-sub::before{corner-shape:squircle;}
-  :is(.p-card,.m-card,.svc-card,.blog-card,.path-card,.team-row,.founder)::before,:is(.p-card,.m-card,.svc-card,.blog-card,.path-card,.team-row,.founder)::after{corner-shape:squircle;}
+  :is(.p-card,.m-card,.svc-card,.blog-card,.path-card,.team-row,.founder)::after{corner-shape:squircle;}
 }
 
 /* ── GLASS FALLBACKS ── solid ink wherever the glass cannot do its job: visitors
@@ -535,14 +530,13 @@ nav.on-light .nav-sub-all a{color:var(--blue);}
   .wa-btn{background:var(--whatsapp);}
   :is(.p-card,.m-card,.svc-card,.blog-card,.path-card,.team-row,.work-item,.founder){background:var(--surface);}
   :is(.p-card.pop,.m-card.rec){background:color-mix(in srgb,var(--blue) 5%,var(--surface));}
-  :is(.p-card,.m-card,.svc-card,.blog-card,.path-card,.team-row,.work-item,.founder)::before{display:none;}
 }
 @media (prefers-contrast:more){
   nav,.mobile-menu{background:var(--ink);border-color:var(--surface);}
   nav.on-light{background:var(--surface);}
   :is(.p-card,.m-card,.svc-card,.blog-card,.path-card,.faq-accordion,.svc-rows,.team-row,.work-item,.founder){border-color:var(--text);}
   :is(.p-card,.m-card,.svc-card,.blog-card,.path-card,.team-row,.work-item,.founder){background:var(--surface);}
-  :is(.p-card,.m-card,.svc-card,.blog-card,.path-card,.team-row,.work-item,.founder)::before,:is(.p-card,.m-card,.svc-card,.blog-card,.path-card,.team-row,.work-item,.founder)::after{display:none;}
+  :is(.p-card,.m-card,.svc-card,.blog-card,.path-card,.team-row,.work-item,.founder)::after{display:none;}
 }
 
 /* Reduced motion means no MOVEMENT, not a dead page. Windows turns this on whenever

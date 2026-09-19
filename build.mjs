@@ -13,6 +13,7 @@ import { pathToFileURL } from 'node:url';
 import { SERVICES, HOURS } from './lib/services.js';
 import { PACKAGES } from './lib/packages.js';
 import { USD_PACKAGES } from './lib/pricing-usd.js';
+import { WORK } from './lib/work.js';
 
 const SITE = 'https://www.prismaticsyntax.com';
 const WA = '27650858437';
@@ -678,6 +679,13 @@ ${Object.entries(USD_PACKAGES).map(([name, price]) => {
 }).join('\n')}
       </div>`;
 
+
+/* ── the client wall ── one list, laid out identically on both entry pages, so the
+   two cannot drift apart. lib/work.js is the only place a business is named. */
+const workWall = WORK.map(w =>
+  `        <li class="work-item"><img src="/assets/work/${w.logo}" alt="${attr(w.name)}" loading="lazy"></li>`
+).join('\n');
+
 /* ── run ── */
 export function build({ write = true } = {}) {
   tbc.clear();
@@ -688,6 +696,7 @@ export function build({ write = true } = {}) {
 
   let index = readFileSync('south-africa.html', 'utf8');
   index = inject(index, 'svc-grid', homeCards, 'south-africa.html');
+  index = inject(index, 'work-wall-sa', workWall, 'south-africa.html');
   index = inject(index, 'foot-services', footerServices, 'south-africa.html');
   index = inject(index, 'nav-services', navServices, 'south-africa.html');
   index = inject(index, 'mob-services', mobServices, 'south-africa.html');
@@ -696,6 +705,7 @@ export function build({ write = true } = {}) {
 
   let intl = readFileSync('index.html', 'utf8');
   intl = inject(intl, 'intl-services', intlServices, 'index.html');
+  intl = inject(intl, 'work-wall', workWall, 'index.html');
   intl = inject(intl, 'intl-pricing', intlPricing, 'index.html');
   out.set('index.html', intl);
 

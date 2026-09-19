@@ -311,6 +311,17 @@ a.svc-card:hover .svc-more{transform:translateX(6px);}
 
 
 /* ── BLOG ── */
+/* ── CLIENT WORK ── a wall of the businesses we have worked for. Every tile is the same
+   height and the logo is capped by height rather than width, so a long wordmark and a
+   square mark carry the same visual weight instead of one dwarfing the other. */
+.work-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;list-style:none;}
+.work-item{display:flex;align-items:center;justify-content:center;padding:24px 20px;min-height:132px;background:var(--surface);border:1px solid var(--line);border-radius:var(--r-md);transition:border-color .4s;}
+.work-item:hover{border-color:color-mix(in srgb,var(--blue) 35%,var(--line));}
+.work-item img{max-width:100%;max-height:72px;width:auto;height:auto;object-fit:contain;}
+/* Three across on a tablet, two on a phone: at four the tiles get so narrow the
+   logo inside is unreadable. */
+@media (max-width:1080px){.work-grid{grid-template-columns:repeat(3,1fr);}}
+@media (max-width:760px){.work-grid{grid-template-columns:repeat(2,1fr);gap:12px;}.work-item{min-height:112px;padding:20px 16px;}}
 .blog-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
 .blog-card{position:relative;display:flex;flex-direction:column;padding:28px 26px 30px;color:inherit;text-decoration:none;background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);transition:border-color .3s;}
 .blog-card:hover{border-color:color-mix(in srgb,var(--blue) 35%,var(--line));}

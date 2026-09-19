@@ -350,6 +350,23 @@ assert.match(readFileSync('prism.js', 'utf8'), /querySelectorAll\('\.prism-canva
 assert.ok(!existsSync('assets/hero-portrait.jpg'), 'assets/hero-portrait.jpg came back');
 console.log('ok prism: both entry pages render the glass form three times, in the hero, the band and contact, and the portrait is gone');
 
+/* ── the client wall ── lib/work.js is the only place a business is named, and both
+   entry pages must show exactly what it lists: a tile hand-added to the HTML would
+   escape that file's rule against inventing a client. Every logo it names has to be
+   a file that actually exists, or the wall ships with a broken image. */
+const { WORK } = await import('./lib/work.js');
+assert.ok(WORK.length > 0, 'lib/work.js lists no client work');
+for (const w of WORK) {
+  assert.ok(w.name && w.logo, `lib/work.js: an entry is missing a name or a logo`);
+  assert.ok(existsSync(`assets/work/${w.logo}`), `lib/work.js names ${w.logo}, which is not in assets/work/`);
+}
+for (const [name, page] of [['index.html', home], ['south-africa.html', saPage]]) {
+  assert.equal(page.match(/class="work-item"/g)?.length, WORK.length,
+    `${name}: the client wall shows a different number of tiles than lib/work.js lists`);
+  for (const w of WORK) assert.ok(page.includes(`/assets/work/${w.logo}`), `${name} is missing ${w.name}`);
+}
+console.log(`ok work: both entry pages show the ${WORK.length} businesses lib/work.js lists, and every logo exists`);
+
 /* ── WhatsApp buttons are plain links ── the package and retainer buttons called
    window.open, which in-app browsers and some phones block as a popup, so
    "Get Started" did nothing. A link to wa.me opens WhatsApp everywhere. */

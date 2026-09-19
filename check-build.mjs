@@ -124,7 +124,8 @@ assert.ok(menu.includes('.m-svc { break-before:page;'), 'services no longer star
 assert.ok(menu.includes('<svg class="logo"'), 'the logo is not inlined vector SVG');
 assert.doesNotMatch(menu, /<img|background-image|url\(["']?data:image\/(png|jpe?g|gif|webp)/i,
   'menu.html contains a raster image — it must stay live text and vector');
-assert.ok(menu.includes("family=Inter+Tight"), 'menu.html is not loading the Inter Tight webfont');
+assert.ok(menu.includes('/assets/fonts/inter-tight-latin.woff2') || menu.includes('theme.css'),
+  'menu.html has no route to the Inter Tight webfont');
 
 // Screen-only chrome must not reach paper.
 const printCss = menu.slice(menu.indexOf('@media print'));
@@ -366,6 +367,14 @@ for (const [name, page] of [['index.html', home], ['south-africa.html', saPage]]
   for (const w of WORK) assert.ok(page.includes(`/assets/work/${w.logo}`), `${name} is missing ${w.name}`);
 }
 console.log(`ok work: both entry pages show the ${WORK.length} businesses lib/work.js lists, and every logo exists`);
+
+// Nothing may reintroduce a third-party font host: hotlinking leaked every visitor's
+// IP to Google before consent, and the CSP no longer allows it either.
+for (const [name, page] of [['index.html', home], ['south-africa.html', saPage], ['menu.html', menu]]) {
+  assert.doesNotMatch(page, /fonts\.googleapis\.com|fonts\.gstatic\.com/,
+    `${name} calls Google Fonts again; the typefaces are served from /assets/fonts`);
+}
+console.log('ok fonts: the typefaces are served from this domain, not a third-party host');
 
 /* ── WhatsApp buttons are plain links ── the package and retainer buttons called
    window.open, which in-app browsers and some phones block as a popup, so

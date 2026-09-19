@@ -159,3 +159,27 @@ document.querySelectorAll('.faq-toggle').forEach(function (btn) {
   });
   strip.after(pause);
 })();
+
+/* The light in the glass: on a mouse or trackpad, a soft blue pool follows the pointer
+   through whichever light-band card it is over (home.css draws it from --gx/--gy). One
+   listener for the page and one card updated per frame. For reduced motion the pool
+   stays at the top left instead of travelling. Keep GLASS in step with the LIGHT GLASS
+   blocks in home.css, site.css and article.css. */
+(function () {
+  if (!matchMedia('(hover: hover) and (pointer: fine)').matches || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const GLASS = '.p-card, .m-card, .svc-card, .blog-card, .path-card, .team-row, .work-item, .founder, .incl, .tier, .assure, .stat-box, .cta-box, .callout';
+  let card = null, x = 0, y = 0, queued = false;
+  const paint = function () {
+    queued = false;
+    if (!card) return;
+    const r = card.getBoundingClientRect();
+    card.style.setProperty('--gx', Math.round(x - r.left) + 'px');
+    card.style.setProperty('--gy', Math.round(y - r.top) + 'px');
+  };
+  addEventListener('pointermove', function (e) {
+    card = e.target instanceof Element ? e.target.closest(GLASS) : null;
+    if (!card) return;
+    x = e.clientX; y = e.clientY;
+    if (!queued) { queued = true; requestAnimationFrame(paint); }
+  }, { passive: true });
+})();

@@ -52,6 +52,11 @@
   /* Dark bands get a soft blue light behind them, so the glass on them has colour to pick up. */
   --ink-glow:radial-gradient(55% 60% at 88% 0%,color-mix(in srgb,var(--blue) 24%,transparent),transparent 72%),radial-gradient(45% 55% at 0% 100%,color-mix(in srgb,var(--blue) 12%,transparent),transparent 70%),var(--ink);
   --glass-rim-light:linear-gradient(150deg,var(--surface),color-mix(in srgb,var(--surface) 30%,transparent) 40%,color-mix(in srgb,var(--surface) 70%,transparent));
+  /* light-band cards as clear glass: bright where the light comes in, thinner and a shade
+     cooler where it leaves. The pointer light is not a token: it reads each card's --gx/--gy. */
+  --glass-card:linear-gradient(155deg,var(--surface) 12%,color-mix(in srgb,var(--surface) 40%,transparent) 68%,color-mix(in srgb,var(--line) 50%,transparent));
+  --glass-card-rec:linear-gradient(155deg,color-mix(in srgb,var(--blue) 4%,var(--surface)) 12%,color-mix(in srgb,var(--blue) 7%,transparent) 68%,color-mix(in srgb,var(--blue) 13%,transparent));
+  --glass-card-edge:color-mix(in srgb,var(--ink) 8%,transparent);
 }
 
 /* Apple's corners are continuous curves. Where the browser can draw one, the radii

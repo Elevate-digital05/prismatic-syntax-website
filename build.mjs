@@ -643,7 +643,7 @@ const HOME_FEATS = {
   Starter:  ['Custom brand colours & typography', 'Professional contact form', 'Google Business Profile setup', 'Basic on-page SEO', '1 round of revisions'],
   Business: ['Everything in Starter', 'Copywriting for 3 pages', 'Full on-page SEO', 'Speed & Core Web Vitals optimisation', '2 rounds of revisions'],
   Pro:      ['Everything in Business', 'E-commerce or booking system', 'Full copywriting', 'Blog setup + training', '3 rounds of revisions'],
-  Premium:  ['Discovery & strategy workshop', 'Custom functionality / API integrations', 'Full SEO dominance strategy', 'Direct line to the founder throughout', 'Priority support, replies within 24h on weekdays'],
+  Premium:  ['Discovery & strategy workshop', 'Custom functionality / API integrations', 'Full SEO dominance strategy', 'Direct line to the founders throughout', 'Priority support, replies within 24h on weekdays'],
 };
 const homeFeats = name => HOME_FEATS[name].map(f => {
   if (!PACKAGES[name].features.map(featLabel).includes(f)) throw new Error(`build.mjs HOME_FEATS: "${f}" is not a ${name} feature in lib/packages.js`);

@@ -122,3 +122,29 @@ document.querySelectorAll('.faq-toggle').forEach(function (btn) {
   // keys, the scrollbar, links and page switches move the page themselves: let go
   ['keydown', 'pointerdown', 'hashchange'].forEach(function (type) { addEventListener(type, function () { running = false; }); });
 })();
+
+/* The client wall: one row however many businesses are added. A copy of the list goes
+   beside it, hidden from screen readers so each name is announced once, and CSS slides
+   the pair along. It stops while the pointer is over it, and the button stops it for
+   good, which is what the guidelines ask of anything that moves on its own. */
+(function () {
+  const list = document.querySelector('.work-grid');
+  if (!list) return;
+  const strip = document.createElement('div');
+  strip.className = 'work-marquee';
+  list.before(strip);
+  strip.append(list);
+  const copy = list.cloneNode(true);
+  copy.setAttribute('aria-hidden', 'true');
+  copy.querySelectorAll('img').forEach(function (img) { img.alt = ''; });
+  strip.append(copy);
+  const pause = document.createElement('button');
+  pause.type = 'button';
+  pause.className = 'work-pause';
+  pause.textContent = 'Pause logos';
+  pause.addEventListener('click', function () {
+    const paused = strip.classList.toggle('is-paused');
+    pause.textContent = paused ? 'Play logos' : 'Pause logos';
+  });
+  strip.after(pause);
+})();

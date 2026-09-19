@@ -325,16 +325,13 @@ a.svc-card:hover .svc-more{transform:translateX(6px);}
 .work-marquee{--work-gap:16px;display:flex;gap:var(--work-gap);overflow:hidden;-webkit-mask-image:linear-gradient(90deg,transparent,var(--ink) 7%,var(--ink) 93%,transparent);mask-image:linear-gradient(90deg,transparent,var(--ink) 7%,var(--ink) 93%,transparent);}
 /* each copy is at least as wide as the strip, so one full copy always covers the view, and
    sliding by exactly one copy plus the gap lands the second where the first began */
-.work-marquee .work-grid{flex-shrink:0;min-width:100%;justify-content:space-around;overflow:visible;padding-bottom:0;animation:workSlide 48s linear infinite;}
+.work-marquee .work-grid{flex-shrink:0;min-width:100%;justify-content:space-around;overflow:visible;padding-bottom:0;animation:workSlide var(--work-duration,40s) linear infinite;}
 .work-marquee:hover .work-grid,.work-marquee.is-paused .work-grid{animation-play-state:paused;}
 @keyframes workSlide{to{transform:translateX(calc(-100% - var(--work-gap)));}}
 .work-pause{display:block;margin:16px 0 0 auto;padding:9px 16px;border:1px solid var(--line);border-radius:var(--r-pill);background:var(--surface);color:var(--grey);font:600 13px/1 var(--f-display);cursor:pointer;transition:color .3s,border-color .3s;}
 .work-pause:hover{color:var(--text);border-color:color-mix(in srgb,var(--blue) 35%,var(--line));}
 @media (max-width:760px){.work-grid,.work-marquee{--work-gap:12px;}.work-item{flex-basis:160px;min-height:104px;padding:18px 14px;}}
-/* Slower rather than still for reduced motion, as with the glass: Windows asks for reduced
-   motion whenever "Animation effects" is off, and a frozen strip would hide all but the
-   first few logos. Anyone who wants it still has the pause button. */
-@media (prefers-reduced-motion:reduce){.work-marquee .work-grid{animation-duration:96s;}}
+/* the lap time is set by home.js from a pace, so it holds steady as businesses are added */
 .blog-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
 .blog-card{position:relative;display:flex;flex-direction:column;padding:28px 26px 30px;color:inherit;text-decoration:none;background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);transition:border-color .3s;}
 .blog-card:hover{border-color:color-mix(in srgb,var(--blue) 35%,var(--line));}

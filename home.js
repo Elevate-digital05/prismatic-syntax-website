@@ -138,6 +138,17 @@ document.querySelectorAll('.faq-toggle').forEach(function (btn) {
   copy.setAttribute('aria-hidden', 'true');
   copy.querySelectorAll('img').forEach(function (img) { img.alt = ''; });
   strip.append(copy);
+  // A set pace rather than a set lap time: a fixed lap would scroll faster with every
+  // business added, since each lap gets longer. Half pace for reduced motion rather than
+  // still, as with the glass: Windows reports reduced motion whenever "Animation effects"
+  // is off, and a frozen strip would show only the first few logos.
+  const speed = matchMedia('(prefers-reduced-motion: reduce)').matches ? 30 : 60; // px a second
+  const pace = function () {
+    const lap = list.getBoundingClientRect().width + (parseFloat(getComputedStyle(strip).columnGap) || 16);
+    strip.style.setProperty('--work-duration', (lap / speed).toFixed(1) + 's');
+  };
+  pace();
+  new ResizeObserver(pace).observe(list);
   const pause = document.createElement('button');
   pause.type = 'button';
   pause.className = 'work-pause';

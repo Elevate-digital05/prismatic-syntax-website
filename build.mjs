@@ -332,7 +332,6 @@ ${all.map(s => `        <li><a href="/services/${s.slug}">${esc(s.nav)}</a></li>
 </footer>
 
 <a href="${attr(waLink(`Hi Kabelo, I'd like to talk about ${svc.name.toLowerCase()} for my business.`))}" class="wa-float" target="_blank" rel="noopener noreferrer" aria-label="Chat on WhatsApp">${waIcon(27)}</a>
-${GLASS_LENS}
 <script src="/home.js" defer></script>
 </body>
 </html>
@@ -567,30 +566,10 @@ ${contact}
 `;
 }
 
-/* The bent edge of the clear glass (theme.css, CLEAR GLASS). The card's own outline,
-   softened, gives a slope at each edge, and the slope says which way to bend what shows
-   through. Written into every page that has a .glass-stage. */
-const GLASS_LENS = `<svg class="glass-defs" width="0" height="0" aria-hidden="true" focusable="false">
-  <filter id="glass-lens" x="0" y="0" width="100%" height="100%" color-interpolation-filters="sRGB">
-    <feFlood flood-color="#fff"/>
-    <feGaussianBlur stdDeviation="11"/>
-    <feColorMatrix values="0 0 0 1 0  0 0 0 1 0  0 0 0 1 0  0 0 0 0 1" result="shape"/>
-    <feConvolveMatrix in="shape" order="3" kernelMatrix="-1 0 1 -2 0 2 -1 0 1" divisor="1" bias="0.5" edgeMode="duplicate" preserveAlpha="true"/>
-    <feColorMatrix values="1 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0 1" result="dx"/>
-    <feConvolveMatrix in="shape" order="3" kernelMatrix="-1 -2 -1 0 0 0 1 2 1" divisor="1" bias="0.5" edgeMode="duplicate" preserveAlpha="true"/>
-    <feColorMatrix values="0 0 0 0 0  0 1 0 0 0  0 0 0 0 0  0 0 0 0 1"/>
-    <feComposite in2="dx" operator="arithmetic" k2="1" k3="1" result="map"/>
-    <feDisplacementMap in="SourceGraphic" in2="map" scale="150" xChannelSelector="R" yChannelSelector="G"/>
-    <feGaussianBlur stdDeviation="4"/>
-  </filter>
-</svg>`;
-
 // The prism still a section's glass sits over: assets/glass/prism-<n>.webp, placed by
 // its centre (--x, --y) and width (--w) in the section.
 const glassWall = (n, place) =>
   `<img class="glass-wall" src="/assets/glass/prism-${n}.webp" alt="" loading="lazy" decoding="async" style="${place}">`;
-
-const BLOG_POSTS = ['blog/mobile-first-web-design-south-africa.html', 'blog/whatsapp-marketing-website.html', 'blog/website-cost-south-africa-2026.html'];
 
 /* ── injection into hand-written files ──────────────────────────────────
    Everything between the markers is generated; everything outside is yours. */
@@ -726,18 +705,14 @@ export function build({ write = true } = {}) {
   index = inject(index, 'nav-services', navServices, 'south-africa.html');
   index = inject(index, 'mob-services', mobServices, 'south-africa.html');
   for (const [key, body] of packageBlocks) index = inject(index, key, body, 'south-africa.html');
-  index = inject(index, 'glass-lens', GLASS_LENS, 'south-africa.html');
   out.set('south-africa.html', index);
 
   let intl = readFileSync('index.html', 'utf8');
   intl = inject(intl, 'intl-services', intlServices, 'index.html');
   intl = inject(intl, 'work-wall', workWall, 'index.html');
   intl = inject(intl, 'intl-pricing', intlPricing, 'index.html');
-  intl = inject(intl, 'glass-lens', GLASS_LENS, 'index.html');
   out.set('index.html', intl);
 
-  // The blog posts are hand-written; only their glass filter is generated.
-  for (const post of BLOG_POSTS) out.set(post, inject(readFileSync(post, 'utf8'), 'glass-lens', GLASS_LENS, post));
 
   let sitemap = readFileSync('sitemap.xml', 'utf8');
   sitemap = inject(sitemap, 'services', sitemapEntries, 'sitemap.xml');

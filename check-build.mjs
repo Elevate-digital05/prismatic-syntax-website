@@ -189,9 +189,9 @@ for (const [page, raw] of linkSources) {
 console.log(`ok links: ${links} internal links across ${linkSources.length} pages all resolve`);
 
 /* ── clear glass ──
-   A .glass-stage draws its cards' glass from one prism still (its .glass-wall) bent by
-   the #glass-lens filter. Without the filter the edges go flat; without the wall there is
-   nothing to show; and a card class missing from GLASS in home.js is never lined up. */
+   A .glass-stage draws its cards' glass from one prism still, its .glass-wall. Without
+   the wall there is nothing to show through the glass, and a card class missing from
+   GLASS in home.js is never lined up with it. */
 {
   const css = readFileSync('theme.css', 'utf8');
   const js = readFileSync('home.js', 'utf8');
@@ -205,11 +205,10 @@ console.log(`ok links: ${links} internal links across ${linkSources.length} page
     const n = (html.match(/class="[^"]*\bglass-stage\b/g) || []).length;
     if (!n) continue;
     stages += n;
-    assert.ok(html.includes('id="glass-lens"'), `${page} has clear glass but no #glass-lens filter`);
     assert.equal((html.match(/class="glass-wall"/g) || []).length, n, `${page}: every .glass-stage needs exactly one .glass-wall`);
     for (const [img] of html.matchAll(/<img class="glass-wall"[^>]*>/g)) assert.match(img, /alt=""/, `${page}: a glass wall is decoration and needs alt=""`);
   }
-  console.log(`ok glass: ${stages} glass stages, each with its prism and the lens filter`);
+  console.log(`ok glass: ${stages} glass stages, each with its prism still`);
 }
 
 /* ── package and retainer prices match the rand price list ──

@@ -67,26 +67,25 @@
   .glass-stage :is(.p-card,.m-card,.svc-card,.blog-card,.path-card,.team-row,.founder,.incl,.tier,.stat-box,.cta-box)::before { corner-shape:squircle; }
 }
 
-/* ── CLEAR GLASS ── iOS's clear glass: you see what is behind it, a little softened and
-   bent at the edges, under a lit bezel. A light section is flat, so each one that holds
-   cards gets a still of the prism to sit over (.glass-wall, a different angle per
-   section). Every card shows its own copy of that still (::before), lined up with the
-   real one by home.js and bent at the edges by the SVG #glass-lens that build.mjs writes
-   into the page, under a frosted middle (::after). The copy never changes once drawn,
-   so scrolling re-blurs nothing: blurring on every scroll frame is what made PCs
-   choppy. A section's cards are listed in GLASS in home.js as well as here. */
+/* ── CLEAR GLASS ── iOS's clear glass: you see what is behind it, bent at the edges,
+   under a lit bezel. A light section is flat, so each one that holds cards gets a still
+   of the prism to sit over (.glass-wall, a different angle per section). Every card
+   shows its own copy of that still (::before), lined up with the real one by home.js and
+   blown up a little, so what shows through a card no longer lines up with what shows
+   beside it: that offset at the rim is the refraction. The middle is frosted (::after),
+   because grey and blue text needs about 86% white over the prism's darkest blue to stay
+   readable; the rim stays clear, and that is where the prism shows.
+   Backgrounds and a transform only. Filters and masks here turned to black rectangles on
+   several iPhones, which is also why the copy is only drawn on cards near the screen
+   (.is-lit, set by home.js). A section's cards are listed in GLASS in home.js too. */
 .glass-stage { position:relative; }
 .band.glass-stage { overflow:clip; }
-.glass-defs { position:absolute; }
 .glass-wall { position:absolute; left:var(--x,50%); top:var(--y,55%); width:var(--w,clamp(320px,30vw,460px)); height:auto; transform:translate(-50%,-50%); pointer-events:none; user-select:none; }
 @media (max-width:760px) { .glass-wall { left:var(--xm,50%); top:var(--ym,var(--y,55%)); width:var(--wm,min(80vw,340px)); } }
 .glass-stage :is(.p-card,.m-card,.svc-card,.blog-card,.path-card,.team-row,.founder,.incl,.tier,.stat-box,.cta-box) { overflow:hidden; border-color:color-mix(in srgb,var(--surface) 85%,transparent); box-shadow:0 0 0 1px color-mix(in srgb,var(--ink) 9%,transparent),var(--lift); }
-.glass-stage :is(.p-card,.m-card,.svc-card,.blog-card,.path-card,.team-row,.founder,.incl,.tier,.stat-box,.cta-box)::before { content:''; position:absolute; inset:-4px; z-index:-2; border-radius:inherit; pointer-events:none; background:var(--wall) no-repeat calc(var(--wx) + 4px) calc(var(--wy) + 4px) / var(--ww) var(--wh); filter:url(#glass-lens); }
-/* The frost sits inside the rim: text always has near-white behind it (grey and blue
-   text need about 86% white over the prism's darkest blue to stay readable), while the
-   outer edge stays clear, so that is where the prism shows, bent. */
-.glass-stage :is(.p-card,.m-card,.svc-card,.blog-card,.path-card,.team-row,.founder,.incl,.tier,.stat-box,.cta-box)::after { inset:10px; padding:0; -webkit-mask:none; mask:none; background:color-mix(in srgb,var(--surface) 86%,transparent); box-shadow:none; filter:blur(9px); }
-.glass-stage :is(.p-card.pop,.m-card.rec,.tier.rec)::after { background:color-mix(in srgb,color-mix(in srgb,var(--blue) 6%,var(--surface)) 86%,transparent); }
+.glass-stage :is(.p-card,.m-card,.svc-card,.blog-card,.path-card,.team-row,.founder,.incl,.tier,.stat-box,.cta-box).is-lit::before { content:''; position:absolute; inset:0; z-index:-2; border-radius:inherit; pointer-events:none; background:var(--wall) no-repeat var(--wx) var(--wy) / var(--ww) var(--wh); transform:scale(1.09); }
+.glass-stage :is(.p-card,.m-card,.svc-card,.blog-card,.path-card,.team-row,.founder,.incl,.tier,.stat-box,.cta-box)::after { inset:0; padding:0; -webkit-mask:none; mask:none; box-shadow:none; background:radial-gradient(118% 118% at 50% 46%,color-mix(in srgb,var(--surface) 88%,transparent) 0 58%,color-mix(in srgb,var(--surface) 30%,transparent) 100%); }
+.glass-stage :is(.p-card.pop,.m-card.rec,.tier.rec)::after { background:radial-gradient(118% 118% at 50% 46%,color-mix(in srgb,color-mix(in srgb,var(--blue) 6%,var(--surface)) 88%,transparent) 0 58%,color-mix(in srgb,var(--blue) 12%,transparent) 100%); }
 /* solid again wherever the glass cannot do its job */
 @media (prefers-reduced-transparency:reduce), (prefers-contrast:more) {
   .glass-wall, .glass-stage :is(.p-card,.m-card,.svc-card,.blog-card,.path-card,.team-row,.founder,.incl,.tier,.stat-box,.cta-box)::before { display:none; }

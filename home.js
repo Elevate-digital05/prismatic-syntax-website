@@ -185,6 +185,11 @@ document.querySelectorAll('.faq-toggle').forEach(function (btn) {
     wall.addEventListener('load', place);
     const watch = new ResizeObserver(place);
     watch.observe(stage);
-    cards.forEach(function (card) { watch.observe(card); });
+    // A card holds its filtered copy only while it is near the screen. All of them at
+    // once is more than an older phone's GPU will hold, and it drops what it cannot.
+    const lit = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) { e.target.classList.toggle('is-lit', e.isIntersecting); });
+    }, { rootMargin: '200px' });
+    cards.forEach(function (card) { watch.observe(card); lit.observe(card); });
   });
 })();

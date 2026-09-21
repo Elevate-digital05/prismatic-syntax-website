@@ -411,21 +411,5 @@
 </script>
 <script src="/home.js" defer></script>
 <script src="/prism.js" defer></script>
-<!--BUILD:glass-lens-->
-<svg class="glass-defs" width="0" height="0" aria-hidden="true" focusable="false">
-  <filter id="glass-lens" x="0" y="0" width="100%" height="100%" color-interpolation-filters="sRGB">
-    <feFlood flood-color="#fff"/>
-    <feGaussianBlur stdDeviation="11"/>
-    <feColorMatrix values="0 0 0 1 0  0 0 0 1 0  0 0 0 1 0  0 0 0 0 1" result="shape"/>
-    <feConvolveMatrix in="shape" order="3" kernelMatrix="-1 0 1 -2 0 2 -1 0 1" divisor="1" bias="0.5" edgeMode="duplicate" preserveAlpha="true"/>
-    <feColorMatrix values="1 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0 1" result="dx"/>
-    <feConvolveMatrix in="shape" order="3" kernelMatrix="-1 -2 -1 0 0 0 1 2 1" divisor="1" bias="0.5" edgeMode="duplicate" preserveAlpha="true"/>
-    <feColorMatrix values="0 0 0 0 0  0 1 0 0 0  0 0 0 0 0  0 0 0 0 1"/>
-    <feComposite in2="dx" operator="arithmetic" k2="1" k3="1" result="map"/>
-    <feDisplacementMap in="SourceGraphic" in2="map" scale="150" xChannelSelector="R" yChannelSelector="G"/>
-    <feGaussianBlur stdDeviation="4"/>
-  </filter>
-</svg>
-<!--/BUILD:glass-lens-->
 </body>
 </html>

@@ -403,6 +403,8 @@ footer{position:relative;z-index:1;display:grid;grid-template-columns:1.6fr 1fr 
 .wa-btn{position:fixed;bottom:calc(24px + env(safe-area-inset-bottom));right:calc(24px + env(safe-area-inset-right));z-index:300;display:flex;align-items:center;justify-content:center;width:56px;height:56px;border-radius:50%;background:color-mix(in srgb,var(--whatsapp) 88%,transparent);-webkit-backdrop-filter:var(--glass-blur);backdrop-filter:var(--glass-blur);box-shadow:var(--glass-shine),0 10px 30px color-mix(in srgb,var(--ink) 30%,transparent);text-decoration:none;cursor:pointer;transition:transform .4s var(--ease);animation:fadeUp 1s var(--ease) 1.2s backwards;}
 .wa-btn:hover{transform:scale(1.1) rotate(-8deg);}
 .wa-btn svg{width:28px;height:28px;fill:var(--surface);}
+/* the back-to-top button (theme.css) stands on it, centred, with a 12px gap */
+body:has(.wa-btn) .to-top{right:calc(30px + env(safe-area-inset-right));bottom:calc(92px + env(safe-area-inset-bottom));}
 
 
 /* ── RESPONSIVE ── */
@@ -458,6 +460,7 @@ footer{position:relative;z-index:1;display:grid;grid-template-columns:1.6fr 1fr 
   footer{grid-template-columns:1fr;padding-top:56px;}
   .wa-btn{right:18px;bottom:calc(18px + env(safe-area-inset-bottom));width:50px;height:50px;}
   .wa-btn svg{width:24px;height:24px;}
+  body:has(.wa-btn) .to-top{right:21px;bottom:calc(80px + env(safe-area-inset-bottom));}
 }
 
 @media (max-width:380px){
@@ -469,10 +472,10 @@ footer{position:relative;z-index:1;display:grid;grid-template-columns:1.6fr 1fr 
 
 /* ── iOS 27 GLASS DETAILS ── */
 /* Only the layers that float over moving content blur what is behind them: the nav,
-   the mobile menu and the WhatsApp button. The glass cards on dark bands sit on a
-   flat or smooth background where a blur shows nothing, and backdrop-filter is
-   expensive enough on many Windows GPUs to make scrolling judder, so they keep
-   the translucent fill and rim without it. */
+   the mobile menu, the WhatsApp button and the back-to-top button. The glass cards
+   on dark bands sit on a flat or smooth background where a blur shows nothing, and
+   backdrop-filter is expensive enough on many Windows GPUs to make scrolling judder,
+   so they keep the translucent fill and rim without it. */
 /* The rim: a 1px ring brightest where light would catch the corners. A border
    can only be one colour, so it is a gradient masked down to its outer pixel. */
 /* ── LIGHT GLASS ── the cards on light bands as clear glass rather than flat white: bright

@@ -178,6 +178,8 @@ body {
 .wa-float { position:fixed; right:16px; bottom:16px; z-index:120; display:flex; align-items:center; justify-content:center; width:54px; height:54px; border-radius:50%; background:color-mix(in srgb, var(--whatsapp) 88%, transparent); -webkit-backdrop-filter:var(--glass-blur); backdrop-filter:var(--glass-blur); color:var(--surface); box-shadow:var(--glass-shine), 0 8px 24px color-mix(in srgb, var(--ink) 30%, transparent); transition:transform .3s var(--ease); }
 .wa-float:hover { transform:scale(1.08); }
 .wa-float svg { width:27px; height:27px; }
+/* the back-to-top button (theme.css) stands on it, centred, with a 12px gap */
+body:has(.wa-float) .to-top { right:21px; bottom:82px; }
 
 @media (max-width:380px) {
   .site-head .wrap { padding:0 6px 0 16px; }

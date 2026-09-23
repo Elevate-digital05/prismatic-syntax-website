@@ -90,3 +90,30 @@
 @media (prefers-reduced-transparency:reduce), (prefers-contrast:more) {
   .glass-wall, .glass-stage :is(.p-card,.m-card,.svc-card,.blog-card,.path-card,.team-row,.founder,.incl,.tier,.stat-box,.cta-box)::before { display:none; }
 }
+
+/* ── BACK TO TOP ── the glass button home.js adds to every page once it is a screen
+   down. Glass like the nav, so it blurs what scrolls behind it, and it flips to frosted
+   white over light sections the same way (home.js sets .on-light). It only fades: it
+   never travels in. home.css and site.css stand it on top of their WhatsApp button. */
+.to-top { position:fixed; right:calc(24px + env(safe-area-inset-right)); bottom:calc(24px + env(safe-area-inset-bottom)); z-index:180; display:flex; align-items:center; justify-content:center; width:44px; height:44px; padding:0; border:0; border-radius:50%; background:var(--glass-fill); -webkit-backdrop-filter:var(--glass-blur); backdrop-filter:var(--glass-blur); box-shadow:var(--glass-shine); color:var(--surface); cursor:pointer; opacity:0; visibility:hidden; transition:opacity .3s, visibility 0s .3s, background-color .4s, box-shadow .4s, color .4s; }
+.to-top.is-shown { opacity:1; visibility:visible; transition-delay:0s; }
+.to-top::after { content:''; position:absolute; inset:0; padding:1px; border-radius:inherit; background:var(--glass-rim); -webkit-mask:linear-gradient(var(--ink) 0 0) content-box, linear-gradient(var(--ink) 0 0); -webkit-mask-composite:xor; mask:linear-gradient(var(--ink) 0 0) content-box, linear-gradient(var(--ink) 0 0); mask-composite:exclude; pointer-events:none; }
+.to-top svg { width:20px; height:20px; transition:transform .3s var(--ease); }
+.to-top:hover svg { transform:translateY(-2px); }
+.to-top:focus-visible { outline:2px solid var(--blue); outline-offset:3px; }
+.to-top.on-light { background:var(--glass-fill-light); box-shadow:0 0 0 1px color-mix(in srgb,var(--ink) 7%,transparent), 0 10px 30px -16px color-mix(in srgb,var(--ink) 28%,transparent); color:var(--text); }
+.to-top.on-light::after { background:var(--glass-rim-light); }
+@media (max-width:760px) { .to-top { right:calc(18px + env(safe-area-inset-right)); bottom:calc(18px + env(safe-area-inset-bottom)); } }
+/* the menu sheet covers the page, so there is nothing to go back to the top of */
+body:has(.mobile-menu.open) .to-top { opacity:0; visibility:hidden; }
+/* solid wherever the glass cannot do its job, as with the nav */
+@supports not ((-webkit-backdrop-filter:blur(1px)) or (backdrop-filter:blur(1px))) {
+  .to-top { background:var(--ink); }
+  .to-top.on-light { background:var(--surface); }
+}
+@media (prefers-reduced-transparency:reduce), (prefers-contrast:more) {
+  .to-top { -webkit-backdrop-filter:none; backdrop-filter:none; background:var(--ink); }
+  .to-top.on-light { background:var(--surface); box-shadow:0 0 0 1px var(--text); }
+}
+@media (prefers-reduced-motion:reduce) { .to-top:hover svg { transform:none; } }
+@media print { .to-top { display:none; } }

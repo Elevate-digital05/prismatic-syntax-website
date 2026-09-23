@@ -1,4 +1,4 @@
-/* Shared by every page: the hero motion, the FAQ, and the glass header's tone. */
+/* Shared by every page: the hero motion, the FAQ, the glass header's tone and the back-to-top button. */
 /* Home hero: dark tiles dissolve off the glass (prism.js) on load and the glass
    drifts with the pointer. The hero is the only part of either page that moves. */
 (function () {
@@ -54,21 +54,46 @@ document.querySelectorAll('.faq-toggle').forEach(function (btn) {
   });
 });
 
+/* Back to top: a glass button in the bottom corner once the page is a screen down.
+   It only works with a script, so the script adds it, and every page gets it from here.
+   Focus goes back to the top too, to the first link in the nav, or a keyboard user's
+   next Tab would carry them straight back down to the bottom of the page. */
+(function () {
+  const btn = document.createElement('button');
+  btn.type = 'button';
+  btn.className = 'to-top';
+  btn.setAttribute('aria-label', 'Back to top');
+  btn.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  btn.addEventListener('click', function () {
+    const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    scrollTo({ top: 0, behavior: reduced ? 'auto' : 'smooth' });
+    const first = document.querySelector('nav a[href], .site-head a[href]');
+    if (first) first.focus({ preventScroll: true });
+  });
+  document.body.append(btn);
+  const show = function () { btn.classList.toggle('is-shown', scrollY > innerHeight); };
+  addEventListener('scroll', show, { passive: true });
+  addEventListener('resize', show);
+  show();
+})();
+
 /* The nav flips between dark and frosted-white glass with whatever is under it,
    the way iOS 27 flips its small glass controls, so it never turns into a grey
-   smear over a white section. */
+   smear over a white section. The back-to-top button flips with it. */
 (function () {
-  const nav = document.querySelector('nav, .site-head');
-  if (!nav) return;
+  const controls = [document.querySelector('nav, .site-head'), document.querySelector('.to-top')].filter(Boolean);
+  if (!controls.length) return;
   const DARK = '.hero, .band-ink, .cta-banner, .close-cta, footer, .site-foot, .foot-bottom, #page-contact, .mobile-menu';
   let queued = false;
   const update = function () {
     queued = false;
     // offset* rather than getBoundingClientRect: the bar slides in on load, and
     // mid-animation its box sits above the viewport, which read as "light".
-    const under = document.elementsFromPoint(nav.offsetLeft + nav.offsetWidth / 2, nav.offsetTop + nav.offsetHeight / 2)
-      .find(function (el) { return !nav.contains(el); });
-    nav.classList.toggle('on-light', Boolean(under) && !under.closest(DARK));
+    controls.forEach(function (el) {
+      const under = document.elementsFromPoint(el.offsetLeft + el.offsetWidth / 2, el.offsetTop + el.offsetHeight / 2)
+        .find(function (u) { return !el.contains(u); });
+      el.classList.toggle('on-light', Boolean(under) && !under.closest(DARK));
+    });
   };
   const queue = function () { if (!queued) { queued = true; requestAnimationFrame(update); } };
   addEventListener('scroll', queue, { passive: true });

@@ -17,7 +17,7 @@ import { WORK } from './lib/work.js';
 
 const SITE = 'https://www.prismaticsyntax.com';
 const WA = '27650858437';
-const EMAIL = 'hello@prismaticsyntax.com';
+const EMAIL = 'info@prismaticsyntax.com';
 const PHONE = '+27 65 085 8437';
 // terms.html quotes every ZAR price exclusive of VAT, so each place a ZAR price is
 // shown says so at the point of display rather than only in the small print.

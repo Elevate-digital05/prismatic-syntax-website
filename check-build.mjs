@@ -150,7 +150,7 @@ for (const chunk of menu.split('<section class="m-svc"').slice(1)) {
   assert.ok(chunk.slice(0, chunk.indexOf('</section>')).includes('class="m-contact"'),
     `menu section ${slug} has no contact block`);
 }
-for (const detail of ['wa.me/27650858437', 'hello@prismaticsyntax.com', '+27 65 085 8437', 'prismaticsyntax.com']) {
+for (const detail of ['wa.me/27650858437', 'info@prismaticsyntax.com', '+27 65 085 8437', 'prismaticsyntax.com']) {
   assert.ok(menu.includes(detail), `menu.html is missing ${detail}`);
 }
 console.log(`ok menu: ${SERVICES.length} sections, A4 print rules, inline vector logo, no raster`);
@@ -268,7 +268,7 @@ assert.doesNotMatch(home, /optimiz|specializ|Absolutely!|Yes!/, 'the homepage ha
 assert.ok(home.includes('<meta property="og:locale" content="en_GB">'), 'the homepage og:locale is not en_GB');
 
 const contactBlock = home.slice(home.indexOf('id="contact"'));
-const [book, mail, whatsapp] = ['>Book a call<', 'mailto:hello@prismaticsyntax.com', 'wa.me/'].map(s => contactBlock.indexOf(s));
+const [book, mail, whatsapp] = ['>Book a call<', 'mailto:info@prismaticsyntax.com', 'wa.me/'].map(s => contactBlock.indexOf(s));
 assert.ok(book >= 0 && book < mail && mail < whatsapp, 'the homepage contact block must offer a call, then email, then WhatsApp');
 assert.ok(home.slice(home.indexOf('<nav'), home.indexOf('</nav>')).includes(regionLink),
   'the "South Africa →" link belongs in the nav, where a South African visitor sees it before any dollar price');

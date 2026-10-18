@@ -15,6 +15,9 @@ import { PACKAGES } from './lib/packages.js';
 import { USD_PACKAGES } from './lib/pricing-usd.js';
 import { WORK } from './lib/work.js';
 
+// A free homepage concept means nothing on services that don't build a site.
+const NO_CONCEPT_OFFER = new Set(['seo', 'video-editing', 'brand-identity']);
+
 const SITE = 'https://www.prismaticsyntax.com';
 const WA = '27650858437';
 const EMAIL = 'info@prismaticsyntax.com';
@@ -237,8 +240,8 @@ ${JSON.stringify(jsonLd, null, 2)}
     <section class="sec">
       <h2>What's included</h2>
       <p class="sec-sub">Everything below is part of the work, not an upsell once you have started.</p>
-      <div class="incl-grid glass-stage">
-        ${glassWall(9, '--x:50%;--y:52%;--w:clamp(320px,34vw,500px)')}${included}
+      <div class="incl-grid">
+        ${included}
       </div>
     </section>
 
@@ -252,15 +255,10 @@ ${who}
     <section class="sec" id="pricing">
       <h2>Pricing</h2>
       <p class="sec-sub">${esc(svc.pricing.lead)} ${VAT_NOTE}</p>
-      <div class="tiers t${svc.pricing.cols} glass-stage">
-        ${glassWall(10, '--x:58%;--y:55%;--w:clamp(300px,28vw,420px)')}${tiers}
+      <div class="tiers t${svc.pricing.cols}">
+        ${tiers}
       </div>
-      ${svc.pricing.note ? `<p class="price-note">${svc.pricing.note}</p>` : ''}
-
-      <div class="assure">
-        ${icon('check', 24)}
-        <p><strong>See your homepage design before you pay anything.</strong> After a quick call, I'll build your homepage concept free. If you don't want to go ahead after seeing it, you owe nothing.</p>
-      </div>
+      <p class="price-note">${svc.pricing.note ? svc.pricing.note + ' ' : ''}${NO_CONCEPT_OFFER.has(svc.slug) ? '' : "Not sure yet? We'll build your homepage concept free, and you owe nothing if you don't go ahead."}</p>
     </section>
 
     <section class="sec">
@@ -270,15 +268,15 @@ ${who}
     </section>
 
     <section class="sec">
-      <h2>Other things I do</h2>
+      <h2>Other things we do</h2>
       <div class="svc-links">
 ${otherLinks}
       </div>
     </section>
 
     <section class="close-cta">
-      <h2>Tell me what you need</h2>
-      <p>Send a message with what your business does and what you are trying to fix. I'll come back with a straight answer on whether I can help and what it would cost.</p>
+      <h2>Tell us what you need</h2>
+      <p>Send a message with what your business does and what you are trying to fix. We'll come back with a straight answer on whether we can help and what it would cost.</p>
       <div class="cta-row">
         <a class="btn btn-primary" href="${attr(waLink(`Hi Kabelo, I'd like to talk about ${svc.name.toLowerCase()} for my business.`))}" target="_blank" rel="noopener noreferrer">${waIcon()} Chat on WhatsApp</a>
         <a class="btn btn-ghost" href="mailto:${EMAIL}">Email instead</a>
@@ -543,7 +541,7 @@ a { color:inherit; }
     <div class="m-cover-mid">
       <h1 class="m-title">Service menu</h1>
       <p class="m-sub">Websites, and the work that keeps them earning, for South African trades and service businesses. Designed, built and looked after from Cape Town.</p>
-      <div class="m-assure"><strong>See your homepage design before you pay anything.</strong> After a quick call, I'll build your homepage concept free. If you don't want to go ahead after seeing it, you owe nothing.</div>
+      <div class="m-assure"><strong>See your homepage design before you pay anything.</strong> After a quick call, we'll build your homepage concept free. If you don't want to go ahead after seeing it, you owe nothing.</div>
       <p class="m-note">All prices in South African Rand. ${HOURS}.</p>
       <ul class="m-index">
 ${all.map(s => `        <li><a href="#${s.slug}">${esc(s.nav)}</a></li>`).join('\n')}
@@ -554,8 +552,8 @@ ${contact}
 ${sections}
 
   <section class="m-end">
-    <h2>Tell me what you need</h2>
-    <p>Send a message with what your business does and what you are trying to fix. I'll come back with a straight answer on whether I can help and what it would cost.</p>
+    <h2>Tell us what you need</h2>
+    <p>Send a message with what your business does and what you are trying to fix. We'll come back with a straight answer on whether we can help and what it would cost.</p>
 ${contact}
     <p class="m-note">${HOURS}</p>
   </section>
@@ -565,11 +563,6 @@ ${contact}
 </html>
 `;
 }
-
-// The prism still a section's glass sits over: assets/glass/prism-<n>.webp, placed by
-// its centre (--x, --y) and width (--w) in the section.
-const glassWall = (n, place) =>
-  `<img class="glass-wall" src="/assets/glass/prism-${n}.webp" alt="" loading="lazy" decoding="async" style="${place}">`;
 
 /* ── injection into hand-written files ──────────────────────────────────
    Everything between the markers is generated; everything outside is yours. */
@@ -665,7 +658,7 @@ const intlPricing = usdMissing.length
           <div class="sec-lbl">Pricing</div>
           <h2 class="sec-h">Starting prices, in USD</h2>
         </div>
-        <p class="sec-sub">Once-off, per project. Every project is quoted after a short call, and you see your homepage concept before you pay anything.</p>
+        <p class="sec-sub">Once-off, per project. Every project is quoted after a short call.</p>
       </div>
       <div class="price-grid">
 ${Object.entries(USD_PACKAGES).map(([name, price]) => {

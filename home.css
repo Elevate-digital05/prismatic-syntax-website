@@ -115,26 +115,6 @@ body:has(.mobile-menu.open) .hamburger span:nth-child(3){transform:translateY(-7
 /* ── SECTIONS ── bands paint full width; .sec is the measured column inside */
 .band-mist{background:var(--mist);}
 .band-ink{position:relative;overflow:hidden;background:var(--ink-glow);color:var(--surface);}
-/* The second glass form sits low on the left of this band, in the gap under the heading
-   column. The step cards are only 6% white, so anything behind them shows through and
-   fights their text: it has to go where there is no card. The band is far enough down
-   the page that it and the hero's can never share a screen, so only one is ever drawing.
-   It sits clear of every edge of the band rather than bleeding off any of them: a shape
-   sliced by an edge reads as broken, and the narrower the window the worse the slice got.
-   The content needs no z-index here; .sec already carries one. */
-.band-prism{position:absolute;left:max(20px,calc((100% - 1400px) / 2 + 20px));bottom:16px;width:clamp(260px,24vw,310px);aspect-ratio:1;}
-/* The third sits in the contact band, in the corner the info column leaves free below
-   it and left of the form panel, which is another 6% white and would show it through.
-   The offsets are percentages of its own size, so the crop holds as the column narrows.
-   It is 2450px from the one in the band above: they can never share a screen. */
-/* The contact corner only leaves 197-254px under the details column, so this one is
-   smaller than the band's. The page keeps the spacing it had: the shape fits the room
-   that is there rather than the band growing to suit the shape. */
-.contact-prism{position:absolute;left:max(20px,calc((100% - 1400px) / 2 + 20px));bottom:10px;width:clamp(180px,15vw,235px);aspect-ratio:1;}
-/* On /south-africa contact is its own view rather than a band, so it needs the same
-   frame to hang the shape in. Only one view is ever displayed, so that one can never
-   be on screen with the hero's or the band's at all. */
-#page-contact{position:relative;overflow:hidden;}
 .sec{position:relative;z-index:1;max-width:1400px;margin:0 auto;padding:clamp(64px,7vw,112px) var(--pad);}
 .sec:has(>.cta-banner:last-child){padding-bottom:0;}
 .sec-lbl{margin-bottom:20px;font:500 12.5px/1 var(--f-display);letter-spacing:.08em;text-transform:uppercase;color:var(--grey);}
@@ -193,16 +173,6 @@ body:has(.mobile-menu.open) .hamburger span:nth-child(3){transform:translateY(-7
 @keyframes wipeUp{from{opacity:0;clip-path:inset(0 0 100% 0);transform:translateY(30px);}}
 
 
-/* ── TRUST STRIP ── */
-.trust-strip{background:var(--mist);border-bottom:1px solid var(--line);}
-.trust-in{display:flex;flex-wrap:wrap;align-items:center;gap:22px 48px;max-width:1400px;min-height:clamp(96px,8.6vw,132px);margin:0 auto;padding:0 var(--pad);}
-.trust-lbl{display:flex;align-items:center;gap:26px;font:500 11.5px/1 var(--f-display);letter-spacing:.08em;text-transform:uppercase;color:var(--grey);}
-.trust-lbl::after{content:'';width:clamp(40px,7vw,110px);height:1px;background:var(--grey);opacity:.35;}
-.trust-items{flex:1;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:16px 36px;}
-.trust-item{display:inline-flex;align-items:center;gap:10px;font:600 15px/1 var(--f-display);letter-spacing:-.01em;color:var(--grey);transition:color .3s;}
-.trust-item svg{width:20px;height:20px;flex-shrink:0;}
-.trust-item:hover{color:var(--text);}
-
 /* ── START HERE: the three paths ── */
 
 .paths-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
@@ -217,15 +187,12 @@ body:has(.mobile-menu.open) .hamburger span:nth-child(3){transform:translateY(-7
 .path-card:hover .path-go{transform:translateX(6px);}
 
 
-/* ── PROCESS: dark band, statement beside a ruled frame ── */
-.sec-work{display:grid;grid-template-columns:38% 1fr;gap:clamp(32px,5vw,72px);align-items:start;}
-.sec-work .sec-sub{max-width:24em;margin-bottom:32px;}
-.proc-steps{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;}
-.step{position:relative;padding:32px 30px 36px;background:color-mix(in srgb,var(--surface) 6%,transparent);border-radius:var(--r-lg);transition:background-color .4s;}
-.step:hover{background:color-mix(in srgb,var(--surface) 9%,transparent);}
-.step-n{margin-bottom:22px;font:800 clamp(44px,4.4vw,64px)/1 var(--f-display);letter-spacing:-.03em;color:var(--blue);}
+/* ── PROCESS: dark band, four steps in one ruled row ── */
+.proc-steps{display:grid;grid-template-columns:repeat(4,1fr);gap:24px clamp(24px,3vw,48px);list-style:none;}
+.step{padding-top:20px;border-top:1px solid var(--line-dark);}
+.step-n{margin-bottom:14px;font:600 13px/1 var(--f-display);letter-spacing:.08em;color:var(--blue);}
 .step-nm{margin-bottom:8px;font:600 18px/1.3 var(--f-display);letter-spacing:-.01em;}
-.step-d{font-size:14.5px;line-height:1.65;color:var(--grey-dark);}
+.step-d{font-size:14.5px;line-height:1.6;color:var(--grey-dark);}
 
 /* ── TEAM ── the founder, then everyone else in one row */
 .founder{max-width:520px;padding:22px 26px;border-radius:var(--r-lg);background:var(--mist);}
@@ -246,11 +213,6 @@ body:has(.mobile-menu.open) .hamburger span:nth-child(3){transform:translateY(-7
 .cta-inner p{max-width:34em;font-size:clamp(15.5px,1.2vw,18px);line-height:1.6;color:var(--grey-dark);}
 .cta-inner>.btn-primary,.cta-btns{grid-column:2;grid-row:1/span 2;align-self:end;}
 .cta-btns{display:flex;flex-wrap:wrap;gap:12px;}
-.stats-bar{display:grid;grid-template-columns:repeat(3,1fr);max-width:1400px;margin:clamp(48px,5vw,72px) auto 0;border-top:1px solid var(--line-dark);}
-.s-cell{padding:28px 24px 0;border-left:1px solid var(--line-dark);}
-.s-cell:first-child{border-left:0;padding-left:0;}
-.s-big{font:800 clamp(34px,3.6vw,56px)/1 var(--f-display);letter-spacing:-.03em;color:var(--surface);}
-.s-sm{margin-top:10px;font:500 11.5px/1.4 var(--f-display);letter-spacing:.08em;text-transform:uppercase;color:var(--grey-dark);}
 
 /* ── SERVICES GRID ── */
 .svc-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;}
@@ -271,11 +233,6 @@ a.svc-card:hover .svc-more{transform:translateX(6px);}
 .svc-rows li:nth-child(-n+2){border-top:0;}
 
 /* ── PACKAGES ── */
-.deposit-note{display:flex;align-items:center;gap:16px;max-width:640px;margin-top:40px;padding:20px 24px;background:var(--mist);border-radius:var(--r-md);}
-.deposit-icon,.assure-icon{display:flex;flex-shrink:0;color:var(--blue);}
-.deposit-text{font-size:14.5px;line-height:1.6;color:var(--grey);}
-.deposit-text strong{color:var(--text);}
-.assure-note{margin-top:0;margin-bottom:48px;}
 .price-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;}
 .p-card{position:relative;display:flex;flex-direction:column;padding:30px clamp(20px,1.8vw,28px) 28px;background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);transition:border-color .3s;}
 .p-card:hover,.m-card:hover{border-color:color-mix(in srgb,var(--blue) 35%,var(--line));}
@@ -294,10 +251,7 @@ a.svc-card:hover .svc-more{transform:translateX(6px);}
 .p-cta{margin-top:auto;display:inline-flex;align-items:center;gap:8px;font:600 13.5px/1 var(--f-display);letter-spacing:-.005em;color:var(--blue);text-decoration:none;transition:gap .3s var(--ease);}
 .p-cta:hover{gap:12px;}
 .p-feat-new{display:inline-block;padding:3px 7px;border:1px solid var(--blue);border-radius:var(--r-pill);color:var(--blue);font:600 9px/1 var(--f-display);letter-spacing:.08em;text-transform:uppercase;}
-.p-retainer{margin-top:auto;padding:16px 16px 14px;border:1px dashed color-mix(in srgb,var(--grey) 55%,transparent);border-radius:var(--r-sm);}
-.p-retainer-lbl{margin-bottom:8px;font:600 10px/1 var(--f-display);letter-spacing:.12em;text-transform:uppercase;color:var(--blue);}
-.p-retainer-price{margin-bottom:4px;font:700 17px/1.2 var(--f-display);}
-.p-retainer-desc{font-size:12px;line-height:1.5;color:var(--grey);}
+.p-card .btn-p{margin-top:auto;}
 /* Secondary buttons are the grey capsule iOS uses beside a tinted one. */
 .btn-p{width:100%;height:50px;background:var(--mist);color:var(--text);border:0;font-size:14.5px;}
 .btn-p:hover,.btn-p:focus-visible{color:var(--surface);}
@@ -403,8 +357,6 @@ footer{position:relative;z-index:1;display:grid;grid-template-columns:1.6fr 1fr 
 .wa-btn{position:fixed;bottom:calc(24px + env(safe-area-inset-bottom));right:calc(24px + env(safe-area-inset-right));z-index:300;display:flex;align-items:center;justify-content:center;width:56px;height:56px;border-radius:50%;background:color-mix(in srgb,var(--whatsapp) 88%,transparent);-webkit-backdrop-filter:var(--glass-blur);backdrop-filter:var(--glass-blur);box-shadow:var(--glass-shine),0 10px 30px color-mix(in srgb,var(--ink) 30%,transparent);text-decoration:none;cursor:pointer;transition:transform .4s var(--ease);animation:fadeUp 1s var(--ease) 1.2s backwards;}
 .wa-btn:hover{transform:scale(1.1) rotate(-8deg);}
 .wa-btn svg{width:28px;height:28px;fill:var(--surface);}
-/* the back-to-top button (theme.css) stands on it, centred, with a 12px gap */
-body:has(.wa-btn) .to-top{right:calc(30px + env(safe-area-inset-right));bottom:calc(92px + env(safe-area-inset-bottom));}
 
 
 /* ── RESPONSIVE ── */
@@ -427,12 +379,9 @@ body:has(.wa-btn) .to-top{right:calc(30px + env(safe-area-inset-right));bottom:c
   .hero-media .prism-canvas{width:min(100%,460px);height:auto;aspect-ratio:1;margin:0 auto;}
   /* stacked, nothing crosses the headline, so the wash of ink over the glass comes off */
   .hero::after{display:none;}
-  /* Stacked, there is no room behind the content to hide a shape in, so they leave the
-     corner and sit in the flow instead: a centred square opening each section. A phone
-     still only ever draws one, and still only builds each when it is first reached. */
-  .band-prism,.contact-prism{position:relative;left:auto;bottom:auto;width:min(62vw,240px);margin:44px auto 0;}
   .hero-in{margin-top:-32px;}
-  .sec-work,.contact-wrap{grid-template-columns:1fr;}
+  .contact-wrap{grid-template-columns:1fr;}
+  .proc-steps{grid-template-columns:repeat(2,1fr);}
   .cta-inner{grid-template-columns:1fr;}
   .cta-inner>.btn-primary,.cta-btns{grid-column:1;grid-row:auto;justify-self:start;}
   footer{grid-template-columns:1fr 1fr;}
@@ -445,22 +394,17 @@ body:has(.wa-btn) .to-top{right:calc(30px + env(safe-area-inset-right));bottom:c
   .nav-region{padding:9px 12px;font-size:13px;}
   .faq-toggle::after{width:44px;height:44px;font-size:28px;}
   .hero h1{font-size:clamp(32px,10vw,56px);}
-  .trust-in{padding-block:28px;}
-  .trust-items{justify-content:flex-start;}
-  .paths-grid,.svc-rows,.svc-grid,.blog-grid,.price-grid,.maint-grid,.stats-bar,.proc-steps{grid-template-columns:1fr;}
+  .paths-grid,.svc-rows,.svc-grid,.blog-grid,.price-grid,.maint-grid,.proc-steps{grid-template-columns:1fr;}
   .team-row{grid-template-columns:repeat(2,1fr);}
   .paths-grid .path-card{padding:26px 24px 30px;}
   .svc-rows{padding:4px 22px;}
   .svc-rows li:nth-child(2){border-top:1px solid var(--line);}
   .faq-accordion{padding:0 20px;}
   .team-row{padding:22px;}
-  .stats-bar{border-top:0;}
-  .stats-bar .s-cell{padding:22px 0;border-left:0;border-top:1px solid var(--line-dark);}
   .form-row{grid-template-columns:1fr;}
   footer{grid-template-columns:1fr;padding-top:56px;}
   .wa-btn{right:18px;bottom:calc(18px + env(safe-area-inset-bottom));width:50px;height:50px;}
   .wa-btn svg{width:24px;height:24px;}
-  body:has(.wa-btn) .to-top{right:21px;bottom:calc(80px + env(safe-area-inset-bottom));}
 }
 
 @media (max-width:380px){
@@ -489,7 +433,7 @@ body:has(.wa-btn) .to-top{right:calc(30px + env(safe-area-inset-right));bottom:c
 :is(.p-card,.m-card,.svc-card,.blog-card,.path-card,.team-row,.work-item,.founder)::after{padding:1px;background:var(--glass-rim-light);-webkit-mask:linear-gradient(var(--ink) 0 0) content-box,linear-gradient(var(--ink) 0 0);-webkit-mask-composite:xor;mask:linear-gradient(var(--ink) 0 0) content-box,linear-gradient(var(--ink) 0 0);mask-composite:exclude;}
 /* hairlines inside the glass are tinted, not grey, so they hold on the blue card too */
 :is(.p-card,.m-card,.svc-card,.blog-card,.path-card,.team-row,.work-item,.founder) .p-feats li{border-top-color:var(--glass-card-edge);}
-:is(nav,.wa-btn,.hero-assure,.step,.contact-form,.info-icon)::after{content:'';position:absolute;inset:0;padding:1px;border-radius:inherit;background:var(--glass-rim);-webkit-mask:linear-gradient(var(--ink) 0 0) content-box,linear-gradient(var(--ink) 0 0);-webkit-mask-composite:xor;mask:linear-gradient(var(--ink) 0 0) content-box,linear-gradient(var(--ink) 0 0);mask-composite:exclude;pointer-events:none;transition:opacity .4s;}
+:is(nav,.wa-btn,.hero-assure,.contact-form,.info-icon)::after{content:'';position:absolute;inset:0;padding:1px;border-radius:inherit;background:var(--glass-rim);-webkit-mask:linear-gradient(var(--ink) 0 0) content-box,linear-gradient(var(--ink) 0 0);-webkit-mask-composite:xor;mask:linear-gradient(var(--ink) 0 0) content-box,linear-gradient(var(--ink) 0 0);mask-composite:exclude;pointer-events:none;transition:opacity .4s;}
 /* Over a light section the bar turns frosted white, the way iOS flips a small
    glass control with what is behind it. home.js sets .on-light. */
 nav.on-light{background:var(--glass-fill-light);box-shadow:0 0 0 1px color-mix(in srgb,var(--ink) 7%,transparent),0 10px 30px -16px color-mix(in srgb,var(--ink) 28%,transparent);}
@@ -511,8 +455,8 @@ nav.on-light .nav-sub-all a{color:var(--blue);}
    draw one get it, with larger radii because a squircle keeps more of the
    corner; everything else keeps the plain rounded corners. */
 @supports (corner-shape:squircle){
-  :is(.p-card,.m-card,.svc-card,.blog-card,.path-card,.faq-accordion,.svc-rows,.team-row,.founder,.step,.contact-form,.hero-assure,.deposit-note,.p-retainer,.svc-icon,.form-group input,.form-group textarea){corner-shape:squircle;}
-  :is(.hero-assure,.step,.contact-form)::after,.nav-sub::before{corner-shape:squircle;}
+  :is(.p-card,.m-card,.svc-card,.blog-card,.path-card,.faq-accordion,.svc-rows,.team-row,.founder,.contact-form,.hero-assure,.svc-icon,.form-group input,.form-group textarea){corner-shape:squircle;}
+  :is(.hero-assure,.contact-form)::after,.nav-sub::before{corner-shape:squircle;}
   :is(.p-card,.m-card,.svc-card,.blog-card,.path-card,.team-row,.founder)::after{corner-shape:squircle;}
 }
 
@@ -523,13 +467,13 @@ nav.on-light .nav-sub-all a{color:var(--blue);}
 @supports not ((-webkit-backdrop-filter:blur(1px)) or (backdrop-filter:blur(1px))){
   nav,.mobile-menu{background:var(--ink);}
   nav.on-light{background:var(--surface);}
-  :is(.hero-assure,.step,.contact-form,.info-icon){background:var(--ink-2);}
+  :is(.hero-assure,.contact-form,.info-icon){background:var(--ink-2);}
 }
 @media (prefers-reduced-transparency:reduce){
-  nav,.mobile-menu,.wa-btn,.hero-assure,.step,.contact-form,.info-icon,:is(.band-ink,.cta-banner) .btn-ghost{-webkit-backdrop-filter:none;backdrop-filter:none;}
+  nav,.mobile-menu,.wa-btn,.hero-assure,.contact-form,.info-icon,:is(.band-ink,.cta-banner) .btn-ghost{-webkit-backdrop-filter:none;backdrop-filter:none;}
   nav,.mobile-menu{background:var(--ink);}
   nav.on-light{background:var(--surface);}
-  :is(.hero-assure,.step,.contact-form,.info-icon){background:var(--ink-2);}
+  :is(.hero-assure,.contact-form,.info-icon){background:var(--ink-2);}
   .wa-btn{background:var(--whatsapp);}
   :is(.p-card,.m-card,.svc-card,.blog-card,.path-card,.team-row,.work-item,.founder){background:var(--surface);}
   :is(.p-card.pop,.m-card.rec){background:color-mix(in srgb,var(--blue) 5%,var(--surface));}

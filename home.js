@@ -57,8 +57,10 @@ document.querySelectorAll('.faq-toggle').forEach(function (btn) {
 /* Back to top: a glass button in the bottom corner once the page is a screen down.
    It only works with a script, so the script adds it, and every page gets it from here.
    Focus goes back to the top too, to the first link in the nav, or a keyboard user's
-   next Tab would carry them straight back down to the bottom of the page. */
+   next Tab would carry them straight back down to the bottom of the page.
+   Not where a WhatsApp button already floats in that corner: one floating control, not two. */
 (function () {
+  if (document.querySelector('.wa-btn, .wa-float')) return;
   const btn = document.createElement('button');
   btn.type = 'button';
   btn.className = 'to-top';

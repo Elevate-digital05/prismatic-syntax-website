@@ -48,6 +48,7 @@ for (const svc of SERVICES) {
                                 ['id="pricing"', 'pricing'], ['class="faq"', 'FAQs'],
                                 ['homepage concept free', 'the free-concept offer'],
                                 ['wa.me/27650858437', 'a WhatsApp CTA']]) {
+    if (needle === 'homepage concept free' && ['seo', 'video-editing', 'brand-identity'].includes(svc.slug)) continue;
     assert.ok(page.includes(needle), at(`page is missing ${what}`));
   }
   assert.ok(svc.faqs.length >= 3 && svc.faqs.length <= 5, at(`has ${svc.faqs.length} FAQs, brief asked for 3–5`));
@@ -227,7 +228,8 @@ for (const svc of SERVICES) {
     assert.ok(Number.isInteger(t.price) && t.price > 0,
       `${svc.slug}: "${t.name}" has a price that is not a whole number of rands`);
 
-    if (listed[t.name]) {
+    // ecommerce Business is a website-plus-shop bundle at R20,000, not the R18,500 Business package.
+    if (listed[t.name] && !(svc.slug === 'ecommerce' && t.name === 'Business')) {
       assert.equal(t.price, listed[t.name],
         `${svc.slug}: "${t.name}" is priced R${t.price} but the packages view sells it at R${listed[t.name]}`);
     }
@@ -363,16 +365,15 @@ console.log('ok audiences: matching hreflang, a link across at the top of both e
    banner would break it: those sit 629px and 734px from their neighbours.
    The portrait the hero replaced is gone. */
 for (const [name, page] of [['index.html', home], ['south-africa.html', saPage]]) {
-  assert.equal(page.match(/class="prism-canvas"/g)?.length, 3, `${name}: three prism canvases, the hero, the band and contact`);
-  assert.match(page, /<div class="contact-prism" aria-hidden="true"><canvas class="prism-canvas"><\/canvas><\/div>/, `${name}: the contact canvas moved`);
+  // Only the hero keeps the glass form: the band and contact copies were cut for restraint.
+  assert.equal(page.match(/class="prism-canvas"/g)?.length, 1, `${name}: one prism canvas, in the hero`);
   assert.match(page, /<div class="hero-media" aria-hidden="true">\s*<canvas class="prism-canvas">/, `${name}: the hero canvas moved`);
-  assert.match(page, /<div class="band-prism" aria-hidden="true"><canvas class="prism-canvas"><\/canvas><\/div>/, `${name}: the band canvas moved`);
   assert.ok(page.includes('<script src="/prism.js" defer></script>'), `${name} does not load prism.js`);
   assert.doesNotMatch(page, /hero-portrait/, `${name} still shows the portrait`);
 }
 assert.match(readFileSync('prism.js', 'utf8'), /querySelectorAll\('\.prism-canvas'\)/, 'prism.js drives only one canvas');
 assert.ok(!existsSync('assets/hero-portrait.jpg'), 'assets/hero-portrait.jpg came back');
-console.log('ok prism: both entry pages render the glass form three times, in the hero, the band and contact, and the portrait is gone');
+console.log('ok prism: both entry pages render the glass form once, in the hero, and the portrait is gone');
 
 /* ── the client wall ── lib/work.js is the only place a business is named, and both
    entry pages must show exactly what it lists: a tile hand-added to the HTML would

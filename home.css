@@ -316,6 +316,9 @@ a.svc-card:hover .svc-more{transform:translateX(6px);}
 .form-group label .opt{text-transform:none;letter-spacing:0;opacity:.7;}
 .form-group input,.form-group select,.form-group textarea{width:100%;padding:13px 16px;background:color-mix(in srgb,var(--surface) 5%,transparent);border:1px solid var(--line-dark);border-radius:var(--r-sm);color:var(--surface);font:400 16px var(--f-body);outline:none;transition:border-color .3s,box-shadow .3s;}
 .form-group input:focus,.form-group select:focus,.form-group textarea:focus{border-color:var(--blue-light);box-shadow:0 0 0 3px color-mix(in srgb,var(--blue-light) 25%,transparent);}
+.form-consent{display:flex;gap:10px;align-items:flex-start;margin:4px 0 18px;font-size:14px;line-height:1.5;color:var(--grey-dark);cursor:pointer;}
+.form-consent input{width:18px;height:18px;margin-top:2px;flex:none;accent-color:var(--blue-light);}
+.form-consent a{color:inherit;text-decoration:underline;}
 .form-group input::placeholder,.form-group textarea::placeholder{color:var(--grey-dark);opacity:.55;}
 .form-group select option{background:var(--ink-2);color:var(--surface);}
 .form-group textarea{min-height:120px;resize:vertical;}

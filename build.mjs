@@ -325,7 +325,7 @@ ${all.map(s => `        <li><a href="/services/${s.slug}">${esc(s.nav)}</a></li>
     </div>
   </div>
   <div class="foot-bottom">
-    <div class="wrap">© 2026 Prismatic Syntax. All rights reserved. · <a href="/privacy">Privacy</a> · <a href="/terms">Terms</a> · <a href="/refund-policy">Refund Policy</a></div>
+    <div class="wrap">© 2026 Prismatic Syntax. All rights reserved. By using this site you agree to our <a href="/terms">Terms</a>. · <a href="/privacy">Privacy</a> · <a href="/terms">Terms</a> · <a href="/refund-policy">Refund Policy</a></div>
   </div>
 </footer>
 

@@ -504,3 +504,23 @@ for (const sheet of ['home.css', 'site.css', 'article.css']) {
     `${sheet}: reduced motion switches every transition off again; hold movement still instead`);
 }
 console.log('ok motion: reduced motion stills movement without switching every transition off');
+
+/* ── analytics only with consent ── Whop's tracker is a third party, so home.js loads
+   it only after a visitor chooses Allow, and never for a browser sending Global Privacy
+   Control. No page may load it directly, and the privacy policy must name it and keep
+   the button that lets a visitor change their mind. */
+{
+  for (const [page, raw] of linkSources) {
+    assert.ok(!raw.includes('t.whop.tw'), `${page} loads Whop directly; it loads only from home.js, after consent`);
+  }
+  const js = readFileSync('home.js', 'utf8');
+  assert.equal(js.split('t.whop.tw').length - 1, 1, 'home.js should load Whop from one place, behind the consent check');
+  assert.match(js, /if \(choice === 'granted'\) load\(\);\n\s*else if \(choice !== 'denied' && !navigator\.globalPrivacyControl\) ask\(false\);/,
+    'home.js loads Whop without consent, or stopped honouring Global Privacy Control');
+  const privacy = readFileSync('privacy.html', 'utf8');
+  assert.ok(privacy.includes('Whop') && privacy.includes('data-consent-reset'),
+    'the privacy policy must name Whop and keep the button that changes the analytics choice');
+  assert.doesNotMatch(privacy, /does not use[^.]*analytics/, 'the privacy policy says there are no analytics, but Whop runs with consent');
+  assert.match(readFileSync('vercel.json', 'utf8'), /script-src[^;]*https:\/\/t\.whop\.tw/, 'the CSP no longer allows Whop, so consent would load nothing');
+}
+console.log('ok analytics: Whop loads only from home.js after consent, and the privacy policy says so');

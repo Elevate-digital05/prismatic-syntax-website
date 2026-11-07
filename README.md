@@ -103,9 +103,9 @@ code change on launch day:
 ## Security headers
 
 `vercel.json` sends a Content-Security-Policy on every page: scripts and styles
-only from this site (inline allowed, because the pages use inline handlers),
-fonts from Google Fonts, form posts only to Formspree, and no framing by other
-sites. **Adding a third-party script, embed, font, image host or form endpoint
+only from this site (inline allowed, because the pages use inline handlers), plus
+Whop's analytics host, fonts only from this site, form posts only to Formspree,
+and no framing by other sites. **Adding a third-party script, embed, font, image host or form endpoint
 means adding it to that policy first**, or browsers silently block it; a booking
 calendar embed is the next thing that will need it. `.vercelignore` keeps build
 scripts, `lib/`, `tools/` and `.claude/` out of the deployment, because Vercel
@@ -151,6 +151,18 @@ which are written for South African trades, never link to the homepage. The way
 across is a link at the top of each entry page, in the nav, so nobody meets a
 price in the wrong currency first: "South Africa →" on the homepage and
 "International →" on `/south-africa`.
+
+## Analytics
+
+Visits are counted with Whop's analytics, and only for visitors who agree.
+`home.js` shows a small notice on the first visit and loads Whop's script only
+after **Allow**. **No thanks**, or a browser sending Global Privacy Control,
+means it never loads. The answer is kept in the browser's localStorage under
+`ps-analytics`, not a cookie, and the "Change your analytics choice" button on
+`/privacy` asks again. `check-build.mjs` fails if a page loads Whop directly, if
+the consent check goes, or if the privacy policy stops naming Whop. Whop's host,
+`t.whop.tw`, is in the CSP's `script-src`, `connect-src` and `img-src`; if Whop
+starts calling another host, add it there too.
 
 ## Payments
 

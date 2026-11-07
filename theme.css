@@ -117,3 +117,30 @@ body:has(.mobile-menu.open) .to-top { opacity:0; visibility:hidden; }
 }
 @media (prefers-reduced-motion:reduce) { .to-top:hover svg { transform:none; } }
 @media print { .to-top { display:none; } }
+
+/* ── ANALYTICS CONSENT ── the notice home.js shows until a visitor answers. Dark glass
+   whatever is behind it, dense enough to read small text over a white section. Bottom
+   left on wide screens, clear of the WhatsApp button; across the foot of a phone, over
+   that button, until it is answered. It fades in once the page has settled, and never
+   travels. "No thanks" is the same size as "Allow". */
+.consent { position:fixed; left:calc(24px + env(safe-area-inset-left)); bottom:calc(24px + env(safe-area-inset-bottom)); z-index:310; width:min(400px, calc(100% - 48px)); padding:18px 18px 16px 20px; border-radius:var(--r-md); background:color-mix(in srgb,var(--ink) 88%,transparent); -webkit-backdrop-filter:var(--glass-blur); backdrop-filter:var(--glass-blur); box-shadow:var(--glass-shine), 0 18px 40px -18px color-mix(in srgb,var(--ink) 60%,transparent); animation:consentIn .6s var(--ease) 1.2s backwards; }
+.consent.is-now { animation-delay:0s; }
+@keyframes consentIn { from { opacity:0; } }
+.consent::after { content:''; position:absolute; inset:0; padding:1px; border-radius:inherit; background:var(--glass-rim); -webkit-mask:linear-gradient(var(--ink) 0 0) content-box, linear-gradient(var(--ink) 0 0); -webkit-mask-composite:xor; mask:linear-gradient(var(--ink) 0 0) content-box, linear-gradient(var(--ink) 0 0); mask-composite:exclude; pointer-events:none; }
+.consent p { margin:0; max-width:none; font:400 14px/1.55 var(--f-body); color:var(--grey-dark); }
+.consent a { color:var(--surface); text-decoration:underline; text-underline-offset:3px; }
+.consent-btns { display:flex; gap:10px; margin-top:14px; }
+.consent button { position:relative; z-index:1; flex:1; min-height:44px; padding:0 18px; border-radius:var(--r-pill); font:600 14px/1 var(--f-display); letter-spacing:-.005em; cursor:pointer; transition:background-color .3s, border-color .3s; }
+.consent [data-choice="denied"] { background:transparent; color:var(--surface); border:1px solid color-mix(in srgb,var(--surface) 45%,transparent); }
+.consent [data-choice="denied"]:hover { background:color-mix(in srgb,var(--surface) 8%,transparent); border-color:var(--surface); }
+.consent [data-choice="granted"] { background:var(--blue); color:var(--surface); border:1px solid var(--blue); }
+.consent [data-choice="granted"]:hover { background:var(--blue-dark); border-color:var(--blue-dark); }
+.consent :focus-visible { outline:2px solid var(--blue-light); outline-offset:3px; }
+@media (max-width:760px) { .consent { left:calc(12px + env(safe-area-inset-left)); right:calc(12px + env(safe-area-inset-right)); bottom:calc(12px + env(safe-area-inset-bottom)); width:auto; } }
+/* the menu sheet covers the page; the notice waits under it */
+body:has(.mobile-menu.open) .consent { display:none; }
+@supports (corner-shape:squircle) { .consent, .consent::after { corner-shape:squircle; } }
+@supports not ((-webkit-backdrop-filter:blur(1px)) or (backdrop-filter:blur(1px))) { .consent { background:var(--ink); } }
+@media (prefers-reduced-transparency:reduce) { .consent { -webkit-backdrop-filter:none; backdrop-filter:none; background:var(--ink); } }
+@media (prefers-contrast:more) { .consent { background:var(--ink); box-shadow:0 0 0 1px var(--surface); } .consent p { color:var(--surface); } }
+@media print { .consent { display:none; } }

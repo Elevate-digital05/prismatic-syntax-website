@@ -1,4 +1,5 @@
-/* Shared by every page: the hero motion, the FAQ, the glass header's tone and the back-to-top button. */
+/* Shared by every page: the hero motion, the FAQ, the glass header's tone, the
+   back-to-top button and the analytics consent notice. */
 /* Home hero: dark tiles dissolve off the glass (prism.js) on load and the glass
    drifts with the pointer. The hero is the only part of either page that moves. */
 (function () {
@@ -218,5 +219,55 @@ document.querySelectorAll('.faq-toggle').forEach(function (btn) {
       entries.forEach(function (e) { e.target.classList.toggle('is-lit', e.isIntersecting); });
     }, { rootMargin: '200px' });
     cards.forEach(function (card) { watch.observe(card); lit.observe(card); });
+  });
+})();
+
+/* Visit analytics, only with consent. Whop's analytics is a third-party tracker, so
+   nothing of Whop's loads until a visitor says yes: a small notice asks once, "No thanks"
+   is as easy as "Allow", and the answer stays in this browser (localStorage, not a
+   cookie). A browser sending Global Privacy Control has already said no, so it is never
+   asked. The privacy page's [data-consent-reset] button asks again. No page may load Whop
+   any other way (check-build.mjs). */
+(function () {
+  const KEY = 'ps-analytics';
+  const read = function () { try { return localStorage.getItem(KEY); } catch (e) { return null; } };
+  const save = function (value) { try { localStorage.setItem(KEY, value); } catch (e) { /* asked again next page */ } };
+  let loaded = false;
+  const load = function () {
+    if (loaded) return;
+    loaded = true;
+    // Whop's own snippet, as Whop gives it
+    !function(w,d,s,u,n,a,b){if(w[n])return;a=w[n]={q:[],t:+new Date,s:[],o:u,track:function(){a.q.push([+new Date].concat([].slice.call(arguments)))},setScope:function(){a.s=[].slice.call(arguments).filter(function(x){return typeof x==="string"});a.q.push([+new Date,"setScope"].concat(a.s))},scope:function(){var c=[].slice.call(arguments);return{track:function(){a.q.push([+new Date].concat([].slice.call(arguments)).concat([{__scope:c}]))}}}};b=d.createElement(s);b.async=1;b.src=u+"/s.js";d.getElementsByTagName(s)[0].parentNode.insertBefore(b,d.getElementsByTagName(s)[0])}(window,document,"script","https://t.whop.tw","whop");
+    window.whop.setScope('biz_zaSHaZueOCQWsP');
+    window.whop.track('page');
+  };
+  const ask = function (now) {
+    if (document.querySelector('.consent')) return null;
+    const box = document.createElement('div');
+    box.className = 'consent' + (now ? ' is-now' : '');
+    box.setAttribute('role', 'region');
+    box.setAttribute('aria-label', 'Analytics choice');
+    box.innerHTML = '<p>Can we count your visit? Whop analytics shows us which pages help, and only runs if you say yes. <a href="/privacy#tracking">Privacy policy</a></p>' +
+      '<div class="consent-btns"><button type="button" data-choice="denied">No thanks</button><button type="button" data-choice="granted">Allow</button></div>';
+    box.addEventListener('click', function (e) {
+      const btn = e.target.closest('[data-choice]');
+      if (!btn) return;
+      save(btn.dataset.choice);
+      box.remove();
+      if (btn.dataset.choice === 'granted') load();
+    });
+    document.body.append(box);
+    return box;
+  };
+  const choice = read();
+  if (choice === 'granted') load();
+  else if (choice !== 'denied' && !navigator.globalPrivacyControl) ask(false);
+  // asked for by name, so it appears at once and takes focus
+  document.querySelectorAll('[data-consent-reset]').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      try { localStorage.removeItem(KEY); } catch (e) { /* nothing stored */ }
+      const box = ask(true) || document.querySelector('.consent');
+      box.querySelector('button').focus();
+    });
   });
 })();

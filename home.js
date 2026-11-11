@@ -162,17 +162,18 @@ document.querySelectorAll('.faq-toggle').forEach(function (btn) {
   update();
 })();
 
-/* Smooth scroll: every wheel and trackpad moves a target, and the page glides after it,
-   heavier than the browser's own scrolling, so the whole site carries some weight the
-   way the reference agency site does. A mouse wheel on a PC also stops jumping in 100px
-   notches. It stays out of the way on touch screens, ctrl+wheel zoom, sideways swipes,
-   anything that scrolls itself (a textarea, the mobile menu), while a menu has the page
-   locked, and for anyone who has asked for reduced motion. */
+/* A mouse wheel on a PC jumps the page in 100px notches where a Mac trackpad glides,
+   which is most of why the site felt choppy on Windows. This eases wheel scrolling
+   toward where the notches point. It stays out of the way on Apple devices, touch
+   screens, precision touchpads (small deltas that already glide), ctrl+wheel zoom,
+   anything that scrolls itself (a textarea, the mobile menu), and for anyone who has
+   asked for reduced motion. */
 (function () {
-  if (!matchMedia('(hover: hover) and (pointer: fine)').matches ||
+  const platform = navigator.userAgentData ? navigator.userAgentData.platform : navigator.platform;
+  // case-insensitive: Chrome on a Mac reports "macOS", Safari "MacIntel"
+  if (/mac|iphone|ipad|ipod/i.test(platform) || !matchMedia('(hover: hover) and (pointer: fine)').matches ||
       matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-  const EASE = 0.06; // share of the remaining distance covered per 60Hz frame
-  let target = 0, running = false, last = 0;
+  let target = 0, running = false, gestureUntil = 0;
   const scrollsItself = function (el, dy) {
     for (; el && el !== document.body && el !== document.documentElement; el = el.parentElement) {
       const o = getComputedStyle(el).overflowY;
@@ -181,28 +182,25 @@ document.querySelectorAll('.faq-toggle').forEach(function (btn) {
     }
     return false;
   };
-  const frame = function (now) {
+  const frame = function () {
     if (!running) return;
     const y = scrollY, d = target - y;
     if (Math.abs(d) <= 1) { scrollTo({ top: target, behavior: 'instant' }); running = false; return; }
-    // scaled by frame time, or a 120Hz screen would glide twice as fast as a 60Hz one
-    // (clamped: the first frame can be stamped before the wheel event that started it)
-    const k = 1 - Math.pow(1 - EASE, Math.min(Math.max(now - last, 8), 64) / (1000 / 60));
-    last = now;
     // at least a pixel a frame, or rounding to device pixels can stall the last few
-    scrollTo({ top: y + Math.sign(d) * Math.max(1, Math.abs(d) * k), behavior: 'instant' });
+    scrollTo({ top: y + Math.sign(d) * Math.max(1, Math.abs(d) * 0.16), behavior: 'instant' });
     requestAnimationFrame(frame);
   };
   addEventListener('wheel', function (e) {
     if (e.ctrlKey || e.defaultPrevented || Math.abs(e.deltaX) > Math.abs(e.deltaY)) return;
-    // an open menu locks the page (overflow on the homepage, a fixed body on /south-africa)
-    if (document.body.style.overflow === 'hidden' || document.body.style.position === 'fixed') return;
+    const now = performance.now();
+    if (e.deltaMode === 0 && Math.abs(e.deltaY) < 50 && now > gestureUntil) return;
     if (scrollsItself(e.target, e.deltaY)) return;
     e.preventDefault();
+    gestureUntil = now + 250;
     if (!running) target = scrollY;
     const px = e.deltaMode === 1 ? e.deltaY * 40 : e.deltaMode === 2 ? e.deltaY * innerHeight : e.deltaY;
     target = Math.max(0, Math.min(document.documentElement.scrollHeight - innerHeight, target + px));
-    if (!running) { running = true; last = performance.now(); requestAnimationFrame(frame); }
+    if (!running) { running = true; requestAnimationFrame(frame); }
   }, { passive: false });
   // keys, the scrollbar, links and page switches move the page themselves: let go
   ['keydown', 'pointerdown', 'hashchange'].forEach(function (type) { addEventListener(type, function () { running = false; }); });

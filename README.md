@@ -168,8 +168,6 @@ starts calling another host, add it there too.
 
 Slow and heavy, after dobre.agency, with nothing sliding in:
 
-- **Smooth scroll** (`home.js`): wheel and trackpad input glide after a target on every
-  desktop browser. Off for touch and reduced motion, and while a menu locks the page.
 - **Headings** (`.sec-h` and the CTA banners on the entry pages, `h2` on the service pages): split into
   letters by `home.js`, each sharpening out of a blur as the heading comes into view.
   The heading keeps its words as its `aria-label`.

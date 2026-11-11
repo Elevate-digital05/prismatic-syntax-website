@@ -159,20 +159,22 @@ body {
 
 /* ── FOOTER ── */
 .site-foot { background:var(--ink); color:var(--surface); padding:56px 0 0; border-top:1px solid var(--line-dark); }
-.site-foot .wrap { display:grid; grid-template-columns:1fr; gap:36px; }
+.site-foot > .wrap { display:grid; grid-template-columns:1fr; gap:36px; }
 .site-foot img { height:36px; width:auto; margin-bottom:18px; }
 .foot-desc { font-size:14px; line-height:1.7; color:var(--grey-dark); max-width:38ch; }
 .foot-contact { font-size:14px; line-height:1.9; margin-top:16px; color:var(--grey-dark); }
 .foot-contact a { color:var(--surface); text-decoration:none; }
 .foot-contact a:hover { color:var(--blue-light); }
 .foot-hours { font-size:13px; }
-.foot-h { font:500 11.5px/1 var(--f-display); letter-spacing:.08em; text-transform:uppercase; color:var(--grey-dark); margin-bottom:16px; }
+.foot-h { font:500 12.5px/1 var(--f-display); letter-spacing:.08em; text-transform:uppercase; color:var(--grey-dark); margin-bottom:16px; }
 .foot-links { list-style:none; display:flex; flex-direction:column; gap:10px; }
 .foot-links a { font-size:14px; color:var(--surface); text-decoration:none; opacity:.85; transition:opacity .3s, color .3s; }
 .foot-links a:hover { opacity:1; color:var(--blue-light); }
 .foot-bottom { border-top:1px solid var(--line-dark); margin-top:48px; padding:20px 0 26px; font-size:13px; color:var(--grey-dark); }
+/* on a phone the line runs under the WhatsApp button: end the page above it */
+@media (max-width:759px) { .foot-bottom { padding-bottom:calc(26px + 70px + env(safe-area-inset-bottom)); } }
 .foot-bottom a { color:var(--surface); }
-@media (min-width:760px) { .site-foot .wrap { grid-template-columns:1.6fr 1fr 1fr 1fr; gap:32px; } }
+@media (min-width:760px) { .site-foot > .wrap { grid-template-columns:1.6fr 1fr 1fr 1fr; gap:32px; } }
 
 /* ── FLOATING WHATSAPP ── tinted glass; it floats */
 .wa-float { position:fixed; right:16px; bottom:16px; z-index:120; display:flex; align-items:center; justify-content:center; width:54px; height:54px; border-radius:50%; background:color-mix(in srgb, var(--whatsapp) 88%, transparent); -webkit-backdrop-filter:var(--glass-blur); backdrop-filter:var(--glass-blur); color:var(--surface); box-shadow:var(--glass-shine), 0 8px 24px color-mix(in srgb, var(--ink) 30%, transparent); transition:transform .3s var(--ease); }

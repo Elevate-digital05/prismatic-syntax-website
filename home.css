@@ -216,6 +216,8 @@ html.splashing .splash{position:fixed;inset:0;z-index:1000;display:flex;align-it
 .proc-steps{display:grid;grid-template-columns:repeat(4,1fr);gap:24px clamp(24px,3vw,48px);list-style:none;}
 .step{padding-top:20px;border-top:1px solid var(--line-dark);}
 .step-n{margin-bottom:14px;font:600 13px/1 var(--f-display);letter-spacing:.08em;color:var(--blue);}
+/* small blue on ink is too dark to read (3.2:1): the brand rule's --blue-light */
+:is(.band-ink,.cta-banner,#page-contact) .step-n{color:var(--blue-light);}
 .step-nm{margin-bottom:8px;font:600 18px/1.3 var(--f-display);letter-spacing:-.01em;}
 .step-d{font-size:14.5px;line-height:1.6;color:var(--grey-dark);}
 
@@ -275,7 +277,7 @@ a.svc-card:hover .svc-more{transform:translateX(6px);}
    their calls to action up with each other. */
 .p-cta{margin-top:auto;display:inline-flex;align-items:center;gap:8px;font:600 13.5px/1 var(--f-display);letter-spacing:-.005em;color:var(--blue);text-decoration:none;transition:gap .3s var(--ease);}
 .p-cta:hover{gap:12px;}
-.p-feat-new{display:inline-block;padding:3px 7px;border:1px solid var(--blue);border-radius:var(--r-pill);color:var(--blue);font:600 9px/1 var(--f-display);letter-spacing:.08em;text-transform:uppercase;}
+.p-feat-new{display:inline-block;padding:4px 8px;border:1px solid var(--blue);border-radius:var(--r-pill);color:var(--blue);font:600 11px/1 var(--f-display);letter-spacing:.08em;text-transform:uppercase;}
 .p-card .btn-p{margin-top:auto;}
 /* Secondary buttons are the grey capsule iOS uses beside a tinted one. */
 .btn-p{width:100%;height:50px;background:var(--mist);color:var(--text);border:0;font-size:14.5px;}
@@ -288,7 +290,7 @@ a.svc-card:hover .svc-more{transform:translateX(6px);}
 .m-name{margin-bottom:8px;font:700 17px/1.2 var(--f-display);}
 .m-price{margin-bottom:8px;white-space:nowrap;font:700 clamp(26px,2.2vw,34px)/1.1 var(--f-display);letter-spacing:-.02em;}
 .m-desc{margin-bottom:16px;font-size:13.5px;line-height:1.6;color:var(--grey);}
-.m-tier-label{margin-bottom:14px;font:600 11px/1 var(--f-display);letter-spacing:.1em;text-transform:uppercase;color:var(--blue);}
+.m-tier-label{margin-bottom:14px;font:600 12.5px/1 var(--f-display);letter-spacing:.1em;text-transform:uppercase;color:var(--blue);}
 
 
 /* ── BLOG ── */
@@ -330,7 +332,7 @@ a.svc-card:hover .svc-more{transform:translateX(6px);}
 .info-item:last-child{border-bottom:1px solid var(--line-dark);}
 .info-icon{display:flex;align-items:center;justify-content:center;flex-shrink:0;position:relative;width:44px;height:44px;border-radius:50%;background:color-mix(in srgb,var(--surface) 8%,transparent);color:var(--blue-light);transition:background-color .3s,color .3s,border-color .3s;}
 .info-item:hover .info-icon{background:color-mix(in srgb,var(--surface) 90%,transparent);color:var(--blue);}
-.info-lbl{margin-bottom:8px;font:500 11px/1 var(--f-display);letter-spacing:.1em;text-transform:uppercase;color:var(--grey-dark);}
+.info-lbl{margin-bottom:8px;font:500 12.5px/1 var(--f-display);letter-spacing:.1em;text-transform:uppercase;color:var(--grey-dark);}
 .info-val{font:500 16px/1.4 var(--f-display);color:var(--surface);}
 .info-val a{color:var(--surface);text-decoration:none;background:linear-gradient(currentColor,currentColor) 0 100%/0 1px no-repeat;transition:background-size .6s var(--ease);}
 .info-val a:hover{background-size:100% 1px;}
@@ -349,6 +351,9 @@ a.svc-card:hover .svc-more{transform:translateX(6px);}
 .form-group textarea{min-height:120px;resize:vertical;}
 .btn-submit{--fill:var(--surface);width:100%;height:56px;background:var(--blue);color:var(--surface);border:0;}
 .btn-submit:hover,.btn-submit:focus-visible{color:var(--blue);}
+/* while the form sends: dimmed, and the hover fill stays out */
+.btn-submit:disabled{opacity:.6;cursor:progress;color:var(--surface);}
+.btn-submit:disabled::before{transform:scaleX(0);}
 #contact-status{font-size:14px;color:var(--grey-dark);}
 #contact-status a{color:var(--blue-light);}
 
@@ -371,7 +376,7 @@ footer{position:relative;z-index:1;display:grid;grid-template-columns:1.6fr 1fr 
 .foot-contact{font-size:14px;line-height:1.9;color:var(--grey-dark);}
 .foot-contact a{color:var(--surface);text-decoration:none;}
 .foot-contact a:hover{color:var(--blue-light);}
-.foot-h{margin-bottom:18px;font:500 11.5px/1 var(--f-display);letter-spacing:.08em;text-transform:uppercase;color:var(--grey-dark);}
+.foot-h{margin-bottom:18px;font:500 12.5px/1 var(--f-display);letter-spacing:.08em;text-transform:uppercase;color:var(--grey-dark);}
 .foot-links{list-style:none;}
 .foot-links li{margin-bottom:10px;}
 .foot-links a{display:inline-block;font-size:14px;color:var(--surface);opacity:.85;text-decoration:none;cursor:pointer;transition:opacity .3s,color .3s,transform .4s var(--ease);}
@@ -432,6 +437,8 @@ footer{position:relative;z-index:1;display:grid;grid-template-columns:1.6fr 1fr 
   .form-row{grid-template-columns:1fr;}
   footer{grid-template-columns:1fr;padding-top:56px;}
   .wa-btn{right:18px;bottom:calc(18px + env(safe-area-inset-bottom));width:50px;height:50px;}
+  /* the centred line runs under the floating button at this width: end the page above it */
+  .foot-bottom{padding-bottom:calc(28px + 68px + env(safe-area-inset-bottom));}
   .wa-btn svg{width:24px;height:24px;}
 }
 

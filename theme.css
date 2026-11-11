@@ -118,6 +118,9 @@ body:has(.mobile-menu.open) .to-top { opacity:0; visibility:hidden; }
 @media (prefers-reduced-motion:reduce) { .to-top:hover svg { transform:none; } }
 @media print { .to-top { display:none; } }
 
+/* Selected text takes the brand blue instead of the browser's default highlight. */
+::selection { background:color-mix(in srgb,var(--blue) 26%,transparent); }
+
 /* ── ANALYTICS CONSENT ── the notice home.js shows until a visitor answers. Dark glass
    whatever is behind it, dense enough to read small text over a white section. Bottom
    left on wide screens, clear of the WhatsApp button; across the foot of a phone, over

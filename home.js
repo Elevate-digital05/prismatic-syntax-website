@@ -1,23 +1,29 @@
-/* Shared by every page: the hero motion, the FAQ, the glass header's tone, the
-   back-to-top button and the analytics consent notice. */
+/* Shared by every page: the hero motion, the heading reveal, the FAQ, the glass header's
+   tone, smooth scrolling, the back-to-top button and the analytics consent notice. */
 /* Home hero: dark tiles dissolve off the glass (prism.js) on load and the glass
-   drifts with the pointer. The hero is the only part of either page that moves. */
+   drifts with the pointer. On a first visit they wait for the splash (home.css) to
+   part, by --intro. */
 (function () {
   const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const root = document.documentElement;
+  const intro = (parseFloat(getComputedStyle(root).getPropertyValue('--intro')) || 0) * 1000;
+  // Off once every entrance has run, or /south-africa's home view would wait out the
+  // splash again each time showPage() brings it back.
+  if (intro) setTimeout(function () { root.classList.remove('splashing'); }, 3200);
   const start = function () {
     const tiles = document.querySelector('.hero-tiles');
     // the tiles only fade, so they run for reduced motion too; the zoom and drift do not
     if (tiles) {
       for (let i = 0; i < 81; i++) {
         const t = document.createElement('i');
-        t.style.animationDelay = (150 + Math.random() * 950) + 'ms';
+        t.style.animationDelay = (intro + 150 + Math.random() * 950) + 'ms';
         if (Math.random() < 0.16) t.className = 'b';
         tiles.appendChild(t);
       }
       tiles.classList.add('is-ready');
-      setTimeout(function () { tiles.remove(); }, 2200);
+      setTimeout(function () { tiles.remove(); }, intro + 2200);
     }
-    document.documentElement.classList.add('is-loaded');
+    root.classList.add('is-loaded');
   };
   // wait for the display face so the headline does not reflow mid-reveal, capped so slow fonts never block
   Promise.race([document.fonts.ready, new Promise(function (r) { setTimeout(r, 800); })])
@@ -36,6 +42,52 @@
     });
   };
   parallax(document.querySelector('.hero'), document.querySelector('.hero-media'));
+})();
+
+/* Section headings sharpen out of a blur a letter at a time, the first time they come
+   into view (theme.css). The letters are hidden from screen readers, which otherwise
+   spell split text out, and the heading carries its words as its name instead. Left
+   alone: a heading with a control in it (the FAQ toggle), and one already on screen when
+   this runs, which would vanish and come back. A heading in a view /south-africa has
+   not opened yet has no box, so it is split and waits for the view. */
+(function () {
+  const io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) {
+      if (!e.isIntersecting) return;
+      e.target.classList.add('is-in');
+      io.unobserve(e.target);
+    });
+  }, { rootMargin: '0px 0px -12% 0px' });
+  document.querySelectorAll('.sec-h, .cta-inner > h2, #main h2').forEach(function (h) {
+    if (h.querySelector('a, button, input, select, textarea')) return;
+    if (h.getClientRects().length && h.getBoundingClientRect().top < innerHeight) return;
+    h.setAttribute('aria-label', h.textContent.trim().replace(/\s+/g, ' '));
+    const texts = [];
+    const walk = document.createTreeWalker(h, NodeFilter.SHOW_TEXT);
+    while (walk.nextNode()) texts.push(walk.currentNode);
+    let i = 0;
+    texts.forEach(function (node) {
+      const frag = document.createDocumentFragment();
+      node.data.split(/(\s+)/).forEach(function (part) {
+        if (!part) return;
+        if (/^\s+$/.test(part)) { frag.append(part); return; }
+        const wd = document.createElement('span');
+        wd.className = 'wd';
+        wd.setAttribute('aria-hidden', 'true');
+        for (const c of part) {
+          const ch = document.createElement('span');
+          ch.className = 'ch';
+          ch.style.setProperty('--i', i++);
+          ch.textContent = c;
+          wd.append(ch);
+        }
+        frag.append(wd);
+      });
+      node.replaceWith(frag);
+    });
+    h.classList.add('is-split');
+    io.observe(h);
+  });
 })();
 
 /* The FAQ collapses under its heading. It opens from the heading, from any link
@@ -95,6 +147,9 @@ document.querySelectorAll('.faq-toggle').forEach(function (btn) {
     controls.forEach(function (el) {
       const under = document.elementsFromPoint(el.offsetLeft + el.offsetWidth / 2, el.offsetTop + el.offsetHeight / 2)
         .find(function (u) { return !el.contains(u); });
+      // While a page transition (theme.css) plays, its overlay is all there is to hit and
+      // that reads as <html>: look again once it has gone, or the bar keeps the wrong tone.
+      if (under === document.documentElement) { setTimeout(queue, 150); return; }
       el.classList.toggle('on-light', Boolean(under) && !under.closest(DARK));
     });
   };
@@ -107,18 +162,17 @@ document.querySelectorAll('.faq-toggle').forEach(function (btn) {
   update();
 })();
 
-/* A mouse wheel on a PC jumps the page in 100px notches where a Mac trackpad glides,
-   which is most of why the site felt choppy on Windows. This eases wheel scrolling
-   toward where the notches point. It stays out of the way on Apple devices, touch
-   screens, precision touchpads (small deltas that already glide), ctrl+wheel zoom,
-   anything that scrolls itself (a textarea, the mobile menu), and for anyone who has
-   asked for reduced motion. */
+/* Smooth scroll: every wheel and trackpad moves a target, and the page glides after it,
+   heavier than the browser's own scrolling, so the whole site carries some weight the
+   way the reference agency site does. A mouse wheel on a PC also stops jumping in 100px
+   notches. It stays out of the way on touch screens, ctrl+wheel zoom, sideways swipes,
+   anything that scrolls itself (a textarea, the mobile menu), while a menu has the page
+   locked, and for anyone who has asked for reduced motion. */
 (function () {
-  const platform = navigator.userAgentData ? navigator.userAgentData.platform : navigator.platform;
-  // case-insensitive: Chrome on a Mac reports "macOS", Safari "MacIntel"
-  if (/mac|iphone|ipad|ipod/i.test(platform) || !matchMedia('(hover: hover) and (pointer: fine)').matches ||
+  if (!matchMedia('(hover: hover) and (pointer: fine)').matches ||
       matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-  let target = 0, running = false, gestureUntil = 0;
+  const EASE = 0.06; // share of the remaining distance covered per 60Hz frame
+  let target = 0, running = false, last = 0;
   const scrollsItself = function (el, dy) {
     for (; el && el !== document.body && el !== document.documentElement; el = el.parentElement) {
       const o = getComputedStyle(el).overflowY;
@@ -127,25 +181,28 @@ document.querySelectorAll('.faq-toggle').forEach(function (btn) {
     }
     return false;
   };
-  const frame = function () {
+  const frame = function (now) {
     if (!running) return;
     const y = scrollY, d = target - y;
     if (Math.abs(d) <= 1) { scrollTo({ top: target, behavior: 'instant' }); running = false; return; }
+    // scaled by frame time, or a 120Hz screen would glide twice as fast as a 60Hz one
+    // (clamped: the first frame can be stamped before the wheel event that started it)
+    const k = 1 - Math.pow(1 - EASE, Math.min(Math.max(now - last, 8), 64) / (1000 / 60));
+    last = now;
     // at least a pixel a frame, or rounding to device pixels can stall the last few
-    scrollTo({ top: y + Math.sign(d) * Math.max(1, Math.abs(d) * 0.16), behavior: 'instant' });
+    scrollTo({ top: y + Math.sign(d) * Math.max(1, Math.abs(d) * k), behavior: 'instant' });
     requestAnimationFrame(frame);
   };
   addEventListener('wheel', function (e) {
     if (e.ctrlKey || e.defaultPrevented || Math.abs(e.deltaX) > Math.abs(e.deltaY)) return;
-    const now = performance.now();
-    if (e.deltaMode === 0 && Math.abs(e.deltaY) < 50 && now > gestureUntil) return;
+    // an open menu locks the page (overflow on the homepage, a fixed body on /south-africa)
+    if (document.body.style.overflow === 'hidden' || document.body.style.position === 'fixed') return;
     if (scrollsItself(e.target, e.deltaY)) return;
     e.preventDefault();
-    gestureUntil = now + 250;
     if (!running) target = scrollY;
     const px = e.deltaMode === 1 ? e.deltaY * 40 : e.deltaMode === 2 ? e.deltaY * innerHeight : e.deltaY;
     target = Math.max(0, Math.min(document.documentElement.scrollHeight - innerHeight, target + px));
-    if (!running) { running = true; requestAnimationFrame(frame); }
+    if (!running) { running = true; last = performance.now(); requestAnimationFrame(frame); }
   }, { passive: false });
   // keys, the scrollbar, links and page switches move the page themselves: let go
   ['keydown', 'pointerdown', 'hashchange'].forEach(function (type) { addEventListener(type, function () { running = false; }); });

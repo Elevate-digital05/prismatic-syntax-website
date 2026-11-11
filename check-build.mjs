@@ -319,9 +319,11 @@ for (const [name, page] of [['index.html', home], ['south-africa.html', saPage]]
 }
 console.log('ok faq and currency: no converter on /south-africa, both FAQs collapse under their heading');
 
-/* ── both entry pages stay calm ── September 2026: the site read as busy. The
-   hero is the only thing that moves, only its headline carries the blue
-   highlight, and each FAQ's structured data lists exactly the questions shown. */
+/* ── both entry pages stay calm ── September 2026: the site read as busy, so the
+   scroll reveals, cycling words and progress bar went. November 2026 brought back
+   one kind of motion only: headings sharpen out of a blur where they stand (theme.css,
+   home.js); nothing slides in. Only the hero headline carries the blue highlight,
+   and each FAQ's structured data lists exactly the questions shown. */
 for (const [name, page] of [['index.html', home], ['south-africa.html', saPage]]) {
   assert.doesNotMatch(page, /reveal-(?:card|section)|class="words"|scroll-progress|class="feat |class="art/,
     `${name}: scroll reveals, cycling words, the progress bar, the six-point section or the art composition came back`);

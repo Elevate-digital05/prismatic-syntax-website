@@ -140,8 +140,8 @@ Contact must offer a call, then email, then WhatsApp; `/south-africa` must keep
 its geo tags, `en_ZA` locale and its own canonical; and the vercel.app host must
 stay noindexed.
 
-Both entry pages are also held to the September 2026 decluttering: the hero is the
-only thing that moves, only its headline carries the blue highlight, the homepage
+Both entry pages are also held to the September 2026 decluttering: no scroll
+reveals that slide content in, no cycling words, only the hero headline carries the blue highlight, the homepage
 FAQ stays at six questions or fewer, and each FAQ's structured data lists exactly
 the questions on the page.
 
@@ -163,6 +163,24 @@ means it never loads. The answer is kept in the browser's localStorage under
 the consent check goes, or if the privacy policy stops naming Whop. Whop's host,
 `t.whop.tw`, is in the CSP's `script-src`, `connect-src` and `img-src`; if Whop
 starts calling another host, add it there too.
+
+## Motion
+
+Slow and heavy, after dobre.agency, with nothing sliding in:
+
+- **Smooth scroll** (`home.js`): wheel and trackpad input glide after a target on every
+  desktop browser. Off for touch and reduced motion, and while a menu locks the page.
+- **Headings** (`.sec-h` and the CTA banners on the entry pages, `h2` on the service pages): split into
+  letters by `home.js`, each sharpening out of a blur as the heading comes into view.
+  The heading keeps its words as its `aria-label`.
+- **Page transitions** (`theme.css`): cross-document view transitions. The next page
+  opens out of a slanted slit at the angle of the logo's shards (`--slant`). Firefox
+  just navigates; reduced motion gets a crossfade.
+- **Splash** (`home.css`, plus the script in each entry page's `<head>`): the first
+  entry page of a visit shows the name, then the ink parts along the same slant.
+  Never for reduced motion. `--intro` holds the hero entrance back until it parts.
+
+Easing tokens are in `theme.css`: `--ease-slow` and `--ease-soft`.
 
 ## Payments
 

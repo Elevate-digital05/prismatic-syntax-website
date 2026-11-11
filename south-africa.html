@@ -323,11 +323,14 @@
      inactive pages for real users, but crawlers that skip
      JS never see .js-ready, so all content is indexed.
 ════════════════════════════════════════════════════════ -->
-<script>document.documentElement.classList.add('js-ready');</script>
+<script>document.documentElement.classList.add('js-ready');
+/* The splash (home.css) plays once a visit, on whichever entry page comes first, and never for reduced motion. Storage can throw when blocked. */
+try { if (!sessionStorage.getItem('ps-splash') && !matchMedia('(prefers-reduced-motion: reduce)').matches) { sessionStorage.setItem('ps-splash', '1'); document.documentElement.classList.add('splashing'); } } catch (e) {}</script>
 
 <link rel="stylesheet" href="/home.css">
 </head>
 <body>
+<div class="splash" aria-hidden="true"><span>Prismatic</span><i></i><span>Syntax</span></div>
 
 
 <a href="#main-content" class="skip-link">Skip to main content</a>

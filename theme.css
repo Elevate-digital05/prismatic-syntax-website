@@ -144,3 +144,31 @@ body:has(.mobile-menu.open) .consent { display:none; }
 @media (prefers-reduced-transparency:reduce) { .consent { -webkit-backdrop-filter:none; backdrop-filter:none; background:var(--ink); } }
 @media (prefers-contrast:more) { .consent { background:var(--ink); box-shadow:0 0 0 1px var(--surface); } .consent p { color:var(--surface); } }
 @media print { .consent { display:none; } }
+
+/* ── MOTION ── slow and heavy rather than snappy: type sharpens out of a blur, and
+   pages part along a cut at the slant of the logo's shards (about 15.6deg off upright,
+   which is --slant either side of centre over a screen height) instead of sliding.
+   It lives here because every page links this file, and a page transition only runs
+   when both pages opt in. */
+:root { --ease-slow:cubic-bezier(.5,0,0,1); --ease-soft:cubic-bezier(.39,.575,.565,1); --slant:14vh; }
+
+/* Page transitions: the next page opens out of a slanted slit over the last one, which
+   blurs and dims under it. Browsers without cross-document view transitions (Firefox,
+   older Safari) just navigate. Reduced motion gets the browser's plain crossfade. */
+@view-transition { navigation:auto; }
+::view-transition-old(root), ::view-transition-new(root) { mix-blend-mode:normal; animation-duration:.8s; animation-timing-function:var(--ease-slow); animation-fill-mode:both; }
+::view-transition-old(root) { animation-name:vt-dim; }
+::view-transition-new(root) { animation-name:vt-part; }
+@keyframes vt-dim { to { filter:blur(6px) brightness(.55); } }
+@keyframes vt-part {
+  from { clip-path:polygon(calc(50% + var(--slant)) 0, calc(50% + var(--slant)) 0, calc(50% - var(--slant)) 100%, calc(50% - var(--slant)) 100%); }
+  to { clip-path:polygon(0 0, calc(100% + 2 * var(--slant)) 0, 100% 100%, calc(0% - 2 * var(--slant)) 100%); }
+}
+@media (prefers-reduced-motion:reduce) { ::view-transition-old(root), ::view-transition-new(root) { animation:revert; mix-blend-mode:revert; } }
+
+/* Headings sharpen out of a blur a letter at a time the first time they come into view.
+   home.js splits them into .ch letters inside unbreakable .wd words. Nothing travels,
+   so this runs for reduced motion too. */
+.wd { white-space:nowrap; }
+.ch { display:inline-block; transition:opacity .7s var(--ease-soft), filter .7s var(--ease-soft); transition-delay:calc(var(--i) * 18ms); }
+.is-split:not(.is-in) .ch { opacity:0; filter:blur(10px); }

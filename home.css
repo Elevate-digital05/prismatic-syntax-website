@@ -323,7 +323,12 @@ a.svc-card:hover .svc-more{transform:translateX(6px);}
 .work-grid{--work-gap:16px;display:flex;gap:var(--work-gap);list-style:none;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:thin;padding-bottom:6px;}
 .work-item{flex:0 0 clamp(170px,17vw,230px);display:flex;align-items:center;justify-content:center;padding:24px 20px;min-height:124px;background:var(--surface);border:1px solid var(--line);border-radius:var(--r-md);scroll-snap-align:start;transition:border-color .4s;}
 .work-item:hover{border-color:color-mix(in srgb,var(--blue) 35%,var(--line));}
+/* the client logos sit right under the hero as a quiet band, labelled rather than headlined */
+#work .sec{padding-block:clamp(28px,3.5vw,48px);}
+.work-lbl{margin-bottom:16px;}
 .work-item img{max-width:100%;max-height:64px;width:auto;height:auto;object-fit:contain;}
+/* reduced motion: the strip stands still and the logos wrap (home.js skips the marquee) */
+@media (prefers-reduced-motion:reduce){.work-grid{flex-wrap:wrap;justify-content:center;overflow:visible;}}
 .work-marquee{--work-gap:16px;display:flex;gap:var(--work-gap);overflow:hidden;-webkit-mask-image:linear-gradient(90deg,transparent,var(--ink) 7%,var(--ink) 93%,transparent);mask-image:linear-gradient(90deg,transparent,var(--ink) 7%,var(--ink) 93%,transparent);}
 /* each copy is at least as wide as the strip, so one full copy always covers the view, and
    sliding by exactly one copy plus the gap lands the second where the first began */
@@ -373,7 +378,7 @@ a.svc-card:hover .svc-more{transform:translateX(6px);}
 .form-consent{display:flex;gap:10px;align-items:flex-start;margin:4px 0 18px;font-size:var(--fs-small);line-height:1.5;color:var(--grey-dark);cursor:pointer;}
 .form-consent input{width:18px;height:18px;margin-top:2px;flex:none;accent-color:var(--blue-light);}
 .form-consent a{color:inherit;text-decoration:underline;}
-.form-group input::placeholder,.form-group textarea::placeholder{color:var(--grey-dark);opacity:.45;}
+.form-group input::placeholder,.form-group textarea::placeholder{color:var(--grey-dark);opacity:.6;}
 .form-group select option{background:var(--ink-2);color:var(--surface);}
 .form-group textarea{min-height:120px;resize:vertical;}
 .btn-submit{--fill:var(--surface);width:100%;height:56px;background:var(--blue);color:var(--surface);border:0;}
@@ -385,6 +390,10 @@ a.svc-card:hover .svc-more{transform:translateX(6px);}
 #contact-status{margin-top:14px;font-size:var(--fs-small);line-height:1.55;color:var(--grey-dark);}
 #contact-status:empty{margin-top:0;}
 #contact-status.is-error{padding:12px 16px;border-radius:var(--r-sm);background:color-mix(in srgb,var(--alert) 14%,transparent);box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--alert) 45%,transparent);color:var(--surface);}
+.field-hint{margin-top:6px;font-size:var(--fs-meta);line-height:1.5;color:var(--grey-dark);}
+.price-upkeep{max-width:60ch;margin-top:28px;font-size:var(--fs-small);line-height:1.6;color:var(--grey);}
+.price-upkeep strong{color:var(--text);font-weight:600;}
+.form-done{scroll-margin-top:calc(var(--nav-h) + 16px);}
 .char-count{margin-top:6px;font-size:var(--fs-meta);color:var(--grey-dark);}
 .char-count:empty{display:none;}
 .form-done{color:var(--surface);}
@@ -476,6 +485,14 @@ footer{position:relative;z-index:1;display:grid;grid-template-columns:1.6fr 1fr 
   .hero-in{order:-1;margin-top:0;}
   .hero-media{padding:36px var(--pad) 0;}
   .paths-grid,.svc-rows,.svc-grid,.blog-grid,.price-grid,.maint-grid,.proc-steps{grid-template-columns:1fr;}
+  /* Prices: one swipeable row instead of four stacked cards, about three screens. The
+     next card peeks in, so it reads as a row; the top padding keeps the recommended
+     card's tag inside the scroller. */
+  .price-grid{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;overscroll-behavior-x:contain;margin-inline:calc(-1 * var(--pad));padding:16px var(--pad) 8px;scroll-padding-inline:var(--pad);scrollbar-width:none;}
+  .price-grid::-webkit-scrollbar{display:none;}
+  .price-grid>.p-card{flex:0 0 min(84%,340px);scroll-snap-align:start;}
+  /* one floating control at a time: the call to action outranks back-to-top */
+  body:has(.cta-float.is-shown) .to-top{opacity:0;visibility:hidden;}
   .team-row{grid-template-columns:repeat(2,1fr);}
   .paths-grid .path-card{padding:26px 24px 30px;}
   .svc-rows{padding:4px 22px;}

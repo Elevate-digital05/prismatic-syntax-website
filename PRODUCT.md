@@ -29,6 +29,8 @@ The site is the studio's storefront. It explains what Prismatic Syntax does (web
 
 - First contact is a call request (Formspree form), email (info@prismaticsyntax.com) or WhatsApp. Replies within one working day. Hours are Mon–Fri 07:00–19:00 and Sat 12:00–17:00 SAST (UTC+2).
 - Every project is quoted after a short call; listed prices are starting prices.
+- International monthly retainer: from $300 a month, hosting included (`lib/pricing-usd.js`).
+- The free homepage concept is a working homepage at a private link, usually ready one to two days after the call.
 - The site takes no payments. Clients are invoiced directly and pay by EFT: 50% deposit after approving the concept, the balance before launch, retainers monthly.
 - `/menu` is a printable services PDF sent by email, deliberately not in the nav and `noindex`.
 - One of the founders is on every project, and the same team covers website, brand, copy and video. This is true, but it is not the lead differentiator.

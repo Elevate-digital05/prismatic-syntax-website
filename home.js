@@ -198,7 +198,8 @@
    Space pauses and resumes it, and keyboard focus pauses it. */
 (function () {
   const list = document.querySelector('.work-grid');
-  if (!list) return;
+  // Reduced motion holds it still (PRODUCT.md): no marquee, and home.css wraps the logos.
+  if (!list || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
   const strip = document.createElement('div');
   strip.className = 'work-marquee';
   list.before(strip);
@@ -208,10 +209,8 @@
   copy.querySelectorAll('img').forEach(function (img) { img.alt = ''; });
   strip.append(copy);
   // A set pace rather than a set lap time: a fixed lap would scroll faster with every
-  // business added, since each lap gets longer. Half pace for reduced motion rather than
-  // still, as with the glass: Windows reports reduced motion whenever "Animation effects"
-  // is off, and a frozen strip would show only the first few logos.
-  const speed = matchMedia('(prefers-reduced-motion: reduce)').matches ? 30 : 60; // px a second
+  // business added, since each lap gets longer.
+  const speed = 60; // px a second
   const pace = function () {
     const lap = list.getBoundingClientRect().width + (parseFloat(getComputedStyle(strip).columnGap) || 16);
     strip.style.setProperty('--work-duration', (lap / speed).toFixed(1) + 's');
@@ -221,7 +220,12 @@
   strip.tabIndex = 0;
   strip.setAttribute('role', 'region');
   strip.setAttribute('aria-label', 'Client logos, moving. Tap, click or focus to pause.');
-  const toggle = function () { strip.classList.toggle('is-paused'); };
+  const toggle = function () {
+    const paused = strip.classList.toggle('is-paused');
+    strip.setAttribute('aria-label', paused
+      ? 'Client logos, paused. Tap, click or press Enter to play.'
+      : 'Client logos, moving. Tap, click or focus to pause.');
+  };
   strip.addEventListener('click', toggle);
   strip.addEventListener('keydown', function (e) {
     if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle(); }

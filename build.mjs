@@ -12,7 +12,7 @@ import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { pathToFileURL } from 'node:url';
 import { SERVICES, HOURS } from './lib/services.js';
 import { PACKAGES } from './lib/packages.js';
-import { USD_PACKAGES } from './lib/pricing-usd.js';
+import { USD_PACKAGES, USD_RETAINER_FROM } from './lib/pricing-usd.js';
 import { WORK } from './lib/work.js';
 
 // A free homepage concept means nothing on services that don't build a site.
@@ -675,7 +675,8 @@ ${Object.entries(USD_PACKAGES).map(([name, price]) => {
     // saying which tier it is about. data-package also preselects it in the form.
     `<a class="p-cta" href="#contact" data-package="${attr(name)}">Get a free concept for ${esc(name)} →</a></div>`;
 }).join('\n')}
-      </div>`;
+      </div>
+      <p class="price-upkeep"><strong>After launch:</strong> a monthly retainer from ${usd(USD_RETAINER_FROM)} covers hosting and keeps the site updated, backed up and secure.</p>`;
 
 
 /* ── the client wall ── one list, laid out identically on both entry pages, so the

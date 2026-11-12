@@ -133,6 +133,8 @@ Durations: .3s for colour and opacity changes, .45s for button fills, .6–.8s f
 | On dark | Fill becomes `--surface`, text turns blue | Translucent white fill and border | Inherits |
 | Disabled | `.btn-submit:disabled` dims to 60% with a progress cursor while the form sends, and the fill stays out | Not used | Not used |
 
+On phones the package cards become one swipeable row with the next card peeking in. A one-line monthly retainer price sits under the cards, rendered from `lib/pricing-usd.js`.
+
 Package cards follow the one-tint rule: tier names, bullets and links are ink and grey, and only the Recommended card carries blue. Its tag sits on the card's top edge so prices line up across the row.
 
 Variants: `.btn-nav` is 44px with 14px text, and `.btn-submit` is 56px and full width.
@@ -160,6 +162,10 @@ Appears on the first scroll of a visit, never on load, so it cannot cover the he
 ### Hero
 
 Text column with the live glass beside it on desktop. Up to 1080px the glass stacks above the text. On phones (760px and under) the order flips to headline, offer and **Book a call** first, then the glass, so the primary action is in the first screen. The glass is `aria-hidden`, so reading and focus order never change.
+
+### Client logos
+
+A quiet band directly under the hero, labelled rather than headlined, until real screenshots of client work exist. The strip moves on its own and is its own pause control (hover, keyboard focus, tap, click, Enter or Space; its label says whether it is paused). Under reduced motion it stands still and the logos wrap. The images are WebP sized to the 64px display height at 2×.
 
 ### Calls to action
 

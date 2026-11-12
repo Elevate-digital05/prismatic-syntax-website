@@ -270,7 +270,7 @@ assert.doesNotMatch(home, /optimiz|specializ|Absolutely!|Yes!/, 'the homepage ha
 assert.ok(home.includes('<meta property="og:locale" content="en_GB">'), 'the homepage og:locale is not en_GB');
 
 const contactBlock = home.slice(home.indexOf('id="contact"'));
-const [book, mail, whatsapp] = ['>Book a call<', 'mailto:info@prismaticsyntax.com', 'wa.me/'].map(s => contactBlock.indexOf(s));
+const [book, mail, whatsapp] = ['>Request a call<', 'mailto:info@prismaticsyntax.com', 'wa.me/'].map(s => contactBlock.indexOf(s));
 assert.ok(book >= 0 && book < mail && mail < whatsapp, 'the homepage contact block must offer a call, then email, then WhatsApp');
 assert.ok(home.slice(home.indexOf('<nav'), home.indexOf('</nav>')).includes(regionLink),
   'the "South Africa →" link belongs in the nav, where a South African visitor sees it before any dollar price');
@@ -314,10 +314,12 @@ console.log(usdSet.length ? `ok usd: ${usdSet.length} homepage prices match lib/
    its own USD sheet. Both FAQs collapse under their heading. */
 assert.doesNotMatch(saPage, /currency-selector|setCurrencyAll|data-rate=/, '/south-africa has the ZAR/USD converter again');
 for (const [name, page] of [['index.html', home], ['south-africa.html', saPage]]) {
-  assert.ok(page.includes('class="faq-toggle" aria-expanded="false" aria-controls="faq-panel"') && page.includes('<div class="faq-panel" id="faq-panel">'),
-    `${name}: the FAQ heading no longer collapses the list`);
+  // November 2026: the questions show by default (a critique found the collapsed list hid
+  // the answers to the biggest objections), each a native <details> disclosure.
+  assert.ok(page.includes('<details class="faq-item-accordion"><summary class="faq-q-accordion">') && !page.includes('faq-toggle'),
+    `${name}: the FAQ is collapsed again, or its questions are not native <details>`);
 }
-console.log('ok faq and currency: no converter on /south-africa, both FAQs collapse under their heading');
+console.log('ok faq and currency: no converter on /south-africa, both FAQs show their questions as native disclosures');
 
 /* ── both entry pages stay calm ── September 2026: the site read as busy, so the
    scroll reveals, cycling words and progress bar went. November 2026 brought back
@@ -328,7 +330,7 @@ for (const [name, page] of [['index.html', home], ['south-africa.html', saPage]]
   assert.doesNotMatch(page, /reveal-(?:card|section)|class="words"|scroll-progress|class="feat |class="art/,
     `${name}: scroll reveals, cycling words, the progress bar, the six-point section or the art composition came back`);
   assert.equal(page.match(/class="hl"/g).length, 1, `${name}: only the hero headline may carry the blue highlight`);
-  const shown = [...page.matchAll(/<div class="faq-q-accordion">(.*?)<\/div>/g)].map(m => m[1]);
+  const shown = [...page.matchAll(/<summary class="faq-q-accordion">(.*?)<\/summary>/g)].map(m => m[1]);
   const graph = [...page.matchAll(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g)].flatMap(m => { const d = JSON.parse(m[1]); return d['@graph'] || [d]; });
   assert.deepEqual(graph.find(n => n['@type'] === 'FAQPage').mainEntity.map(q => q.name), shown,
     `${name}: the FAQ structured data does not list the questions on the page`);

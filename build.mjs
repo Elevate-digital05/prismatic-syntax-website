@@ -641,9 +641,9 @@ const featLabel = f => Array.isArray(f) ? f[0] : f;
 // a rename there cannot leave a stale feature here.
 const HOME_FEATS = {
   Starter:  ['Custom brand colours & typography', 'Professional contact form', 'Google Business Profile setup', 'Basic on-page SEO', '1 round of revisions'],
-  Business: ['Everything in Starter', 'Copywriting for 3 pages', 'Full on-page SEO', 'Speed & Core Web Vitals optimisation', '2 rounds of revisions'],
+  Business: ['Everything in Starter', 'Copywriting for 3 pages', 'Full on-page SEO', 'Speed tuning, so pages load fast on phones', '2 rounds of revisions'],
   Pro:      ['Everything in Business', 'E-commerce or booking system', 'Full copywriting', 'Blog setup + training', '3 rounds of revisions'],
-  Premium:  ['Discovery & strategy workshop', 'Custom functionality / API integrations', 'Full SEO dominance strategy', 'Direct line to the founders throughout', 'Priority support, replies within 24h on weekdays'],
+  Premium:  ['Discovery & strategy workshop', 'Custom features, connected to the tools you already use', 'A full search strategy for Google', 'Direct line to the founders throughout', 'Priority support, replies within 24h on weekdays'],
 };
 const homeFeats = name => HOME_FEATS[name].map(f => {
   if (!PACKAGES[name].features.map(featLabel).includes(f)) throw new Error(`build.mjs HOME_FEATS: "${f}" is not a ${name} feature in lib/packages.js`);
@@ -652,7 +652,7 @@ const homeFeats = name => HOME_FEATS[name].map(f => {
 const intlPricing = usdMissing.length
   ? `      <div class="sec-lbl">Pricing</div>
       <h2 class="sec-h quote-line">Every project is quoted after a short call.</h2>
-      <div><a class="btn-primary" href="#contact">Book a call</a></div>`
+      <div><a class="btn-primary" href="#contact">Get your free concept</a></div>`
   : `      <div class="sec-top">
         <div>
           <div class="sec-lbl">Pricing</div>
@@ -666,13 +666,13 @@ ${Object.entries(USD_PACKAGES).map(([name, price]) => {
   return `        <div class="p-card${tier.rec ? ' pop' : ''}">` +
     (tier.rec ? '<div class="pop-tag">Recommended</div>' : '') +
     `<div class="p-name">${esc(name)}</div>` +
-    `<div class="p-amount">${usd(price)}${tier.plus ? '<span style="font-size:18px;">+</span>' : ''}</div>` +
+    `<div class="p-amount">${usd(price)}${tier.plus ? '<span class="p-plus">+</span>' : ''}</div>` +
     `<div class="p-period">${esc(tier.period)}</div><p class="p-best-for">${esc(tier.desc)}</p>` +
     `<ul class="p-feats">${homeFeats(name)}</ul>` +
     // Each card names its own package in its call to action, the way the ZAR package
     // buttons carry the tier in their WhatsApp message: the enquiry arrives already
-    // saying which tier it is about. This page books calls rather than opening chats.
-    `<a class="p-cta" href="#contact">Book a call about ${esc(name)} →</a></div>`;
+    // saying which tier it is about. data-package also preselects it in the form.
+    `<a class="p-cta" href="#contact" data-package="${attr(name)}">Get a free concept for ${esc(name)} →</a></div>`;
 }).join('\n')}
       </div>`;
 

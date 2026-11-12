@@ -155,7 +155,7 @@ price in the wrong currency first: "South Africa →" on the homepage and
 ## Analytics
 
 Visits are counted with Whop's analytics, and only for visitors who agree.
-`home.js` shows a small notice on the first visit and loads Whop's script only
+`home.js` shows a small notice on the first scroll of a visit (never over the hero) and loads Whop's script only
 after **Allow**. **No thanks**, or a browser sending Global Privacy Control,
 means it never loads. The answer is kept in the browser's localStorage under
 `ps-analytics`, not a cookie, and the "Change your analytics choice" button on

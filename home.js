@@ -1,5 +1,6 @@
 /* Shared by every page: the hero motion, the heading reveal, the FAQ, the glass header's
-   tone, smooth scrolling, the back-to-top button and the analytics consent notice. */
+   tone, smooth scrolling, the back-to-top button and the analytics consent notice. The FAQs
+   are native <details>, so they need no script. */
 /* Home hero: dark tiles dissolve off the glass (prism.js) on load and the glass
    drifts with the pointer. On a first visit they wait for the splash (home.css) to
    part, by --intro. */
@@ -89,23 +90,6 @@
     io.observe(h);
   });
 })();
-
-/* The FAQ collapses under its heading. It opens from the heading, from any link
-   to #faq, and when the page is opened at #faq; inert keeps the closed list out
-   of the tab order. */
-document.querySelectorAll('.faq-toggle').forEach(function (btn) {
-  const panel = document.getElementById(btn.getAttribute('aria-controls'));
-  const set = function (open) {
-    btn.setAttribute('aria-expanded', open);
-    panel.classList.toggle('is-open', open);
-    panel.inert = !open;
-  };
-  set(location.hash === '#faq');
-  btn.addEventListener('click', function () { set(btn.getAttribute('aria-expanded') !== 'true'); });
-  document.querySelectorAll('a[href="#faq"]').forEach(function (a) {
-    a.addEventListener('click', function () { set(true); });
-  });
-});
 
 /* Back to top: a glass button in the bottom corner once the page is a screen down.
    It only works with a script, so the script adds it, and every page gets it from here.
@@ -298,6 +282,12 @@ document.querySelectorAll('.faq-toggle').forEach(function (btn) {
   };
   const ask = function (now) {
     if (document.querySelector('.consent')) return null;
+    // Unprompted, the question waits for the first scroll, so it never lands on top of
+    // the hero's promise and its call to action. Answered by then, it never shows.
+    if (!now && scrollY < 1) {
+      addEventListener('scroll', function () { if (!read()) ask(false); }, { once: true, passive: true });
+      return null;
+    }
     const box = document.createElement('div');
     box.className = 'consent' + (now ? ' is-now' : '');
     box.setAttribute('role', 'region');

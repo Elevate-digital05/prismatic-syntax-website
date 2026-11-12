@@ -37,6 +37,7 @@
   --blue-dark:  #0038cc;                  /* accent hover */
   --blue-light: #6f9bff;                  /* accent as small text on ink */
   --whatsapp:   #25D366;                  /* the floating chat button only */
+  --alert:      #ff8a7a;                  /* errors, on ink only (8.7:1 on --ink) */
 
   --f-display: "Inter Tight", "Inter Tight Fallback", "Helvetica Neue", Arial, sans-serif;
   --f-body:    "Manrope", "Manrope Fallback", "Helvetica Neue", Arial, sans-serif;
@@ -147,15 +148,18 @@ body:has(.mobile-menu.open) .to-top { opacity:0; visibility:hidden; }
 :where(h1, h2, h3, .sec-h, .cta-inner h2) { text-wrap:balance; }
 :where(p, li, .svc-desc, .step-d, .faq-a-accordion, .m-desc, .team-role) { text-wrap:pretty; }
 
+/* Read by screen readers, hidden on screen: "(opens in a new tab)" and the like. */
+.sr-only { position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; border:0; }
+
 /* Selected text takes the brand blue instead of the browser's default highlight. */
 ::selection { background:color-mix(in srgb,var(--blue) 26%,transparent); }
 
 /* ── ANALYTICS CONSENT ── the notice home.js shows until a visitor answers. Dark glass
    whatever is behind it, dense enough to read small text over a white section. Bottom
-   left on wide screens, clear of the WhatsApp button; across the foot of a phone, over
-   that button, until it is answered. It fades in once the page has settled, and never
-   travels. "No thanks" is the same size as "Allow". */
-.consent { position:fixed; left:calc(24px + env(safe-area-inset-left)); bottom:calc(24px + env(safe-area-inset-bottom)); z-index:310; width:min(400px, calc(100% - 48px)); padding:18px 18px 16px 20px; border-radius:var(--r-md); background:color-mix(in srgb,var(--ink) 88%,transparent); -webkit-backdrop-filter:var(--glass-blur); backdrop-filter:var(--glass-blur); box-shadow:var(--glass-shine), 0 18px 40px -18px color-mix(in srgb,var(--ink) 60%,transparent); animation:consentIn .6s var(--ease) 1.2s backwards; }
+   right on wide screens, above the WhatsApp or back-to-top button and clear of the text
+   column the hero's promise sits in; across the foot of a phone until it is answered. It appears on the first scroll
+   (home.js), fades in and never travels. "No thanks" and "Allow" are the same size and style. */
+.consent { position:fixed; right:calc(24px + env(safe-area-inset-right)); bottom:calc(92px + env(safe-area-inset-bottom)); z-index:310; width:min(400px, calc(100% - 48px)); padding:18px 18px 16px 20px; border-radius:var(--r-md); background:color-mix(in srgb,var(--ink) 88%,transparent); -webkit-backdrop-filter:var(--glass-blur); backdrop-filter:var(--glass-blur); box-shadow:var(--glass-shine), 0 18px 40px -18px color-mix(in srgb,var(--ink) 60%,transparent); animation:consentIn .6s var(--ease) 1.2s backwards; }
 .consent.is-now { animation-delay:0s; }
 @keyframes consentIn { from { opacity:0; } }
 .consent::after { content:''; position:absolute; inset:0; padding:1px; border-radius:inherit; background:var(--glass-rim); -webkit-mask:linear-gradient(var(--ink) 0 0) content-box, linear-gradient(var(--ink) 0 0); -webkit-mask-composite:xor; mask:linear-gradient(var(--ink) 0 0) content-box, linear-gradient(var(--ink) 0 0); mask-composite:exclude; pointer-events:none; }
@@ -163,10 +167,10 @@ body:has(.mobile-menu.open) .to-top { opacity:0; visibility:hidden; }
 .consent a { color:var(--surface); text-decoration:underline; text-underline-offset:3px; }
 .consent-btns { display:flex; gap:10px; margin-top:14px; }
 .consent button { position:relative; z-index:1; flex:1; min-height:44px; padding:0 18px; border-radius:var(--r-pill); font:600 14px/1 var(--f-display); letter-spacing:-.005em; cursor:pointer; transition:background-color .3s, border-color .3s; }
-.consent [data-choice="denied"] { background:transparent; color:var(--surface); border:1px solid color-mix(in srgb,var(--surface) 45%,transparent); }
-.consent [data-choice="denied"]:hover { background:color-mix(in srgb,var(--surface) 8%,transparent); border-color:var(--surface); }
-.consent [data-choice="granted"] { background:var(--blue); color:var(--surface); border:1px solid var(--blue); }
-.consent [data-choice="granted"]:hover { background:var(--blue-dark); border-color:var(--blue-dark); }
+/* Allow and No thanks look the same, so neither answer is the easy one, and the one
+   blue on the screen stays with the page's own call to action. */
+.consent button { background:transparent; color:var(--surface); border:1px solid color-mix(in srgb,var(--surface) 45%,transparent); }
+.consent button:hover { background:color-mix(in srgb,var(--surface) 8%,transparent); border-color:var(--surface); }
 .consent :focus-visible { outline:2px solid var(--blue-light); outline-offset:3px; }
 @media (max-width:760px) { .consent { left:calc(12px + env(safe-area-inset-left)); right:calc(12px + env(safe-area-inset-right)); bottom:calc(12px + env(safe-area-inset-bottom)); width:auto; } }
 /* the menu sheet covers the page; the notice waits under it */

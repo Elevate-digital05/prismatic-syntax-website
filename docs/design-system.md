@@ -139,9 +139,28 @@ Variants: `.btn-nav` is 44px with 14px text, and `.btn-submit` is 56px and full 
 
 16px Manrope on translucent white over ink, `--line-dark` border, `--r-sm` corners. Focus turns the border `--blue-light` and adds a 3px halo at 25%.
 
+Outcomes on the homepage form (`#contact-status`, always in the page so screen readers hear it):
+- **Sending:** the button reads "Sending…" and is disabled.
+- **Sent:** white text, the button reads "Request sent" and stays disabled until the form changes, so one request cannot go twice.
+- **Failed:** a box tinted with `--alert` (errors on ink only), announced assertively. It keeps the typed text and offers email and WhatsApp links that carry the message.
+
+The pricing cards' links carry `data-package`, which preselects the form's optional Package field.
+
+### FAQ
+
+Native `<details>`/`<summary>` on both entry pages, questions visible by default, no height cap. Chrome animates the opening through `::details-content`; other browsers open instantly. `check-build.mjs` keeps them uncollapsed.
+
+### Consent notice
+
+Appears on the first scroll of a visit, never on load, so it cannot cover the hero. Bottom-right on wide screens above the floating button, full-width at the foot of a phone. "Allow" and "No thanks" share one neutral style.
+
 ### Hero
 
 Text column with the live glass beside it on desktop. Up to 1080px the glass stacks above the text. On phones (760px and under) the order flips to headline, offer and **Book a call** first, then the glass, so the primary action is in the first screen. The glass is `aria-hidden`, so reading and focus order never change.
+
+### Calls to action
+
+One label everywhere for the primary action: **Get your free concept** (hero, nav, mobile menu, phone pill). The form's own action is **Request a call**, the first step towards the concept. On phones a floating pill repeats the call to action once the hero's button has scrolled away, and hides at the contact form, under an open menu and under the consent notice.
 
 ### Nav
 

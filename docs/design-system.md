@@ -139,6 +139,10 @@ Variants: `.btn-nav` is 44px with 14px text, and `.btn-submit` is 56px and full 
 
 16px Manrope on translucent white over ink, `--line-dark` border, `--r-sm` corners. Focus turns the border `--blue-light` and adds a 3px halo at 25%.
 
+### Hero
+
+Text column with the live glass beside it on desktop. Up to 1080px the glass stacks above the text. On phones (760px and under) the order flips to headline, offer and **Book a call** first, then the glass, so the primary action is in the first screen. The glass is `aria-hidden`, so reading and focus order never change.
+
 ### Nav
 
 A floating glass pill. It is dark over dark sections and frosted white (`.on-light`) over light ones; `home.js` decides by hit-testing what sits under it, and waits out page transitions. The current item is a bright pill with dark text.

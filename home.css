@@ -344,7 +344,9 @@ html.splashing .splash{position:fixed;inset:0;z-index:1000;display:flex;align-it
 .work-item img{max-width:100%;max-height:64px;width:auto;height:auto;object-fit:contain;}
 /* reduced motion: the strip stands still and the logos wrap (home.js skips the marquee) */
 @media (prefers-reduced-motion:reduce){.work-grid{flex-wrap:wrap;justify-content:center;overflow:visible;}}
-.work-marquee{--work-gap:16px;display:flex;gap:var(--work-gap);overflow:hidden;-webkit-mask-image:linear-gradient(90deg,transparent,var(--ink) 7%,var(--ink) 93%,transparent);mask-image:linear-gradient(90deg,transparent,var(--ink) 7%,var(--ink) 93%,transparent);}
+/* room above and below for the tiles' soft shadow, which overflow:hidden otherwise cut
+   into a hard line under the logos; the negative margins keep the layout where it was */
+.work-marquee{--work-gap:16px;display:flex;gap:var(--work-gap);overflow:hidden;padding:12px 0 36px;margin:-12px 0 -36px;-webkit-mask-image:linear-gradient(90deg,transparent,var(--ink) 7%,var(--ink) 93%,transparent);mask-image:linear-gradient(90deg,transparent,var(--ink) 7%,var(--ink) 93%,transparent);}
 /* each copy is at least as wide as the strip, so one full copy always covers the view, and
    sliding by exactly one copy plus the gap lands the second where the first began */
 .work-marquee .work-grid{flex-shrink:0;min-width:100%;justify-content:space-around;overflow:visible;padding-bottom:0;animation:workSlide var(--work-duration,40s) linear infinite;}

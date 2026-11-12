@@ -192,8 +192,10 @@
 
 /* The client wall: one row however many businesses are added. A copy of the list goes
    beside it, hidden from screen readers so each name is announced once, and CSS slides
-   the pair along. It stops while the pointer is over it, and the button stops it for
-   good, which is what the guidelines ask of anything that moves on its own. */
+   the pair along. It stops while the pointer is over it. There is no visible pause button
+   (removed November 2026 at the owner's request): the strip itself is the control, which
+   keeps WCAG 2.2.2's way to stop anything that moves on its own. A tap, click, Enter or
+   Space pauses and resumes it, and keyboard focus pauses it. */
 (function () {
   const list = document.querySelector('.work-grid');
   if (!list) return;
@@ -216,15 +218,14 @@
   };
   pace();
   new ResizeObserver(pace).observe(list);
-  const pause = document.createElement('button');
-  pause.type = 'button';
-  pause.className = 'work-pause';
-  pause.textContent = 'Pause logos';
-  pause.addEventListener('click', function () {
-    const paused = strip.classList.toggle('is-paused');
-    pause.textContent = paused ? 'Play logos' : 'Pause logos';
+  strip.tabIndex = 0;
+  strip.setAttribute('role', 'region');
+  strip.setAttribute('aria-label', 'Client logos, moving. Tap, click or focus to pause.');
+  const toggle = function () { strip.classList.toggle('is-paused'); };
+  strip.addEventListener('click', toggle);
+  strip.addEventListener('keydown', function (e) {
+    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle(); }
   });
-  strip.after(pause);
 })();
 
 /* Clear glass: every card on a .glass-stage shows the prism still behind it (its

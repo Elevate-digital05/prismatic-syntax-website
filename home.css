@@ -328,10 +328,9 @@ a.svc-card:hover .svc-more{transform:translateX(6px);}
 /* each copy is at least as wide as the strip, so one full copy always covers the view, and
    sliding by exactly one copy plus the gap lands the second where the first began */
 .work-marquee .work-grid{flex-shrink:0;min-width:100%;justify-content:space-around;overflow:visible;padding-bottom:0;animation:workSlide var(--work-duration,40s) linear infinite;}
-.work-marquee:hover .work-grid,.work-marquee.is-paused .work-grid{animation-play-state:paused;}
+.work-marquee:is(:hover,:focus-visible) .work-grid,.work-marquee.is-paused .work-grid{animation-play-state:paused;}
+.work-marquee:focus-visible{outline:2px solid var(--blue);outline-offset:4px;border-radius:var(--r-md);}
 @keyframes workSlide{to{transform:translateX(calc(-100% - var(--work-gap)));}}
-.work-pause{display:block;margin:16px 0 0 auto;min-height:44px;padding:0 18px;border:1px solid var(--line);border-radius:var(--r-pill);background:var(--surface);color:var(--grey);font:600 var(--fs-meta)/1 var(--f-display);cursor:pointer;transition:color .3s,border-color .3s;}
-.work-pause:hover{color:var(--text);border-color:color-mix(in srgb,var(--blue) 35%,var(--line));}
 @media (max-width:760px){.work-grid,.work-marquee{--work-gap:12px;}.work-item{flex-basis:160px;min-height:104px;padding:18px 14px;}}
 /* the lap time is set by home.js from a pace, so it holds steady as businesses are added */
 .blog-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}

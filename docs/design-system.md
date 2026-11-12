@@ -112,12 +112,12 @@ Every glass surface has a solid fallback for `prefers-reduced-transparency`, `pr
 | Token | Value | Use |
 |---|---|---|
 | `--ease` | `cubic-bezier(.16, 1, .3, 1)` | Interface: button fills, menus, the FAQ, hero entrances |
-| `--ease-slow` | `cubic-bezier(.5, 0, 0, 1)` | Page transitions and the splash parting |
-| `--ease-soft` | `cubic-bezier(.39, .575, .565, 1)` | Text sharpening out of blur |
+| `--ease-slow` | `cubic-bezier(.5, 0, 0, 1)` | The splash parting |
+| `--ease-soft` | `cubic-bezier(.23, 1, .32, 1)` | Page transitions and text sharpening out of blur |
 | `--slant` | 14vh | Half the horizontal offset of the shard-angle cut (about 15.6deg) |
-| `--intro` | 0s, or 1s while the splash plays | Delays hero and nav entrances |
+| `--intro` | 0s, or .6s while the splash plays | Delays hero and nav entrances |
 
-Durations: .3s for colour and opacity changes, .45s for button fills, .6–.8s for reveals and transitions, 1.2–1.4s for the hero glass.
+Durations (reviewed November 2026 against a 300ms UI ceiling): .16s button press (`scale(.97)`), .18s dropdowns, about .2s for hover nudges, fills and colour, .22s menus, .26s FAQ opening, .4s page transitions and heading reveals (stagger capped at .3s), .5s hero entrance (60ms stagger, CTA settled by about .7s), 1.2s splash on first visits only. Hover motion is gated behind `(hover:hover) and (pointer:fine)` so taps never leave it stuck; the nav and logo animate only with the splash. Only `transform`, `opacity` and `filter` animate; the hero glass and its parallax keep their slower 1.2–1.4s.
 
 **Reduced motion holds movement still but never switches every transition off.** Fades, colour changes, fills and the FAQ still animate; anything that travels stops. Page transitions fall back to a crossfade, and the splash is skipped. `check-build.mjs` fails if a blanket `transition-duration: .01ms` rule comes back.
 
@@ -148,6 +148,11 @@ Outcomes on the homepage form:
 - **Sent:** the form gives way to a confirmation panel (`.form-done`, focused and announced) with the reply address, the reply time and what to prepare, plus "Send another request".
 - **Failed:** `#contact-status` (`role="alert"`, always in the page) shows a box tinted with `--alert` (errors on ink only). It keeps the typed text and offers email and WhatsApp links carrying the name, email, call time, package and message; a message too long for a mailto link is shortened there, and the link says so.
 - A character count appears in the last 500 of the message's 4,000.
+- No consent checkbox on the homepage form: a notice line under the button links the Terms of Service and Privacy Policy (owner's decision, November 2026). /south-africa keeps its checkbox.
+
+The footer's last line on the entry pages and service pages is "© 2026 Prismatic Syntax. Terms · Privacy · Refunds", without browse-wrap wording.
+
+`body` is ink and `main` is paper on the entry and service pages, so iOS Safari tints the status bar dark above the dark heroes.
 
 The pricing cards' links carry `data-package`, which preselects the form's optional Package field.
 

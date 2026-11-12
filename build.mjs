@@ -325,7 +325,7 @@ ${all.map(s => `        <li><a href="/services/${s.slug}">${esc(s.nav)}</a></li>
     </div>
   </div>
   <div class="foot-bottom">
-    <div class="wrap">© 2026 Prismatic Syntax. All rights reserved. By using this site you agree to our <a href="/terms">Terms</a>. · <a href="/privacy">Privacy</a> · <a href="/terms">Terms</a> · <a href="/refund-policy">Refund Policy</a></div>
+    <div class="wrap">© 2026 Prismatic Syntax. <a href="/terms">Terms</a> · <a href="/privacy">Privacy</a> · <a href="/refund-policy">Refunds</a></div>
   </div>
 </footer>
 
@@ -644,7 +644,7 @@ const HOME_FEATS = {
   Business: ['Everything in Starter', 'Copywriting for 3 pages', 'Full on-page SEO', 'Speed tuning, so pages load fast on phones', '2 rounds of revisions'],
   Pro:      ['Everything in Business', 'E-commerce or booking system', 'Full copywriting', 'Blog setup + training', '3 rounds of revisions'],
   // Not the founder access or the reply time: the page promises those to every client.
-  Premium:  ['Discovery & strategy workshop', 'Unlimited pages', 'Custom features, connected to the tools you already use', 'A full search strategy for Google'],
+  Premium:  ['Discovery & strategy workshop', 'Unlimited pages', 'Custom features, connected to the tools you already use', 'A full search strategy for Google', '4 rounds of revisions'],
 };
 const homeFeats = name => HOME_FEATS[name].map(f => {
   if (!PACKAGES[name].features.map(featLabel).includes(f)) throw new Error(`build.mjs HOME_FEATS: "${f}" is not a ${name} feature in lib/packages.js`);
@@ -673,7 +673,7 @@ ${Object.entries(USD_PACKAGES).map(([name, price]) => {
     // Each card names its own package in its call to action, the way the ZAR package
     // buttons carry the tier in their WhatsApp message: the enquiry arrives already
     // saying which tier it is about. data-package also preselects it in the form.
-    `<a class="p-cta" href="#contact" data-package="${attr(name)}">Get a free concept for ${esc(name)} →</a></div>`;
+    `<a class="p-cta" href="#contact" data-package="${attr(name)}">Get a free concept for ${esc(name)} <span class="p-arrow" aria-hidden="true">→</span></a></div>`;
 }).join('\n')}
       </div>
       <p class="price-upkeep"><strong>After launch:</strong> a monthly retainer from ${usd(USD_RETAINER_FROM)} covers hosting and keeps the site updated, backed up and secure.</p>`;

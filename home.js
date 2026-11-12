@@ -25,6 +25,9 @@
       setTimeout(function () { tiles.remove(); }, intro + 2200);
     }
     root.classList.add('is-loaded');
+    // entrance done: mark it, so a hidden-then-shown home view does not replay it
+    const hero = document.querySelector('.hero');
+    if (hero) setTimeout(function () { hero.classList.add('entered'); }, intro + 900);
   };
   // wait for the display face so the headline does not reflow mid-reveal, capped so slow fonts never block
   Promise.race([document.fonts.ready, new Promise(function (r) { setTimeout(r, 800); })])
@@ -32,15 +35,16 @@
 
   const parallax = function (area, target) {
     if (reduced || !area || !target || !matchMedia('(hover: hover) and (pointer: fine)').matches) return;
+    // translate set on the glass itself: custom properties set here restyled its whole
+    // subtree on every move. Wide layout only; the stacked layout has no offset.
+    const wide = matchMedia('(min-width: 1081px)');
     area.addEventListener('pointermove', function (e) {
+      if (!wide.matches) { target.style.translate = ''; return; }
       const r = area.getBoundingClientRect();
-      target.style.setProperty('--px', ((e.clientX - r.left) / r.width - 0.5).toFixed(3));
-      target.style.setProperty('--py', ((e.clientY - r.top) / r.height - 0.5).toFixed(3));
+      const x = (e.clientX - r.left) / r.width - 0.5, y = (e.clientY - r.top) / r.height - 0.5;
+      target.style.translate = (x * -22).toFixed(1) + 'px calc(-50% + ' + (y * -16).toFixed(1) + 'px)';
     });
-    area.addEventListener('pointerleave', function () {
-      target.style.setProperty('--px', 0);
-      target.style.setProperty('--py', 0);
-    });
+    area.addEventListener('pointerleave', function () { target.style.translate = ''; });
   };
   parallax(document.querySelector('.hero'), document.querySelector('.hero-media'));
 })();
@@ -157,7 +161,7 @@
   // case-insensitive: Chrome on a Mac reports "macOS", Safari "MacIntel"
   if (/mac|iphone|ipad|ipod/i.test(platform) || !matchMedia('(hover: hover) and (pointer: fine)').matches ||
       matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-  let target = 0, running = false, gestureUntil = 0;
+  let target = 0, running = false, gestureUntil = 0, last = 0;
   const scrollsItself = function (el, dy) {
     for (; el && el !== document.body && el !== document.documentElement; el = el.parentElement) {
       const o = getComputedStyle(el).overflowY;
@@ -166,12 +170,16 @@
     }
     return false;
   };
-  const frame = function () {
+  const frame = function (now) {
     if (!running) return;
     const y = scrollY, d = target - y;
     if (Math.abs(d) <= 1) { scrollTo({ top: target, behavior: 'instant' }); running = false; return; }
+    // 0.16 of the distance per 60Hz frame, scaled by frame time so a 144Hz screen glides at
+    // the same pace (clamped: the first frame can be stamped before the wheel event)
+    const k = 1 - Math.pow(1 - 0.16, Math.min(Math.max(now - last, 8), 64) / (1000 / 60));
+    last = now;
     // at least a pixel a frame, or rounding to device pixels can stall the last few
-    scrollTo({ top: y + Math.sign(d) * Math.max(1, Math.abs(d) * 0.16), behavior: 'instant' });
+    scrollTo({ top: y + Math.sign(d) * Math.max(1, Math.abs(d) * k), behavior: 'instant' });
     requestAnimationFrame(frame);
   };
   addEventListener('wheel', function (e) {
@@ -184,7 +192,7 @@
     if (!running) target = scrollY;
     const px = e.deltaMode === 1 ? e.deltaY * 40 : e.deltaMode === 2 ? e.deltaY * innerHeight : e.deltaY;
     target = Math.max(0, Math.min(document.documentElement.scrollHeight - innerHeight, target + px));
-    if (!running) { running = true; requestAnimationFrame(frame); }
+    if (!running) { running = true; last = performance.now(); requestAnimationFrame(frame); }
   }, { passive: false });
   // keys, the scrollbar, links and page switches move the page themselves: let go
   ['keydown', 'pointerdown', 'hashchange'].forEach(function (type) { addEventListener(type, function () { running = false; }); });

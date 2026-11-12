@@ -123,7 +123,7 @@
 .to-top.is-shown { opacity:1; visibility:visible; transition-delay:0s; }
 .to-top::after { content:''; position:absolute; inset:0; padding:1px; border-radius:inherit; background:var(--glass-rim); -webkit-mask:linear-gradient(var(--ink) 0 0) content-box, linear-gradient(var(--ink) 0 0); -webkit-mask-composite:xor; mask:linear-gradient(var(--ink) 0 0) content-box, linear-gradient(var(--ink) 0 0); mask-composite:exclude; pointer-events:none; }
 .to-top svg { width:20px; height:20px; transition:transform .3s var(--ease); }
-.to-top:hover svg { transform:translateY(-2px); }
+@media (hover:hover) and (pointer:fine) { .to-top:hover svg { transform:translateY(-2px); } }
 .to-top:focus-visible { outline:2px solid var(--blue); outline-offset:3px; }
 .to-top.on-light { background:var(--glass-fill-light); box-shadow:0 0 0 1px color-mix(in srgb,var(--ink) 7%,transparent), 0 10px 30px -16px color-mix(in srgb,var(--ink) 28%,transparent); color:var(--text); }
 .to-top.on-light::after { background:var(--glass-rim-light); }
@@ -159,7 +159,7 @@ body:has(.mobile-menu.open) .to-top { opacity:0; visibility:hidden; }
    right on wide screens, above the WhatsApp or back-to-top button and clear of the text
    column the hero's promise sits in; across the foot of a phone until it is answered. It appears on the first scroll
    (home.js), fades in and never travels. "No thanks" and "Allow" are the same size and style. */
-.consent { position:fixed; right:calc(24px + env(safe-area-inset-right)); bottom:calc(92px + env(safe-area-inset-bottom)); z-index:310; width:min(400px, calc(100% - 48px)); padding:18px 18px 16px 20px; border-radius:var(--r-md); background:color-mix(in srgb,var(--ink) 88%,transparent); -webkit-backdrop-filter:var(--glass-blur); backdrop-filter:var(--glass-blur); box-shadow:var(--glass-shine), 0 18px 40px -18px color-mix(in srgb,var(--ink) 60%,transparent); animation:consentIn .6s var(--ease) 1.2s backwards; }
+.consent { position:fixed; right:calc(24px + env(safe-area-inset-right)); bottom:calc(92px + env(safe-area-inset-bottom)); z-index:310; width:min(400px, calc(100% - 48px)); padding:18px 18px 16px 20px; border-radius:var(--r-md); background:color-mix(in srgb,var(--ink) 88%,transparent); -webkit-backdrop-filter:var(--glass-blur); backdrop-filter:var(--glass-blur); box-shadow:var(--glass-shine), 0 18px 40px -18px color-mix(in srgb,var(--ink) 60%,transparent); animation:consentIn .3s var(--ease) backwards; }
 .consent.is-now { animation-delay:0s; }
 @keyframes consentIn { from { opacity:0; } }
 .consent::after { content:''; position:absolute; inset:0; padding:1px; border-radius:inherit; background:var(--glass-rim); -webkit-mask:linear-gradient(var(--ink) 0 0) content-box, linear-gradient(var(--ink) 0 0); -webkit-mask-composite:xor; mask:linear-gradient(var(--ink) 0 0) content-box, linear-gradient(var(--ink) 0 0); mask-composite:exclude; pointer-events:none; }
@@ -186,16 +186,16 @@ body:has(.mobile-menu.open) .consent { display:none; }
    which is --slant either side of centre over a screen height) instead of sliding.
    It lives here because every page links this file, and a page transition only runs
    when both pages opt in. */
-:root { --ease-slow:cubic-bezier(.5,0,0,1); --ease-soft:cubic-bezier(.39,.575,.565,1); --slant:14vh; }
+:root { --ease-slow:cubic-bezier(.5,0,0,1); --ease-soft:cubic-bezier(.23,1,.32,1); --slant:14vh; }
 
 /* Page transitions: the next page opens out of a slanted slit over the last one, which
    blurs and dims under it. Browsers without cross-document view transitions (Firefox,
    older Safari) just navigate. Reduced motion gets the browser's plain crossfade. */
 @view-transition { navigation:auto; }
-::view-transition-old(root), ::view-transition-new(root) { mix-blend-mode:normal; animation-duration:.8s; animation-timing-function:var(--ease-slow); animation-fill-mode:both; }
+::view-transition-old(root), ::view-transition-new(root) { mix-blend-mode:normal; animation-duration:.4s; animation-timing-function:var(--ease-soft); animation-fill-mode:both; }
 ::view-transition-old(root) { animation-name:vt-dim; }
 ::view-transition-new(root) { animation-name:vt-part; }
-@keyframes vt-dim { to { filter:blur(6px) brightness(.55); } }
+@keyframes vt-dim { to { filter:brightness(.6); } }
 @keyframes vt-part {
   from { clip-path:polygon(calc(50% + var(--slant)) 0, calc(50% + var(--slant)) 0, calc(50% - var(--slant)) 100%, calc(50% - var(--slant)) 100%); }
   to { clip-path:polygon(0 0, calc(100% + 2 * var(--slant)) 0, 100% 100%, calc(0% - 2 * var(--slant)) 100%); }
@@ -206,5 +206,6 @@ body:has(.mobile-menu.open) .consent { display:none; }
    home.js splits them into .ch letters inside unbreakable .wd words. Nothing travels,
    so this runs for reduced motion too. */
 .wd { white-space:nowrap; }
-.ch { display:inline-block; transition:opacity .7s var(--ease-soft), filter .7s var(--ease-soft); transition-delay:calc(var(--i) * 18ms); }
+/* capped so a long heading is whole within about 0.7s */
+.ch { display:inline-block; transition:opacity .4s var(--ease-soft), filter .4s var(--ease-soft); transition-delay:calc(min(var(--i), 20) * 15ms); }
 .is-split:not(.is-in) .ch { opacity:0; filter:blur(10px); }

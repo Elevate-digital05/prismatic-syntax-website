@@ -77,11 +77,13 @@ footer .logo-lockup{height:40px;width:auto;margin-bottom:12px;}
 /* The current page is a switched-on control: a bright pill with dark text. */
 .nav-links>li>a.active{background:color-mix(in srgb,var(--surface) 88%,transparent);color:var(--text);}
 
-/* Services dropdown: hover and :focus-within, no JS, so it is reachable by
+/* Services dropdown: hover and keyboard focus, no JS, so it is reachable by
    keyboard. The padding-top bridges the gap under the trigger. */
 .nav-has-sub{position:relative;}
 .nav-sub{position:absolute;top:100%;left:-18px;z-index:120;min-width:230px;list-style:none;padding:22px 0 6px;opacity:0;visibility:hidden;transform:translateY(-6px);transition:opacity .18s var(--ease),transform .18s var(--ease),visibility .18s;}
-.nav-has-sub:hover .nav-sub,.nav-has-sub:focus-within .nav-sub{opacity:1;visibility:visible;transform:none;}
+/* :has(:focus-visible), not :focus-within: a mouse click focuses the Services link, and
+   :focus-within then held the menu open after the pointer left. Keyboard focus still opens it. */
+.nav-has-sub:hover .nav-sub,.nav-has-sub:has(:focus-visible) .nav-sub{opacity:1;visibility:visible;transform:none;}
 .nav-sub::before{content:'';position:absolute;inset:14px 0 0;background:var(--ink-2);border:1px solid var(--line-dark);border-radius:var(--r-md);}
 .nav-sub li{position:relative;}
 .nav-sub a{display:flex;margin:0 6px;padding:11px 12px;border-radius:var(--r-xs);font-size:var(--fs-small);}

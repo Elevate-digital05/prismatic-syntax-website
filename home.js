@@ -2,7 +2,7 @@
    tone, smooth scrolling, the back-to-top button and the analytics consent notice. The FAQs
    are native <details>, so they need no script. */
 /* Home hero: dark tiles dissolve off the glass (prism.js) on load and the glass
-   drifts with the pointer. On a first visit they wait for the splash (home.css) to
+   drifts with the pointer. On every entry-page load they wait for the splash (home.css) to
    part, by --intro. */
 (function () {
   const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;

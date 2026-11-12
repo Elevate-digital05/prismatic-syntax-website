@@ -174,8 +174,8 @@ Slow and heavy, after dobre.agency, with nothing sliding in:
 - **Page transitions** (`theme.css`): cross-document view transitions. The next page
   opens out of a slanted slit at the angle of the logo's shards (`--slant`). Firefox
   just navigates; reduced motion gets a crossfade.
-- **Splash** (`home.css`, plus the script in each entry page's `<head>`): the first
-  entry page of a visit shows the name, then the ink parts along the same slant.
+- **Splash** (`home.css`, plus the script in each entry page's `<head>`): every load
+  of an entry page, refreshes included, shows the name, then the ink parts along the same slant.
   Never for reduced motion. `--intro` holds the hero entrance back until it parts.
 
 Easing tokens are in `theme.css`: `--ease-slow` and `--ease-soft`.

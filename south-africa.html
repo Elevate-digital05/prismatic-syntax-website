@@ -326,8 +326,8 @@
      JS never see .js-ready, so all content is indexed.
 ════════════════════════════════════════════════════════ -->
 <script>document.documentElement.classList.add('js-ready');
-/* The splash (home.css) plays once a visit, on whichever entry page comes first, and never for reduced motion. Storage can throw when blocked. */
-try { if (!sessionStorage.getItem('ps-splash') && !matchMedia('(prefers-reduced-motion: reduce)').matches) { sessionStorage.setItem('ps-splash', '1'); document.documentElement.classList.add('splashing'); } } catch (e) {}</script>
+/* The splash (home.css) plays on every load of an entry page, refreshes included (owner's choice, November 2026), and never for reduced motion. */
+if (!matchMedia('(prefers-reduced-motion: reduce)').matches) document.documentElement.classList.add('splashing');</script>
 
 <link rel="stylesheet" href="/home.css">
 </head>

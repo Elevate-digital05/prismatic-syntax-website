@@ -58,7 +58,7 @@ body:has(.mobile-menu.open) nav::after{opacity:0;}
 .logo .m,.logo .lw{transform-box:fill-box;transform-origin:center;transition:transform .25s var(--ease);}
 @media (hover:hover) and (pointer:fine){.logo:hover .m2{transform:translate(5%,-5%);}.logo:hover .m3{transform:translate(-5%,5%);}}
 html.splashing nav{animation:slideDown .9s var(--ease) var(--intro) backwards;}
-/* the nav and logo animate only with the first-visit splash, never on every page load */
+/* the nav and logo animate only with the splash (entry pages), not on the other pages */
 html.splashing nav .m{animation:markIn 1.1s var(--ease) backwards;}
 nav .m1{--tx:-70%;--ty:-40%;animation-delay:calc(var(--intro) + .15s);}
 nav .m2{--tx:70%;--ty:-40%;animation-delay:calc(var(--intro) + .25s);}
@@ -200,7 +200,7 @@ body:has(.contact-form:focus-within) .to-top{opacity:0;visibility:hidden;}
 /* the headline sharpens out of a blur in place, as the section headings do (theme.css) */
 @keyframes blurIn{from{opacity:0;filter:blur(12px);}}
 
-/* ── SPLASH ── once a visit, never for reduced motion (the script in each entry page's
+/* ── SPLASH ── on every entry-page load, never for reduced motion (the script in each entry page's
    <head> decides and sets html.splashing). The name sharpens out of a blur either side of a
    blue cut at the logo's slant, then the ink parts along that cut over the hero, the way
    pages part in theme.css. CSS alone runs and ends it, so a failed script cannot leave

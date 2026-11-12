@@ -270,6 +270,13 @@ assert.doesNotMatch(home, /optimiz|specializ|Absolutely!|Yes!/, 'the homepage ha
 assert.ok(home.includes('<meta property="og:locale" content="en_GB">'), 'the homepage og:locale is not en_GB');
 
 const contactBlock = home.slice(home.indexOf('id="contact"'));
+// The contact details sit inside .contact-info. A stray closing tag once emptied it, and
+// email, WhatsApp and hours fell out of their column into the grid under the form.
+assert.match(home, /<div class="contact-info">\s*<div class="info-item">/, 'the homepage .contact-info no longer holds its info items');
+// (the slice starts inside the band's own opening tag, so a balanced section has one more close than open)
+assert.equal((contactBlock.slice(0, contactBlock.indexOf('</section>')).match(/<\/div>/g) || []).length,
+  (contactBlock.slice(0, contactBlock.indexOf('</section>')).match(/<div\b/g) || []).length + 1,
+  'the homepage contact section has unbalanced <div> tags');
 const [book, mail, whatsapp] = ['>Request a call<', 'mailto:info@prismaticsyntax.com', 'wa.me/'].map(s => contactBlock.indexOf(s));
 assert.ok(book >= 0 && book < mail && mail < whatsapp, 'the homepage contact block must offer a call, then email, then WhatsApp');
 assert.ok(home.slice(home.indexOf('<nav'), home.indexOf('</nav>')).includes(regionLink),

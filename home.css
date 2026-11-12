@@ -86,7 +86,7 @@ footer .logo-lockup{height:40px;width:auto;margin-bottom:12px;}
 .btn-nav:is(:hover,:focus-visible){color:var(--blue);}
 /* The way across to the other audience's page: top right at every width, so a
    visitor sees it before any price in a currency that is not theirs. */
-.nav-region{padding:11px 16px;margin-right:2px;border:1px solid var(--line-dark);border-radius:var(--r-pill);color:var(--surface);font:600 var(--fs-small)/1 var(--f-display);letter-spacing:-.005em;text-decoration:none;white-space:nowrap;transition:background-color .3s,border-color .3s;}
+.nav-region{display:inline-flex;align-items:center;min-height:44px;padding:0 16px;margin-right:2px;border:1px solid var(--line-dark);border-radius:var(--r-pill);color:var(--surface);font:600 var(--fs-small)/1 var(--f-display);letter-spacing:-.005em;text-decoration:none;white-space:nowrap;transition:background-color .3s,border-color .3s;}
 .nav-region:hover{background:color-mix(in srgb,var(--surface) 8%,transparent);border-color:var(--glass-edge);}
 .hamburger{display:none;flex-direction:column;justify-content:center;gap:6px;width:44px;height:44px;padding:0 9px;cursor:pointer;}
 .hamburger span{height:1.5px;background:var(--surface);transition:transform .4s var(--ease),opacity .3s;}
@@ -109,6 +109,8 @@ body:has(.mobile-menu.open) .hamburger span:nth-child(3){transform:translateY(-7
 .mobile-menu>a.menu-cta:is(:hover,:focus-visible){color:var(--blue);}
 .mobile-menu>a.menu-cta:is(:hover,:focus-visible)::before{transform:scaleX(1);}
 .mobile-menu>a.menu-cta{--fill:var(--surface);}
+/* nothing floats over the form while someone is filling it in */
+body:has(.contact-form:focus-within) .to-top{opacity:0;visibility:hidden;}
 /* phones only: the floating call to action (see the homepage script) */
 .cta-float{display:none;}
 .mobile-menu a.mob-sub{padding:9px 0;font:500 var(--fs-body)/1 var(--f-display);letter-spacing:-.005em;color:var(--grey-dark);text-decoration:none;}
@@ -132,6 +134,8 @@ body:has(.mobile-menu.open) .hamburger span:nth-child(3){transform:translateY(-7
 .hl{color:var(--blue);}
 .sec-sub{max-width:34em;margin-bottom:48px;font-size:var(--fs-lead);line-height:1.65;color:var(--grey);}
 :is(.band-ink,.cta-banner,#page-contact) .sec-sub{color:var(--grey-dark);}
+.sec-sub strong{color:var(--text);font-weight:600;}
+:is(.band-ink,.cta-banner,#page-contact) .sec-sub strong{color:var(--surface);}
 .sec-sub a{color:var(--blue);text-decoration:underline;text-underline-offset:3px;}
 #page-contact .sec-sub a{color:var(--blue-light);}
 .sec-top{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:28px 64px;margin-bottom:56px;}
@@ -171,6 +175,7 @@ body:has(.mobile-menu.open) .hamburger span:nth-child(3){transform:translateY(-7
      blue glass is the one pairing the brand rules rule out, so it keeps clear of it */
   #page-home .hero-in>h1{max-width:min(720px,54vw);}
 }
+.eyebrow span{text-wrap:balance;}
 .eyebrow{display:flex;align-items:center;font:500 var(--fs-label)/1 var(--f-display);letter-spacing:.08em;text-transform:uppercase;animation:fadeUp .8s var(--ease) calc(var(--intro) + .2s) backwards;}
 .hero h1{margin-top:22px;font:700 var(--fs-display)/1.02 var(--f-display);letter-spacing:-.035em;overflow-wrap:break-word;animation:blurIn 1.3s var(--ease-soft) calc(var(--intro) + .3s) backwards;}
 .hero-sub{margin-top:26px;font-size:var(--fs-lead);line-height:1.55;color:var(--grey-dark);animation:fadeUp .8s var(--ease) calc(var(--intro) + .55s) backwards;}
@@ -275,18 +280,24 @@ a.svc-card:hover .svc-more{transform:translateX(6px);}
 .p-card:hover,.m-card:hover{border-color:color-mix(in srgb,var(--blue) 35%,var(--line));}
 /* The one tinted card: Apple tints the primary choice and nothing else. */
 .p-card.pop,.m-card.rec{background:color-mix(in srgb,var(--blue) 5%,var(--surface));border-color:var(--blue);}
+/* on a package card the tag sits on the top edge, so the prices line up across the row */
+.p-card>.pop-tag{position:absolute;top:0;left:clamp(20px,1.8vw,28px);margin:0;transform:translateY(-50%);}
 .pop-tag{align-self:flex-start;margin-bottom:18px;padding:7px 12px;border-radius:var(--r-pill);background:var(--blue);color:var(--surface);font:600 var(--fs-label)/1 var(--f-display);letter-spacing:0;}
-.p-name{margin-bottom:14px;font:600 var(--fs-label)/1 var(--f-display);letter-spacing:.1em;text-transform:uppercase;color:var(--blue);}
+/* One tint: blue marks the recommended package only; the rest are ink and grey. */
+.p-name{margin-bottom:14px;font:600 var(--fs-label)/1 var(--f-display);letter-spacing:.1em;text-transform:uppercase;color:var(--grey);}
+.p-card.pop .p-name{color:var(--blue);}
 .p-amount{margin-bottom:6px;font:700 var(--fs-figure)/1.05 var(--f-display);letter-spacing:-.03em;color:var(--text);}
 .p-period{margin-bottom:18px;font-size:var(--fs-meta);color:var(--grey);}
 .p-best-for{margin-bottom:18px;font-size:var(--fs-small);line-height:1.5;color:var(--text);}
 .p-feats{list-style:none;margin-bottom:24px;}
 .p-feats li{display:flex;align-items:baseline;gap:10px;padding:8px 0;border-top:1px solid var(--line);font-size:var(--fs-small);color:var(--text);}
-.p-feats li::before{content:'';width:6px;height:6px;flex-shrink:0;border-radius:50%;background:var(--blue);transform:translateY(-2px);}
+.p-feats li::before{content:'';width:6px;height:6px;flex-shrink:0;border-radius:50%;background:color-mix(in srgb,var(--text) 30%,transparent);transform:translateY(-2px);}
+.p-card.pop .p-feats li::before{background:var(--blue);}
 /* Sits at the foot of the card whatever the feature list does, so the four cards line
    their calls to action up with each other. */
-.p-cta{margin-top:auto;display:inline-flex;align-items:center;min-height:44px;gap:8px;font:600 var(--fs-small)/1 var(--f-display);letter-spacing:-.005em;color:var(--blue);text-decoration:none;transition:gap .3s var(--ease);}
-.p-cta:hover{gap:12px;}
+.p-cta{margin-top:auto;display:inline-flex;align-items:center;min-height:44px;gap:8px;font:600 var(--fs-small)/1 var(--f-display);letter-spacing:-.005em;color:var(--text);text-decoration:none;transition:gap .3s var(--ease),color .3s;}
+.p-cta:hover{gap:12px;color:var(--blue);}
+.p-card.pop .p-cta{color:var(--blue);}
 .p-feat-new{display:inline-block;padding:4px 8px;border:1px solid var(--blue);border-radius:var(--r-pill);color:var(--blue);font:600 11px/1 var(--f-display);letter-spacing:.08em;text-transform:uppercase;}
 .p-card .btn-p{margin-top:auto;}
 /* Secondary buttons are the grey capsule iOS uses beside a tinted one. */
@@ -337,7 +348,11 @@ a.svc-card:hover .svc-more{transform:translateX(6px);}
 .wa-primary{margin-bottom:48px;}
 .btn-wa-lg{height:58px;padding:0 30px;}
 .wa-primary-note{margin-top:12px;font-size:var(--fs-small);color:var(--grey-dark);}
+/* the form comes first in the page, so a tap on a call to action lands on it on phones;
+   wide screens still show it on the right, beside the other ways to get in touch */
 .contact-wrap{display:grid;grid-template-columns:1fr 1.2fr;gap:48px;align-items:start;}
+.contact-wrap>.contact-form{grid-column:2;grid-row:1;}
+.contact-wrap>.contact-info{grid-column:1;grid-row:1;}
 .info-item{display:flex;align-items:flex-start;gap:18px;padding:22px 0;border-top:1px solid var(--line-dark);}
 .info-item:last-child{border-bottom:1px solid var(--line-dark);}
 .info-icon{display:flex;align-items:center;justify-content:center;flex-shrink:0;position:relative;width:44px;height:44px;border-radius:50%;background:color-mix(in srgb,var(--surface) 8%,transparent);color:var(--blue-light);transition:background-color .3s,color .3s,border-color .3s;}
@@ -346,8 +361,6 @@ a.svc-card:hover .svc-more{transform:translateX(6px);}
 .info-val{font:500 var(--fs-body)/1.4 var(--f-display);color:var(--surface);}
 .p-plus{font-size:.45em;margin-left:2px;}
 .foot-hours{color:var(--line);}
-.price-terms{max-width:60ch;margin-top:28px;font-size:var(--fs-small);line-height:1.6;color:var(--grey);}
-.price-terms strong{color:var(--text);font-weight:600;}
 .info-note{display:block;margin-top:4px;font:400 var(--fs-meta)/1.5 var(--f-body);color:var(--grey-dark);}
 .info-val a{color:var(--surface);text-decoration:none;background:linear-gradient(currentColor,currentColor) 0 100%/0 1px no-repeat;transition:background-size .6s var(--ease);}
 .info-val a:hover{background-size:100% 1px;}
@@ -361,7 +374,7 @@ a.svc-card:hover .svc-more{transform:translateX(6px);}
 .form-consent{display:flex;gap:10px;align-items:flex-start;margin:4px 0 18px;font-size:var(--fs-small);line-height:1.5;color:var(--grey-dark);cursor:pointer;}
 .form-consent input{width:18px;height:18px;margin-top:2px;flex:none;accent-color:var(--blue-light);}
 .form-consent a{color:inherit;text-decoration:underline;}
-.form-group input::placeholder,.form-group textarea::placeholder{color:var(--grey-dark);opacity:.55;}
+.form-group input::placeholder,.form-group textarea::placeholder{color:var(--grey-dark);opacity:.45;}
 .form-group select option{background:var(--ink-2);color:var(--surface);}
 .form-group textarea{min-height:120px;resize:vertical;}
 .btn-submit{--fill:var(--surface);width:100%;height:56px;background:var(--blue);color:var(--surface);border:0;}
@@ -372,8 +385,15 @@ a.svc-card:hover .svc-more{transform:translateX(6px);}
 /* always in the page, so screen readers hear it the moment text arrives */
 #contact-status{margin-top:14px;font-size:var(--fs-small);line-height:1.55;color:var(--grey-dark);}
 #contact-status:empty{margin-top:0;}
-#contact-status.is-ok{color:var(--surface);}
 #contact-status.is-error{padding:12px 16px;border-radius:var(--r-sm);background:color-mix(in srgb,var(--alert) 14%,transparent);box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--alert) 45%,transparent);color:var(--surface);}
+.char-count{margin-top:6px;font-size:var(--fs-meta);color:var(--grey-dark);}
+.char-count:empty{display:none;}
+.form-done{color:var(--surface);}
+.form-done:focus{outline:none;}
+.form-done-h{margin-bottom:10px;font:600 var(--fs-title)/1.3 var(--f-display);letter-spacing:-.01em;}
+.form-done p{margin-bottom:12px;font-size:var(--fs-body-sm);line-height:1.6;color:var(--grey-dark);}
+.form-done strong{color:var(--surface);font-weight:600;}
+.form-done .btn-link{background:none;border:0;color:var(--surface);cursor:pointer;}
 #contact-status a{color:var(--blue-light);text-decoration:underline;text-underline-offset:3px;}
 #contact-status a{color:var(--blue-light);}
 
@@ -438,6 +458,7 @@ footer{position:relative;z-index:1;display:grid;grid-template-columns:1.6fr 1fr 
   .hero::after{display:none;}
   .hero-in{margin-top:-32px;}
   .contact-wrap{grid-template-columns:1fr;}
+  .contact-wrap>:is(.contact-form,.contact-info){grid-column:auto;grid-row:auto;}
   .proc-steps{grid-template-columns:repeat(2,1fr);}
   .cta-inner{grid-template-columns:1fr;}
   .cta-inner>.btn-primary,.cta-btns{grid-column:1;grid-row:auto;justify-self:start;}
@@ -448,7 +469,7 @@ footer{position:relative;z-index:1;display:grid;grid-template-columns:1.6fr 1fr 
   :root{--nav-h:76px;}
   nav{gap:10px;padding:0 6px 0 18px;}
   .logo svg{height:26px;}
-  .nav-region{padding:9px 12px;font-size:var(--fs-meta);}
+  .nav-region{padding:0 12px;font-size:var(--fs-meta);}
   /* Phones: headline, offer and call to action first, the glass after them. Stacked on
      top it pushed "Book a call" most of a screen down, and the nav's button is hidden at
      this width. The glass is aria-hidden, so reading and focus order are unchanged. */
@@ -479,7 +500,7 @@ footer{position:relative;z-index:1;display:grid;grid-template-columns:1.6fr 1fr 
 @media (max-width:380px){
   nav{gap:6px;padding:0 4px 0 14px;}
   .logo svg{height:22px;}
-  .nav-region{padding:8px 4px;border-color:transparent;}
+  .nav-region{padding:0 4px;border-color:transparent;}
   .hamburger{width:40px;}
 }
 

@@ -133,16 +133,19 @@ Durations: .3s for colour and opacity changes, .45s for button fills, .6–.8s f
 | On dark | Fill becomes `--surface`, text turns blue | Translucent white fill and border | Inherits |
 | Disabled | `.btn-submit:disabled` dims to 60% with a progress cursor while the form sends, and the fill stays out | Not used | Not used |
 
+Package cards follow the one-tint rule: tier names, bullets and links are ink and grey, and only the Recommended card carries blue. Its tag sits on the card's top edge so prices line up across the row.
+
 Variants: `.btn-nav` is 44px with 14px text, and `.btn-submit` is 56px and full width.
 
 ### Form fields
 
 16px Manrope on translucent white over ink, `--line-dark` border, `--r-sm` corners. Focus turns the border `--blue-light` and adds a 3px halo at 25%.
 
-Outcomes on the homepage form (`#contact-status`, always in the page so screen readers hear it):
+Outcomes on the homepage form:
 - **Sending:** the button reads "Sending…" and is disabled.
-- **Sent:** white text, the button reads "Request sent" and stays disabled until the form changes, so one request cannot go twice.
-- **Failed:** a box tinted with `--alert` (errors on ink only), announced assertively. It keeps the typed text and offers email and WhatsApp links that carry the message.
+- **Sent:** the form gives way to a confirmation panel (`.form-done`, focused and announced) with the reply address, the reply time and what to prepare, plus "Send another request".
+- **Failed:** `#contact-status` (`role="alert"`, always in the page) shows a box tinted with `--alert` (errors on ink only). It keeps the typed text and offers email and WhatsApp links carrying the name, email, call time, package and message; a message too long for a mailto link is shortened there, and the link says so.
+- A character count appears in the last 500 of the message's 4,000.
 
 The pricing cards' links carry `data-package`, which preselects the form's optional Package field.
 
@@ -160,7 +163,7 @@ Text column with the live glass beside it on desktop. Up to 1080px the glass sta
 
 ### Calls to action
 
-One label everywhere for the primary action: **Get your free concept** (hero, nav, mobile menu, phone pill). The form's own action is **Request a call**, the first step towards the concept. On phones a floating pill repeats the call to action once the hero's button has scrolled away, and hides at the contact form, under an open menu and under the consent notice.
+One label everywhere for the primary action: **Get your free concept** (hero, nav, mobile menu, phone pill). The form's own action is **Request a call**, the first step towards the concept. The form comes first in the contact section's markup, so on phones and tablets a tap lands on the heading with the form right under it; on desktop it sits on the right. On phones a floating pill repeats the call to action once the hero's button has scrolled away, and hides at the contact form, under an open menu and under the consent notice.
 
 ### Nav
 

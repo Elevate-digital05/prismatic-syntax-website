@@ -643,7 +643,8 @@ const HOME_FEATS = {
   Starter:  ['Custom brand colours & typography', 'Professional contact form', 'Google Business Profile setup', 'Basic on-page SEO', '1 round of revisions'],
   Business: ['Everything in Starter', 'Copywriting for 3 pages', 'Full on-page SEO', 'Speed tuning, so pages load fast on phones', '2 rounds of revisions'],
   Pro:      ['Everything in Business', 'E-commerce or booking system', 'Full copywriting', 'Blog setup + training', '3 rounds of revisions'],
-  Premium:  ['Discovery & strategy workshop', 'Custom features, connected to the tools you already use', 'A full search strategy for Google', 'Direct line to the founders throughout', 'Priority support, replies within 24h on weekdays'],
+  // Not the founder access or the reply time: the page promises those to every client.
+  Premium:  ['Discovery & strategy workshop', 'Unlimited pages', 'Custom features, connected to the tools you already use', 'A full search strategy for Google'],
 };
 const homeFeats = name => HOME_FEATS[name].map(f => {
   if (!PACKAGES[name].features.map(featLabel).includes(f)) throw new Error(`build.mjs HOME_FEATS: "${f}" is not a ${name} feature in lib/packages.js`);
@@ -658,7 +659,7 @@ const intlPricing = usdMissing.length
           <div class="sec-lbl">Pricing</div>
           <h2 class="sec-h">Starting prices, in USD</h2>
         </div>
-        <p class="sec-sub">Once-off, per project. Every project is quoted after a short call.</p>
+        <p class="sec-sub">One-off, per project, and quoted after a short call. <strong>Your homepage concept is free:</strong> the 50% deposit is due only once you approve it, and the balance before launch.</p>
       </div>
       <div class="price-grid">
 ${Object.entries(USD_PACKAGES).map(([name, price]) => {
@@ -667,7 +668,7 @@ ${Object.entries(USD_PACKAGES).map(([name, price]) => {
     (tier.rec ? '<div class="pop-tag">Recommended</div>' : '') +
     `<div class="p-name">${esc(name)}</div>` +
     `<div class="p-amount">${usd(price)}${tier.plus ? '<span class="p-plus">+</span>' : ''}</div>` +
-    `<div class="p-period">${esc(tier.period)}</div><p class="p-best-for">${esc(tier.desc)}</p>` +
+    `<div class="p-period">${esc(tier.period.replace('once-off', 'one-off'))}</div><p class="p-best-for">${esc(tier.desc)}</p>` +
     `<ul class="p-feats">${homeFeats(name)}</ul>` +
     // Each card names its own package in its call to action, the way the ZAR package
     // buttons carry the tier in their WhatsApp message: the enquiry arrives already

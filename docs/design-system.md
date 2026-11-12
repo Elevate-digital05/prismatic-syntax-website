@@ -39,48 +39,37 @@ The site has no build step for CSS, so the three usual token layers live as cust
 
 | Token | Value |
 |---|---|
-| `--f-display` | "Inter Tight", Helvetica Neue, Arial, sans-serif |
-| `--f-body` | "Manrope", Helvetica Neue, Arial, sans-serif |
+| `--f-display` | "Inter Tight", "Inter Tight Fallback", Helvetica Neue, Arial, sans-serif |
+| `--f-body` | "Manrope", "Manrope Fallback", Helvetica Neue, Arial, sans-serif |
 
-Both are variable fonts served from `/assets/fonts/`, never from Google.
+Both are variable fonts served from `/assets/fonts/`, never from Google. The entry pages preload the two Latin files. The `… Fallback` faces are Arial with `size-adjust` and ascent/descent overrides measured against the real fonts, so text barely moves when the web fonts swap in.
 
-### Type roles in use
+### Type roles
 
-| Role | Selector | Font | Size / line height | Notes |
-|---|---|---|---|---|
-| Hero headline | `.hero h1` | Display 700 | `clamp(40px, 4.8vw, 76px)` / 1.02; `clamp(32px, 10vw, 56px)` under 760px | Tracking -.035em |
-| Section headline | `.sec-h` | Display 700 | `clamp(32px, 3.6vw, 56px)` / 1.05 | Tracking -.03em |
-| Hero lead | `.hero-sub` | Body | `clamp(16px, 1.2vw, 18.5px)` / 1.55 | |
-| Section lead | `.sec-sub` | Body | `clamp(15.5px, 1.15vw, 17.5px)` / 1.65 | |
-| Mobile menu link | `.mobile-menu > a` | Display 700 | `clamp(30px, 8.4vw, 44px)` / 1.2 | |
-| Button | `.btn-primary` and family | Display 600 | 15px / 1 | `.btn-nav` 14px |
-| Nav link | `.nav-links a` | Display 600 | 14.5px / 1 | |
-| Section label | `.sec-lbl`, `.eyebrow` | Display 500 | 12.5px / 1 | Uppercase, +.08em, the only capitals on the site |
-| Form input | `.form-group input` | Body 400 | 16px | 16px stops iOS zooming on focus |
+Every size on the site comes from one of these tokens in `theme.css`. A new element picks the role it plays, not a pixel value.
 
-Service and article pages set their own headline clamps in `site.css` and `article.css`.
+| Token | Value | Role | Used by |
+|---|---|---|---|
+| `--fs-display` | `clamp(34px, 2.95vw + 26.5px, 76px)` | Hero and closing headlines | `.hero h1` on every template, `.cta-inner h2` |
+| `--fs-heading` | `clamp(32px, 3.6vw, 56px)` | Section headlines | `.sec-h`, `.faq-main-header`, service `.sec > h2`, `.close-cta h2` |
+| `--fs-figure` | `clamp(30px, 2.6vw, 42px)` | Prices | `.p-amount`, `.tier-price` |
+| `--fs-lead` | `clamp(16px, 1.2vw, 18.5px)` | The paragraph under a headline | `.hero-sub`, `.sec-sub`, `.cta-inner p`, service `.lede` |
+| `--fs-title` | 17px, weight 600, leading 1.3 | Card and step titles | `.svc-name`, `.step-nm`, `.team-name`, `.m-name`, `.blog-title`, `.incl h3` |
+| `--fs-body` | 16px | Reading text, inputs | article paragraphs, form fields, FAQ questions |
+| `--fs-body-sm` | 15px | Answers, bios, supporting paragraphs | `.faq-a-accordion`, `.founder-bio`, service `.faq p` |
+| `--fs-ui` | 15px | Buttons | `.btn-primary` and family, `.btn-p` |
+| `--fs-small` | 14px | Card copy, nav, links, notes | `.svc-desc`, `.p-feats li`, `.nav-links a`, footer links |
+| `--fs-meta` | 13px | Roles, periods, dates, fine print | `.team-role`, `.p-period`, `.foot-bottom` |
+| `--fs-label` | 12.5px | Uppercase labels, at 500–600 with +.08em | `.sec-lbl`, `.eyebrow`, `.info-lbl`, `.foot-h`, tags |
 
-### What the stylesheets actually use
+Display is one fluid curve. The old hero jumped from 56px to 40px as the viewport crossed 761px. At 390px it is 38px, at 1280px 64px, and from 1680px it holds at 76px. Section headlines are now the same size on the entry pages and the service pages.
 
-Sizes are literal values, not tokens. Across the three stylesheets there are about 20 distinct pixel sizes (most used: 14px ×29, 13px ×20, 15px ×16, 16px ×9, 12.5px ×9, 13.5px ×6) and a dozen different `clamp()`s.
+Left as literal values on purpose: the article template's own headings (`article.css` h1 and h2, a Read surface), the mobile menu links, the splash, the "+" glyphs on FAQ toggles, the path and retainer price displays, and the 11px "New" badge.
 
-The small uppercase labels (`.sec-lbl`, `.eyebrow`, `.info-lbl`, `.foot-h`, `.m-tier-label`, `.tier-name`) all sit at 12.5px. The smallest text on the site is the 11px "New" badge (`.p-feat-new`).
+### Wrapping and measure
 
-### Proposed scale (not yet applied)
-
-For a later typography pass, the small sizes collapse onto five steps and the headlines onto three:
-
-| Proposed token | Value | Replaces |
-|---|---|---|
-| `--fs-label` | 12.5px | 11, 12, 12.5px |
-| `--fs-sm` | 13.5px | 13, 13.5px |
-| `--fs-ui` | 14.5px | 14, 14.5px |
-| `--fs-md` | 16px | 15, 16, 16.5px |
-| `--fs-lead` | `clamp(16px, 1.2vw, 18.5px)` | the lead clamps |
-| `--fs-h2` | `clamp(32px, 3.6vw, 56px)` | section and service headline clamps |
-| `--fs-h1` | `clamp(40px, 4.8vw, 76px)` | hero and service page h1 clamps |
-
-Applying it shifts many sizes by half a pixel to a pixel, so it belongs in a reviewed pass (`/impeccable typeset`), not a silent refactor.
+- Headings use `text-wrap: balance`; paragraphs and list items use `text-wrap: pretty` (both in `theme.css`, inside `:where()` so any rule can override them).
+- Running text stops at about 70 characters: `article > :is(p, ul, ol)` and `.faq-a-accordion` cap at `60ch`. Manrope's zero is wide, so 60ch is about 70 real characters.
 
 ## Spacing and layout
 
@@ -162,8 +151,7 @@ A floating glass pill. It is dark over dark sections and frosted white (`.on-lig
 
 In order of value:
 
-1. **Type is not tokenized.** Adopt the proposed scale in a reviewed typography pass.
-2. **Spacing is off-grid.** Pick a 4px base and add spacing tokens when the layout is next reworked.
-3. **Near-duplicate durations** (.3, .4, .45 and .5s). Two or three duration tokens would cover them.
+1. **Spacing is off-grid.** Pick a 4px base and add spacing tokens when the layout is next reworked.
+2. **Near-duplicate durations** (.3, .4, .45 and .5s). Two or three duration tokens would cover them.
 
-Closed in the November 2026 polish pass: text below 12px on labels, the missing disabled state on the submit button, small `--blue` text on ink (the process step numbers now use `--blue-light`), the service-page footer line breaking into a grid, and footer text running under the floating buttons on phones.
+Closed in November 2026: text below 12px on labels, the missing disabled state on the submit button, small `--blue` text on ink, the service-page footer line breaking into a grid, footer text under the floating buttons on phones (polish), and the untokenized type scale, the hero size jump at 761px, the over-long FAQ and article lines, and font-swap reflow (typeset).

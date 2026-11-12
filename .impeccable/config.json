@@ -1,3 +1,15 @@
 {
-  "buildPath": "code"
+  "buildPath": "code",
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "overused-font",
+        "value": "inter",
+        "createdAt": "2026-11-12T00:01:05.339Z",
+        "reason": "Brand typeface: brand/README.md names Inter Tight as the display face, recorded as a brand commitment in PRODUCT.md"
+      }
+    ]
+  }
 }

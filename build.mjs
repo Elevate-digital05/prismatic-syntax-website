@@ -12,7 +12,8 @@ import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { pathToFileURL } from 'node:url';
 import { SERVICES, HOURS } from './lib/services.js';
 import { PACKAGES } from './lib/packages.js';
-import { USD_PACKAGES, USD_RETAINER_FROM } from './lib/pricing-usd.js';
+import { USD_PACKAGES, USD_RETAINERS, USD_RETAINER_FROM } from './lib/pricing-usd.js';
+import { INTL, HOURS_INTL } from './lib/services-intl.js';
 import { WORK } from './lib/work.js';
 
 // A free homepage concept means nothing on services that don't build a site.
@@ -88,17 +89,143 @@ const waLink = msg => `https://wa.me/${WA}?text=${encodeURIComponent(msg)}`;
 // because each figure renders on both its service page and the menu and one
 // number to fill in should be reported once, not twice.
 const tbc = new Set();
-function price(p, { service, tier }) {
+function price(p, { service, tier }, money = zar) {
   if (p && p.tbc) {
     tbc.add(`${service} → ${tier}`);
     return '<span class="tbc">PRICE_TBC</span>';
   }
-  return zar(p);
+  return money(p);
+}
+const usd = n => '$' + String(n).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+
+/* ── the two audiences ──────────────────────────────────────────────────
+   One template renders every service twice: for South African trades at
+   /services/<slug> (ZAR, WhatsApp first, local geo tags) and for everyone else
+   at /international/<slug> (USD, a call first, then email, then WhatsApp, the
+   way the homepage at / does it). The international copy and prices are laid
+   over the shared service by intlService(), from lib/services-intl.js. */
+const ZA = {
+  path: slug => `/services/${slug}`,
+  money: zar,
+  vat: ' ' + VAT_NOTE,
+  htmlLang: 'en',
+  locale: 'en_ZA',
+  ogImage: 'og-image-south-africa-1200x630.png',
+  ogAlt: 'Prismatic Syntax - Web Design South Africa',
+  head: svc => `<meta name="keywords" content="${attr(svc.keywords)}">
+<meta name="author" content="Prismatic Syntax">
+<meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large">
+<meta name="geo.region" content="ZA">
+<meta name="geo.country" content="South Africa">
+<meta name="geo.placename" content="Cape Town, Western Cape, South Africa">
+<meta name="geo.position" content="-33.9249;18.4241">
+<meta name="ICBM" content="-33.9249, 18.4241">`,
+  provider: { '@type': 'LocalBusiness', '@id': `${SITE}/south-africa#business`, name: 'Prismatic Syntax' },
+  areaServed: [
+    { '@type': 'State', name: 'Western Cape' },
+    { '@type': 'State', name: 'Gauteng' },
+    { '@type': 'Country', name: 'South Africa' },
+  ],
+  home: '/south-africa',
+  services: '/south-africa#services',
+  hours: HOURS,
+  heroCta: svc => `<a class="btn btn-primary" href="${attr(waLink(`Hi Kabelo, I'd like to talk about ${svc.name.toLowerCase()} for my business.`))}" target="_blank" rel="noopener noreferrer">${waIcon()} Chat on WhatsApp</a>`,
+  tierCta: (svc, t) => `<a class="btn ${t.rec ? 'btn-primary' : 'btn-ghost'}" href="${attr(waLink(`Hi Kabelo, I'm interested in ${svc.name} (${t.name}).`))}" target="_blank" rel="noopener noreferrer">Enquire</a>`,
+  closeCtas: svc => `<a class="btn btn-primary" href="${attr(waLink(`Hi Kabelo, I'd like to talk about ${svc.name.toLowerCase()} for my business.`))}" target="_blank" rel="noopener noreferrer">${waIcon()} Chat on WhatsApp</a>
+        <a class="btn btn-ghost" href="mailto:${EMAIL}">Email instead</a>`,
+  footDesc: 'Modern web design for South African businesses that want to stand out and grow online. Packages from R8,500.',
+  footContact: `<a href="mailto:${EMAIL}">${EMAIL}</a><br>
+        <a href="tel:+27650858437">${PHONE}</a><br>
+        Cape Town, South Africa<br>
+        <span class="foot-hours">${HOURS}</span>`,
+  company: [['Home', '/south-africa'], ['Services', '/south-africa#services'], ['Packages', '/south-africa#packages'],
+            ['Blog', '/south-africa#blog'], ['Contact', '/south-africa#contact']],
+  menu: {
+    file: 'menu.html',
+    currency: 'South African Rand',
+    sub: 'Websites, and the work that keeps them earning, for South African trades and service businesses. Designed, built and looked after from Cape Town.',
+    web: [`${SITE}/south-africa`, 'prismaticsyntax.com/south-africa'],
+    desc: 'Prismatic Syntax service menu: web design, SEO, e-commerce, maintenance, booking systems, copywriting, video editing and brand identity, with pricing in ZAR.',
+  },
+};
+const INTL_R = {
+  path: slug => `/international/${slug}`,
+  money: usd,
+  vat: '',
+  htmlLang: 'en-GB',
+  locale: 'en_GB',
+  ogImage: 'og-image-1200x630.png',
+  ogAlt: 'Prismatic Syntax: custom websites, built by hand, yours to keep',
+  head: () => `<meta name="author" content="Prismatic Syntax">
+<meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large">`,
+  provider: { '@type': 'Organization', '@id': `${SITE}/#organization`, name: 'Prismatic Syntax' },
+  areaServed: [
+    { '@type': 'Country', name: 'United Kingdom' },
+    { '@type': 'Place', name: 'Europe' },
+    { '@type': 'Place', name: 'North America' },
+  ],
+  home: '/',
+  services: '/#services',
+  hours: HOURS_INTL,
+  // A call first, then email, then WhatsApp: the homepage's order. The form lives on /.
+  heroCta: () => `<a class="btn btn-primary" href="/#contact">Request a call</a>`,
+  // The tier rides along to the form on /, which preselects it and starts the message.
+  tierCta: (svc, t) => `<a class="btn ${t.rec ? 'btn-primary' : 'btn-ghost'}" href="/?${attr(new URLSearchParams({ package: t.name, service: svc.name }).toString())}#contact">Request a call</a>`,
+  closeCtas: svc => `<a class="btn btn-primary" href="/#contact">Request a call</a>
+        <a class="btn btn-ghost" href="mailto:${EMAIL}">Email instead</a>
+        <a class="btn btn-ghost" href="${attr(waLink(`Hi Kabelo, I'd like to talk about ${svc.name.toLowerCase()} for my business.`))}" target="_blank" rel="noopener noreferrer">${waIcon()} WhatsApp</a>`,
+  footDesc: 'Custom websites for service businesses. Built by hand, yours to keep.',
+  footContact: `<a href="mailto:${EMAIL}">${EMAIL}</a><br>
+        <a href="https://wa.me/${WA}" target="_blank" rel="noopener noreferrer">${PHONE}</a><br>
+        <span class="foot-hours">${HOURS_INTL}</span>`,
+  company: [['Home', '/'], ['Services', '/#services'], ['Process', '/#process'], ['Pricing', '/#pricing'],
+            ['Blog', '/international/blog'], ['Contact', '/#contact']],
+  menu: {
+    file: 'international/menu.html',
+    currency: 'US dollars',
+    sub: 'Websites, and the work that keeps them earning, for service businesses in the UK, Europe and North America. One team for the site, the brand, the copy and the video.',
+    web: [`${SITE}/`, 'prismaticsyntax.com'],
+    desc: 'Prismatic Syntax service menu: web design, SEO, e-commerce, maintenance, booking systems, copywriting, video editing and brand identity, with pricing in USD.',
+  },
+};
+
+// A service as the international pages show it: lib/services.js with
+// lib/services-intl.js laid over it. Every override has to land on something
+// that exists, so a renamed tier, item or question fails the build instead of
+// quietly falling back to the rand copy.
+function intlService(svc) {
+  const o = INTL[svc.slug];
+  const at = m => { throw new Error(`lib/services-intl.js, ${svc.slug}: ${m}`); };
+  if (!o) at('no entry');
+  const swap = s => s.replaceAll(HOURS, HOURS_INTL).replaceAll('once-off', 'one-off');
+  for (const name of Object.keys(o.included || {})) if (!svc.included.some(i => i.name === name)) at(`no included item "${name}"`);
+  for (const q of Object.keys(o.faqs || {})) if (!svc.faqs.some(f => f.q === q)) at(`no FAQ "${q}"`);
+  for (const t of Object.keys({ ...o.pricing.prices, ...o.pricing.feats })) if (!svc.pricing.tiers.some(x => x.name === t)) at(`no tier "${t}"`);
+  return {
+    ...svc,
+    metaTitle: o.metaTitle,
+    metaDescription: o.metaDescription,
+    hero: { ...svc.hero, lede: o.lede || svc.hero.lede },
+    included: svc.included.map(i => ({ ...i, ...o.included?.[i.name] })),
+    who: o.who || svc.who,
+    pricing: {
+      ...svc.pricing,
+      lead: o.pricing.lead,
+      note: o.pricing.note,
+      tiers: svc.pricing.tiers.map(t => {
+        if (!(t.name in o.pricing.prices)) at(`no USD price for "${t.name}"`);
+        return { ...t, price: o.pricing.prices[t.name], period: swap(t.period), feats: o.pricing.feats?.[t.name] || t.feats };
+      }),
+    },
+    faqs: svc.faqs.map(f => { const r = o.faqs?.[f.q] || f; return { q: r.q, a: swap(r.a) }; }),
+  };
 }
 
 /* ── page template ── */
-function renderPage(svc, all) {
-  const url = `${SITE}/services/${svc.slug}`;
+function renderPage(svc, all, R = ZA) {
+  const url = `${SITE}${R.path(svc.slug)}`;
+  // Each service exists once per audience; both versions name each other.
+  const za = `${SITE}${ZA.path(svc.slug)}`, intl = `${SITE}${INTL_R.path(svc.slug)}`;
   const [before, hl, after] = svc.hero.h1;
   const h1Text = `${before}${hl}${after}`;
   const others = all.filter(s => s.slug !== svc.slug);
@@ -117,11 +244,11 @@ function renderPage(svc, all) {
         <div class="tier${t.rec ? ' rec' : ''}">
           ${t.rec ? '<span class="tier-tag">Recommended</span>' : ''}
           <div class="tier-name">${esc(t.name)}</div>
-          <div class="tier-price">${price(t.price, { service: svc.name, tier: t.name })}${t.plus ? '+' : ''}${t.per ? `<span class="tier-period"> /${t.per}</span>` : ''}</div>
+          <div class="tier-price">${price(t.price, { service: svc.name, tier: t.name }, R.money)}${t.plus ? '+' : ''}${t.per ? `<span class="tier-period"> /${t.per}</span>` : ''}</div>
           <div class="tier-period">${esc(t.period)}</div>
           <p class="tier-desc">${esc(t.desc)}</p>
           <ul class="tier-feats">${t.feats.map(f => `<li><span>${esc(f)}</span></li>`).join('')}</ul>
-          <a class="btn ${t.rec ? 'btn-primary' : 'btn-ghost'}" href="${attr(waLink(`Hi Kabelo, I'm interested in ${svc.name} (${t.name}).`))}" target="_blank" rel="noopener noreferrer">Enquire</a>
+          ${R.tierCta(svc, t)}
         </div>`).join('');
 
   const faqs = svc.faqs.map(f => `
@@ -131,7 +258,7 @@ function renderPage(svc, all) {
         </details>`).join('');
 
   const otherLinks = others.map(s =>
-    `        <a href="/services/${s.slug}">${esc(s.name)} <span aria-hidden="true">→</span></a>`).join('\n');
+    `        <a href="${R.path(s.slug)}">${esc(s.name)} <span aria-hidden="true">→</span></a>`).join('\n');
 
   const jsonLd = {
     '@context': 'https://schema.org',
@@ -143,18 +270,14 @@ function renderPage(svc, all) {
         description: svc.metaDescription,
         serviceType: svc.name,
         url,
-        provider: { '@type': 'LocalBusiness', '@id': `${SITE}/south-africa#business`, name: 'Prismatic Syntax' },
-        areaServed: [
-          { '@type': 'State', name: 'Western Cape' },
-          { '@type': 'State', name: 'Gauteng' },
-          { '@type': 'Country', name: 'South Africa' },
-        ],
+        provider: R.provider,
+        areaServed: R.areaServed,
       },
       {
         '@type': 'BreadcrumbList',
         itemListElement: [
-          { '@type': 'ListItem', position: 1, name: 'Home', item: `${SITE}/south-africa` },
-          { '@type': 'ListItem', position: 2, name: 'Services', item: `${SITE}/south-africa#services` },
+          { '@type': 'ListItem', position: 1, name: 'Home', item: `${SITE}${R.home}` },
+          { '@type': 'ListItem', position: 2, name: 'Services', item: `${SITE}${R.services}` },
           { '@type': 'ListItem', position: 3, name: svc.name, item: url },
         ],
       },
@@ -171,41 +294,35 @@ function renderPage(svc, all) {
   };
 
   return `<!DOCTYPE html>
-<html lang="en" dir="ltr">
+<html lang="${R.htmlLang}" dir="ltr">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
 <title>${esc(svc.metaTitle)} | Prismatic Syntax</title>
 <meta name="description" content="${attr(svc.metaDescription)}">
-<meta name="keywords" content="${attr(svc.keywords)}">
-<meta name="author" content="Prismatic Syntax">
-<meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large">
-<meta name="geo.region" content="ZA">
-<meta name="geo.country" content="South Africa">
-<meta name="geo.placename" content="Cape Town, Western Cape, South Africa">
-<meta name="geo.position" content="-33.9249;18.4241">
-<meta name="ICBM" content="-33.9249, 18.4241">
+${R.head(svc)}
 <meta name="theme-color" content="#05090d">
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
 <link rel="alternate icon" type="image/png" href="/brand/favicon-180.png">
 <link rel="apple-touch-icon" href="/brand/favicon-180.png">
 <link rel="canonical" href="${url}">
-<link rel="alternate" hreflang="en" href="${url}">
-<link rel="alternate" hreflang="x-default" href="${url}">
+<link rel="alternate" hreflang="en" href="${intl}">
+<link rel="alternate" hreflang="en-ZA" href="${za}">
+<link rel="alternate" hreflang="x-default" href="${intl}">
 <meta property="og:type" content="website">
-<meta property="og:locale" content="en_ZA">
+<meta property="og:locale" content="${R.locale}">
 <meta property="og:url" content="${url}">
 <meta property="og:title" content="${attr(svc.metaTitle)}">
 <meta property="og:description" content="${attr(svc.metaDescription)}">
-<meta property="og:image" content="${SITE}/og-image-south-africa-1200x630.png">
+<meta property="og:image" content="${SITE}/${R.ogImage}">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="Prismatic Syntax - Web Design South Africa">
+<meta property="og:image:alt" content="${attr(R.ogAlt)}">
 <meta property="og:site_name" content="Prismatic Syntax">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="${attr(svc.metaTitle)}">
 <meta name="twitter:description" content="${attr(svc.metaDescription)}">
-<meta name="twitter:image" content="${SITE}/og-image-south-africa-1200x630.png">
+<meta name="twitter:image" content="${SITE}/${R.ogImage}">
 <script type="application/ld+json">
 ${JSON.stringify(jsonLd, null, 2)}
 </script>
@@ -217,10 +334,10 @@ ${JSON.stringify(jsonLd, null, 2)}
 
 <header class="site-head">
   <div class="wrap">
-    <a href="/south-africa" class="logo" aria-label="Prismatic Syntax - go to homepage">
+    <a href="${R.home}" class="logo" aria-label="Prismatic Syntax - go to homepage">
       <img class="logo-dark" src="/brand/logo-on-dark.svg" alt="Prismatic Syntax" width="270" height="62"><img class="logo-light" src="/brand/logo.svg" alt="" width="270" height="62">
     </a>
-    <a href="/south-africa#services" class="head-back">All services</a>
+    <a href="${R.services}" class="head-back">All services</a>
   </div>
 </header>
 
@@ -232,7 +349,7 @@ ${JSON.stringify(jsonLd, null, 2)}
       <h1>${esc(before)}<span class="hl">${esc(hl)}</span>${esc(after)}</h1>
       <p class="lede">${esc(svc.hero.lede)}</p>
       <div class="cta-row">
-        <a class="btn btn-primary" href="${attr(waLink(`Hi Kabelo, I'd like to talk about ${svc.name.toLowerCase()} for my business.`))}" target="_blank" rel="noopener noreferrer">${waIcon()} Chat on WhatsApp</a>
+        ${R.heroCta(svc)}
         <a class="btn btn-ghost" href="#pricing">See pricing</a>
       </div>
     </section>
@@ -254,7 +371,7 @@ ${who}
 
     <section class="sec" id="pricing">
       <h2>Pricing</h2>
-      <p class="sec-sub">${esc(svc.pricing.lead)} ${VAT_NOTE}</p>
+      <p class="sec-sub">${esc(svc.pricing.lead)}${R.vat}</p>
       <div class="tiers t${svc.pricing.cols}">
         ${tiers}
       </div>
@@ -278,10 +395,9 @@ ${otherLinks}
       <h2>Tell us what you need</h2>
       <p>Send a message with what your business does and what you are trying to fix. We'll come back with a straight answer on whether we can help and what it would cost.</p>
       <div class="cta-row">
-        <a class="btn btn-primary" href="${attr(waLink(`Hi Kabelo, I'd like to talk about ${svc.name.toLowerCase()} for my business.`))}" target="_blank" rel="noopener noreferrer">${waIcon()} Chat on WhatsApp</a>
-        <a class="btn btn-ghost" href="mailto:${EMAIL}">Email instead</a>
+        ${R.closeCtas(svc)}
       </div>
-      <p class="hours">${HOURS}</p>
+      <p class="hours">${R.hours}</p>
     </section>
 
   </div>
@@ -291,28 +407,21 @@ ${otherLinks}
   <div class="wrap">
     <div>
       <img src="/brand/logo-on-dark.svg" alt="Prismatic Syntax" width="270" height="62">
-      <p class="foot-desc">Modern web design for South African businesses that want to stand out and grow online. Packages from R8,500.</p>
+      <p class="foot-desc">${esc(R.footDesc)}</p>
       <p class="foot-contact">
-        <a href="mailto:${EMAIL}">${EMAIL}</a><br>
-        <a href="tel:+27650858437">${PHONE}</a><br>
-        Cape Town, South Africa<br>
-        <span class="foot-hours">${HOURS}</span>
+        ${R.footContact}
       </p>
     </div>
     <div>
       <div class="foot-h">Company</div>
       <ul class="foot-links">
-        <li><a href="/south-africa">Home</a></li>
-        <li><a href="/south-africa#services">Services</a></li>
-        <li><a href="/south-africa#packages">Packages</a></li>
-        <li><a href="/south-africa#blog">Blog</a></li>
-        <li><a href="/south-africa#contact">Contact</a></li>
+${R.company.map(([label, href]) => `        <li><a href="${href}">${label}</a></li>`).join('\n')}
       </ul>
     </div>
     <div>
       <div class="foot-h">Services</div>
       <ul class="foot-links">
-${all.map(s => `        <li><a href="/services/${s.slug}">${esc(s.nav)}</a></li>`).join('\n')}
+${all.map(s => `        <li><a href="${R.path(s.slug)}">${esc(s.nav)}</a></li>`).join('\n')}
       </ul>
     </div>
     <div>
@@ -344,7 +453,7 @@ ${all.map(s => `        <li><a href="/services/${s.slug}">${esc(s.nav)}</a></li>
    than an <img>, because some engines rasterise a referenced SVG when printing
    and the whole point is that the PDF stays vector, editable and small. No
    raster background, no exported image, no web fonts beyond Inter Tight and Manrope. */
-function renderMenu(all) {
+function renderMenu(all, R = ZA) {
   // Inlined, and the fixed width/height stripped so CSS can size it. Keeping
   // them would pin the mark at 274px in print.
   const logo = readFileSync('brand/logo.svg', 'utf8')
@@ -355,7 +464,7 @@ function renderMenu(all) {
       <div class="m-contact">
         <span><strong>WhatsApp</strong> <a href="https://wa.me/${WA}">${PHONE}</a></span>
         <span><strong>Email</strong> <a href="mailto:${EMAIL}">${EMAIL}</a></span>
-        <span><strong>Web</strong> <a href="${SITE}/south-africa">prismaticsyntax.com/south-africa</a></span>
+        <span><strong>Web</strong> <a href="${R.menu.web[0]}">${R.menu.web[1]}</a></span>
       </div>`;
 
   const sections = all.map(svc => {
@@ -364,7 +473,7 @@ function renderMenu(all) {
           <div class="m-tier${t.rec ? ' rec' : ''}">
             <div class="m-tier-top">
               <span class="m-tier-name">${esc(t.name)}${t.rec ? '<span class="m-rec">Recommended</span>' : ''}</span>
-              <span class="m-tier-price">${price(t.price, { service: svc.name, tier: t.name })}${t.plus ? '+' : ''}${t.per ? `<span class="m-per">/${t.per}</span>` : ''}</span>
+              <span class="m-tier-price">${price(t.price, { service: svc.name, tier: t.name }, R.money)}${t.plus ? '+' : ''}${t.per ? `<span class="m-per">/${t.per}</span>` : ''}</span>
             </div>
             <div class="m-tier-period">${esc(t.period)}</div>
             <div class="m-tier-desc">${esc(t.desc)}</div>
@@ -386,7 +495,7 @@ function renderMenu(all) {
 
       <div class="m-pricing">
         <h3>Pricing</h3>
-        <p class="m-pricing-lead">${esc(svc.pricing.lead)} ${VAT_NOTE}</p>
+        <p class="m-pricing-lead">${esc(svc.pricing.lead)}${R.vat}</p>
         ${tiers}
       </div>
 ${contact}
@@ -394,12 +503,12 @@ ${contact}
   }).join('\n');
 
   return `<!DOCTYPE html>
-<html lang="en" dir="ltr">
+<html lang="${R.htmlLang}" dir="ltr">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Service Menu | Prismatic Syntax</title>
-<meta name="description" content="Prismatic Syntax service menu: web design, SEO, e-commerce, maintenance, booking systems, copywriting, video editing and brand identity, with pricing in ZAR.">
+<meta name="description" content="${attr(R.menu.desc)}">
 <meta name="robots" content="noindex, nofollow">
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
 <link rel="apple-touch-icon" href="/brand/favicon-180.png">
@@ -530,7 +639,7 @@ a { color:inherit; }
 <body>
 
 <div class="bar">
-  <p>Service menu &middot; all prices in South African Rand</p>
+  <p>Service menu &middot; all prices in ${R.menu.currency}</p>
   <button class="bar-btn" onclick="window.print()">Save as PDF</button>
 </div>
 
@@ -540,9 +649,9 @@ a { color:inherit; }
     ${logo}
     <div class="m-cover-mid">
       <h1 class="m-title">Service menu</h1>
-      <p class="m-sub">Websites, and the work that keeps them earning, for South African trades and service businesses. Designed, built and looked after from Cape Town.</p>
+      <p class="m-sub">${esc(R.menu.sub)}</p>
       <div class="m-assure"><strong>See your homepage design before you pay anything.</strong> After a quick call, we'll build your homepage concept free. If you don't want to go ahead after seeing it, you owe nothing.</div>
-      <p class="m-note">All prices in South African Rand. ${HOURS}.</p>
+      <p class="m-note">All prices in ${R.menu.currency}. ${R.hours}.</p>
       <ul class="m-index">
 ${all.map(s => `        <li><a href="#${s.slug}">${esc(s.nav)}</a></li>`).join('\n')}
       </ul>
@@ -555,7 +664,7 @@ ${sections}
     <h2>Tell us what you need</h2>
     <p>Send a message with what your business does and what you are trying to fix. We'll come back with a straight answer on whether we can help and what it would cost.</p>
 ${contact}
-    <p class="m-note">${HOURS}</p>
+    <p class="m-note">${R.hours}</p>
   </section>
 
 </div>
@@ -613,43 +722,32 @@ const mobServices = SERVICES.map(s =>
 // changed when it did not, and they stop believing the field.
 const SERVICES_LASTMOD = '2026-08-16';
 
-const sitemapEntries = SERVICES.map(s => `  <url>
-    <loc>${SITE}/services/${s.slug}</loc>
-    <lastmod>${SERVICES_LASTMOD}</lastmod>
+const INTL_LASTMOD = '2026-11-15';
+
+const sitemapEntries = [...SERVICES.map(s => [ZA.path(s.slug), SERVICES_LASTMOD]),
+                        ...SERVICES.map(s => [INTL_R.path(s.slug), INTL_LASTMOD])].map(([path, lastmod]) => `  <url>
+    <loc>${SITE}${path}</loc>
+    <lastmod>${lastmod}</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>`).join('\n');
 
 /* ── the international homepage ─────────────────────────────────────────
    index.html is the international studio page; everything written for South
-   African trades lives on south-africa.html. The services are listed without
-   links or prices: the /services pages still quote in rand and speak to South
-   African trades, so they stay reachable from /south-africa only until they
-   are rewritten. */
+   African trades lives on south-africa.html. Each service links to its
+   international page at /international/<slug>, in USD, never to the rand one. */
 const intlServices = SERVICES.map(s =>
-  `        <li><div class="svc-name">${esc(s.name)}</div><div class="svc-desc">${esc(s.cardDesc)}</div></li>`).join('\n');
+  `        <li><a href="${INTL_R.path(s.slug)}"><div class="svc-name">${esc(s.name)}</div><div class="svc-desc">${esc(s.cardDesc)}</div><span class="svc-more">Read more →</span></a></li>`).join('\n');
 
 // USD figures are Kabelo's to set in lib/pricing-usd.js, never converted from
 // the rand sheet. Until every one is filled in, the section is one quote-on-call
 // line: shipping no price beats shipping a converted or half-finished one.
 const usdMissing = Object.entries(USD_PACKAGES).filter(([, v]) => v == null).map(([k]) => k);
-const usd = n => '$' + String(n).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-const featLabel = f => Array.isArray(f) ? f[0] : f;
-// Five features a card, picked from lib/packages.js; the full lists stay on
-// /south-africa. Page counts are left out because the line under each price
-// already gives them. A label that is not in lib/packages.js fails the build, so
-// a rename there cannot leave a stale feature here.
-const HOME_FEATS = {
-  Starter:  ['Custom brand colours & typography', 'Professional contact form', 'Google Business Profile setup', 'Basic on-page SEO', '1 round of revisions'],
-  Business: ['Everything in Starter', 'Copywriting for 3 pages', 'Full on-page SEO', 'Speed tuning, so pages load fast on phones', '2 rounds of revisions'],
-  Pro:      ['Everything in Business', 'E-commerce or booking system', 'Full copywriting', 'Blog setup + training', '3 rounds of revisions'],
-  // Not the founder access or the reply time: the page promises those to every client.
-  Premium:  ['Discovery & strategy workshop', 'Unlimited pages', 'Custom features, connected to the tools you already use', 'A full search strategy for Google', '4 rounds of revisions'],
-};
-const homeFeats = name => HOME_FEATS[name].map(f => {
-  if (!PACKAGES[name].features.map(featLabel).includes(f)) throw new Error(`build.mjs HOME_FEATS: "${f}" is not a ${name} feature in lib/packages.js`);
-  return `<li>${esc(f)}</li>`;
-}).join('');
+// The full feature lists from lib/packages.js, New badges included, exactly as
+// the ZAR package cards on /south-africa show them.
+const homeFeats = name => Object.fromEntries(packageBlocks)[`feats-${name}`];
+// The four retainers, from the maintenance tiers and priced from lib/pricing-usd.js.
+const careTiers = intlService(SERVICES.find(s => s.slug === 'maintenance')).pricing.tiers;
 const intlPricing = usdMissing.length
   ? `      <div class="sec-lbl">Pricing</div>
       <h2 class="sec-h quote-line">Every project is quoted after a short call.</h2>
@@ -676,7 +774,17 @@ ${Object.entries(USD_PACKAGES).map(([name, price]) => {
     `<a class="p-cta" href="#contact" data-package="${attr(name)}">Get a free concept for ${esc(name)} <span class="p-arrow" aria-hidden="true">→</span></a></div>`;
 }).join('\n')}
       </div>
-      <p class="price-upkeep"><strong>After launch:</strong> a monthly retainer from ${usd(USD_RETAINER_FROM)} covers hosting and keeps the site updated, backed up and secure.</p>`;
+      <p class="price-upkeep"><strong>After launch:</strong> a monthly retainer from ${usd(USD_RETAINER_FROM)} covers hosting and keeps the site updated, backed up and secure. Each package has a matching plan, and you can cancel any time with 30 days' notice.</p>
+      <div class="maint-grid" id="retainers">
+${careTiers.map(t => `        <div class="m-card${t.rec ? ' rec' : ''}">` +
+    (t.rec ? '<div class="pop-tag">Recommended</div>' : '') +
+    `<div class="m-name">${esc(t.name)}</div>` +
+    `<div class="m-price">${usd(USD_RETAINERS[t.name])}${t.plus ? '+' : ''}<span class="m-per"> /mo</span></div>` +
+    `<div class="m-tier-label">${esc(t.period.replace(/^pairs/, 'Pairs'))}</div><p class="m-desc">${esc(t.desc)}</p>` +
+    `<ul class="p-feats">${t.feats.map(f => `<li>${esc(f)}</li>`).join('')}</ul>` +
+    `<a class="p-cta" href="#contact" data-package="${attr(t.name)}">Ask about ${esc(t.name)} <span class="p-arrow" aria-hidden="true">→</span></a></div>`).join('\n')}
+      </div>
+      <p class="price-upkeep">Every service is priced in full on its own page: <a href="${INTL_R.path('web-design')}">websites</a>, <a href="${INTL_R.path('maintenance')}">maintenance</a>, <a href="${INTL_R.path('seo')}">SEO</a>, <a href="${INTL_R.path('ecommerce')}">e-commerce</a>, <a href="${INTL_R.path('booking-systems')}">booking systems</a>, <a href="${INTL_R.path('copywriting')}">copywriting</a>, <a href="${INTL_R.path('video-editing')}">video</a> and <a href="${INTL_R.path('brand-identity')}">brand identity</a>.</p>`;
 
 
 /* ── the client wall ── one list, laid out identically on both entry pages, so the
@@ -691,7 +799,9 @@ export function build({ write = true } = {}) {
   const out = new Map();
 
   for (const svc of SERVICES) out.set(`services/${svc.slug}.html`, renderPage(svc, SERVICES));
+  for (const svc of SERVICES) out.set(`international/${svc.slug}.html`, renderPage(intlService(svc), SERVICES, INTL_R));
   out.set('menu.html', renderMenu(SERVICES));
+  out.set(INTL_R.menu.file, renderMenu(SERVICES.map(intlService), INTL_R));
 
   let index = readFileSync('south-africa.html', 'utf8');
   index = inject(index, 'svc-grid', homeCards, 'south-africa.html');
@@ -715,6 +825,7 @@ export function build({ write = true } = {}) {
 
   if (write) {
     mkdirSync('services', { recursive: true });
+    mkdirSync('international', { recursive: true });
     for (const [path, body] of out) writeFileSync(path, body);
   }
   return { out, tbc: [...tbc], usdMissing };

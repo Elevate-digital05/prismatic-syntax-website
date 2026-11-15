@@ -32,7 +32,18 @@ each feature list into the package cards, so a crawler reads them in the HTML
 rather than after a script runs. They were hand-written in two places once and drifted far
 enough to sell an account manager who did not exist.
 
-The homepage's prices are separate and in USD: `lib/pricing-usd.js`. They are set
+Every service also has an international page at `/international/<slug>`, in USD,
+rendered from the same `lib/services.js` entry with `lib/services-intl.js` laid
+over it (the USD tier prices, and only the copy that names South Africa, rands,
+EFTs or Paystack). The homepage's service rows link there, never to the rand
+pages, and the two versions of each page name each other in hreflang.
+The international blog is hand-written at `/international/blog` (index) and
+`/international/blog/<slug>`; the posts under `/blog/` stay South African. The
+service pages' "Request a call" buttons send `?package=…&service=…` to the form
+on `/`, which preselects the package or retainer and starts the message.
+
+The homepage's prices are separate and in USD: `lib/pricing-usd.js` holds the
+packages and the four retainers, and the international service pages are held to it. They are set
 by hand, never converted from the rand sheet, because at the exchange rate the
 ZAR prices read as offshore template work to a UK or US buyer. While any figure
 is `TBD`, `build.mjs` renders "Every project is quoted after a short call."
@@ -52,7 +63,8 @@ sitemap entry and the printable menu all come from that one object.
 
 ## The printable menu
 
-`/menu` is generated from the same data. It is deliberately **not in the nav**
+`/menu` is generated from the same data, in rand; `/international/menu` is the
+same document in USD, from the international versions of each service. It is deliberately **not in the nav**
 and carries `noindex` — it is a link you send directly and a PDF you attach to
 email, not a landing page.
 

@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="en-GB" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Service Menu | Prismatic Syntax</title>
+<meta name="description" content="Prismatic Syntax service menu: web design, SEO, e-commerce, maintenance, booking systems, copywriting, video editing and brand identity, with pricing in USD.">
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="apple-touch-icon" href="/brand/favicon-180.png">
+<link rel="stylesheet" href="/theme.css">
+<style>
+/* Menu-only. Not in site.css: the eight service pages have no use for any of
+   it, and print rules that nothing else shares are easier to reason about when
+   they live next to the only document they format. */
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:var(--f-body); background:var(--paper); color:var(--text); line-height:1.5; -webkit-font-smoothing:antialiased; }
+a { color:inherit; }
+.sheet { max-width:820px; margin:0 auto; padding:32px 24px 64px; }
+
+/* ── cover ── */
+.m-cover { padding-bottom:28px; border-bottom:2px solid var(--text); }
+.logo { width:230px; height:auto; display:block; }
+.m-title { font-size:38px; font-weight:600; letter-spacing:-0.02em; line-height:1.05; margin-top:24px; }
+.m-sub { font-size:15px; color:var(--grey); margin-top:10px; max-width:56ch; }
+.m-assure { font-size:13.5px; color:var(--text); margin-top:18px; padding:14px 16px; background:var(--surface); border:1px solid var(--line); border-radius:0; max-width:62ch; }
+.m-assure strong { font-weight:600; }
+.m-note { font-size:12px; color:var(--grey); margin-top:14px; }
+.m-index { list-style:none; columns:2; gap:24px; margin-top:22px; font-size:13.5px; }
+.m-index li { padding:4px 0; break-inside:avoid; }
+.m-index a { text-decoration:none; color:var(--grey); }
+.m-index a:hover { color:var(--text); }
+
+/* ── a service ── */
+.m-svc { padding-top:34px; }
+.m-svc-head { border-bottom:1px solid var(--line); padding-bottom:14px; }
+.m-svc-kicker { font-size:10.5px; font-weight:600; letter-spacing:0.16em; text-transform:uppercase; color:var(--grey); }
+.m-svc h2 { font-size:26px; font-weight:600; line-height:1.15; letter-spacing:-0.015em; margin-top:7px; max-width:24ch; }
+.m-svc-lede { font-size:13.5px; color:var(--grey); margin-top:9px; max-width:70ch; }
+.m-svc h3 { font-size:10.5px; font-weight:600; letter-spacing:0.16em; text-transform:uppercase; color:var(--grey); margin-bottom:10px; }
+
+.m-incl { margin-top:20px; }
+.m-incl ul { list-style:none; columns:2; gap:26px; }
+.m-incl li { position:relative; padding:3px 0 3px 15px; font-size:13px; break-inside:avoid; }
+.m-incl li::before { content:'✓'; position:absolute; left:0; font-size:11px; font-weight:700; }
+
+.m-pricing { margin-top:22px; }
+.m-pricing-lead { font-size:12.5px; color:var(--grey); margin:-4px 0 14px; max-width:74ch; }
+.m-tier { padding:11px 0; border-top:1px solid var(--line); break-inside:avoid; }
+.m-tier:last-of-type { border-bottom:1px solid var(--line); }
+.m-tier-top { display:flex; align-items:baseline; justify-content:space-between; gap:16px; }
+.m-tier-name { font-size:14px; font-weight:600; letter-spacing:0.02em; }
+.m-title, .m-svc h2, .m-end h2 { font-family:var(--f-display); font-weight:700; letter-spacing:-0.02em; }
+.m-rec { display:inline-block; margin-left:9px; font-size:8.5px; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; background:var(--blue); color:var(--surface); padding:2px 7px; border-radius:0; vertical-align:1px; }
+.m-tier-price { font-size:19px; font-weight:600; letter-spacing:-0.01em; white-space:nowrap; }
+.m-per { font-size:11px; font-weight:500; color:var(--grey); }
+.m-tier-period { font-size:11.5px; color:var(--grey); margin-top:1px; }
+.m-tier-desc { font-size:12.5px; margin-top:5px; }
+.m-tier-feats { font-size:11.5px; color:var(--grey); margin-top:4px; line-height:1.55; }
+
+/* Unset price — deliberately loud so a draft cannot be sent as if it were final. */
+.tbc { display:inline-block; font-family:ui-monospace,SFMono-Regular,Menlo,monospace; font-size:11px; font-weight:700; letter-spacing:0.04em; border:1.5px dashed var(--text); border-radius:0; padding:2px 7px; }
+
+.m-contact { display:flex; flex-wrap:wrap; gap:6px 22px; margin-top:20px; padding-top:12px; border-top:1px solid var(--line); font-size:11.5px; color:var(--grey); break-inside:avoid; }
+.m-contact strong { color:var(--text); font-weight:600; }
+.m-contact a { text-decoration:none; }
+
+.m-end { margin-top:40px; padding:24px; background:var(--surface); border:1px solid var(--line); border-radius:0; }
+.m-end h2 { font-size:22px; font-weight:600; }
+.m-end p { font-size:13.5px; color:var(--grey); margin-top:8px; max-width:56ch; }
+.m-end .m-contact { border-top:none; margin-top:14px; padding-top:0; font-size:13px; }
+
+/* ── screen-only controls ── */
+.bar { position:sticky; top:0; z-index:10; display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:12px; background:var(--paper); border-bottom:1px solid var(--line); padding:12px 24px; }
+.bar p { font-size:12.5px; color:var(--grey); }
+.bar-btn { font-family:inherit; font-size:14px; font-weight:600; background:var(--blue); color:var(--surface); border:none; border-radius:0; padding:11px 22px; cursor:pointer; }
+.bar-btn:hover { background:var(--blue-dark); }
+
+@media (max-width:560px) {
+  .m-incl ul, .m-index { columns:1; }
+  .m-title { font-size:30px; }
+  .m-tier-top { flex-direction:column; gap:2px; }
+}
+
+/* ══════════ PRINT ══════════
+   A4 portrait, one service per page. Everything that only makes sense on a
+   screen is removed rather than hidden, so it cannot claim layout. */
+@page { size: A4 portrait; margin: 14mm 15mm; }
+
+@media print {
+  .bar, .m-index { display:none !important; }
+
+  html, body { background:#fff; }
+  body { font-size:9.4pt; line-height:1.45; }
+  .sheet { max-width:none; margin:0; padding:0; }
+
+  /* Keep the hi-vis Recommended tag and the card fills — a PDF is the point
+     here, and browsers drop background colour from print unless told. */
+  * { -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+
+  /* Fill the cover sheet rather than stacking everything at the top and
+     leaving two thirds of the page blank. min-height is the A4 content box
+     (297mm less the 14mm margins); percentages are unreliable inside @page. */
+  .m-cover { break-after:page; padding-bottom:0; border-bottom:none; display:flex; flex-direction:column; min-height:266mm; }
+  .m-cover-mid { margin:auto 0; }
+  .m-cover .m-contact { margin-top:0; }
+  .logo { width:52mm; }
+  .m-title { font-size:34pt; }
+  .m-sub { font-size:11.5pt; margin-top:5mm; max-width:64ch; }
+  .m-assure { font-size:9.5pt; margin-top:8mm; max-width:70ch; }
+
+  /* One service per page. The last must not force a trailing blank sheet. */
+  .m-svc { break-before:page; break-inside:auto; padding-top:0; }
+  .m-svc h2 { font-size:19pt; max-width:30ch; }
+  .m-svc-lede { font-size:9.4pt; }
+  .m-svc h3 { font-size:7.5pt; }
+  .m-incl li, .m-tier-desc { font-size:9pt; }
+  .m-tier-feats, .m-tier-period, .m-contact { font-size:8.4pt; }
+  .m-tier-price { font-size:15pt; }
+  .m-tier-name { font-size:11pt; }
+
+  /* A heading must never be the last thing on a page. */
+  .m-svc-head, .m-incl, .m-pricing h3 + .m-pricing-lead { break-after:avoid; }
+  h2, h3 { break-after:avoid; }
+
+  /* No forced break: it is short, and on its own sheet it leaves a page that is
+     one-sixth full at the end of a document that gets emailed. It sits under
+     the last service when there is room and takes a page of its own only when
+     there genuinely is not. */
+  .m-end { break-before:auto; break-inside:avoid; border:none; background:none; padding:0; margin-top:7mm; }
+  a { text-decoration:none; }
+}
+</style>
+</head>
+<body>
+
+<div class="bar">
+  <p>Service menu &middot; all prices in US dollars</p>
+  <button class="bar-btn" onclick="window.print()">Save as PDF</button>
+</div>
+
+<div class="sheet">
+
+  <header class="m-cover">
+    <svg class="logo" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1675.84 385.56" role="img"><title>Prismatic Syntax</title><polygon fill="#111317" points="167.67 5.2 116.39 190.2 0 195.38"/><polygon fill="#0046ff" points="167.67 5.2 123.17 190.47 240.26 195.38"/><polygon fill="#0046ff" points="72.58 385.56 114.42 198 0 195.38"/><polygon fill="#111317" points="72.58 385.56 121.6 197.9 240.26 195.38"/><path fill="#111317" d="M273.91,3.64h76.38c46.77,0,80.28,13.51,80.28,59.76,0,50.14-43.91,61.58-80.28,61.58h-16.37v60.02h-60.02V3.64ZM343.54,84.18c15.85,0,29.62-3.9,29.62-20.53s-13.25-20.01-29.62-20.01h-10.91v40.53h10.91Z"/><path fill="#111317" d="M440.19,3.64h70.15c47.03,0,90.93,6.5,90.93,48.06,0,23.12-12.47,38.97-42.87,44.17v.52c15.59,3.9,25.72,11.17,31.96,28.84l21.3,59.76h-61.32l-10.91-40.53c-5.46-19.49-12.47-23.12-27.28-23.12h-11.95v63.65h-60.02V3.64ZM506.18,82.88c23.12,0,37.41-5.2,37.41-20.53,0-13.51-12.21-19.23-37.41-19.23h-6.75v39.75h6.75Z"/><path fill="#111317" d="M620.76,3.64h59.76v181.35h-59.76V3.64Z"/><path fill="#111317" d="M693.5,180.83l4.42-45.21c18.71,7.27,39.49,10.65,52.74,10.65,15.59,0,24.42-3.38,24.42-13.51,0-7.02-7.53-12.47-30.4-20.79-26.24-9.61-50.4-21.04-50.4-52.74,0-43.65,40.79-59.24,81.58-59.24,20.79,0,38.19,2.34,53,5.72l-2.86,44.17c-16.63-6.24-33.26-8.31-46.77-8.31-14.29,0-24.42,3.12-24.42,12.21,0,6.75,4.68,9.87,27.8,18.19,32.48,11.69,52.48,26.76,52.48,56.9,0,38.71-29.88,59.76-81.06,59.76-21.56,0-41.57-2.6-60.54-7.79Z"/><path fill="#111317" d="M849.13,3.64h94.83l8.57,31.7c7.54,28.06,14.55,57.42,20.79,85.48h.52c7.01-28.06,14.29-57.42,22.6-85.48l9.35-31.7h89.38v181.35h-57.16v-30.92c0-34.81.52-76.38,1.3-109.9h-.52c-7.01,27.28-21.04,72.75-28.06,95.09l-14.29,45.73h-51.7l-15.33-47.55c-6.75-20.52-22.34-71.97-28.58-93.27h-.52c.78,33.26,1.3,75.09,1.3,109.9v30.92h-52.48V3.64Z"/><path fill="#111317" d="M1170.25,3.64h72.75l67.55,181.35h-63.39l-11.69-36.11h-61.83l-12.99,36.11h-58.72L1170.25,3.64ZM1225.07,109.38l-3.12-9.61c-5.46-15.85-13.77-46.25-15.85-56.12h-.52c-2.08,9.87-11.17,39.75-16.63,56.38l-3.12,9.35h39.23Z"/><path fill="#111317" d="M1331.85,43.91l-44.43.78V3.64h149.39v41.05l-45.47-.78v141.08h-59.5V43.91Z"/><path fill="#111317" d="M1445.39,3.64h59.76v181.35h-59.76V3.64Z"/><path fill="#111317" d="M1520.48,94.05c0-61.32,49.36-92.75,112.5-92.75,18.97,0,33.26,2.34,42.87,5.2l-3.9,42.61c-11.17-3.9-23.64-5.46-35.85-5.46-28.58,0-54.82,13.77-54.82,49.36,0,32.48,25.2,50.92,58.72,50.92,11.17,0,20.53-1.3,31.7-5.2l3.64,44.17c-14.81,3.38-27.02,4.42-42.35,4.42-63.65,0-112.5-26.76-112.5-93.27Z"/><path fill="#0046ff" d="M255.73,375.43l9.35-30.14c15.33,7.54,31.18,11.95,44.43,11.95,19.75,0,35.33-8.05,35.33-27.8,0-12.73-6.24-18.71-25.72-29.1-26.76-14.29-36.63-26.24-36.63-47.8,0-32.74,26.76-54.56,67.55-54.56,16.89,0,36.63,3.38,48.84,8.57l-9.09,29.1c-12.47-6.5-27.28-10.39-40.01-10.39-17.15,0-31.18,8.05-31.18,22.86,0,9.61,5.98,16.11,26.24,26.5,23.12,12.73,37.67,24.94,37.67,51.96,0,35.33-26.5,58.98-69.63,58.98-18.71,0-36.37-2.86-57.16-10.13Z"/><path fill="#0046ff" d="M467.22,306.06l-42.35-104.96h38.45c17.41,47.81,22.86,63.39,27.02,77.16h.52c9.87-14.03,20.78-28.32,60.02-77.16h42.09l-88.08,104.7-16.37,76.64h-36.89l15.59-76.38Z"/><path fill="#0046ff" d="M622.32,201.09h48.07c27.02,94.57,36.37,133.28,38.45,145.23h.52c.78-10.91,6.24-35.07,9.61-51.7l20.27-93.53h32.22l-38.19,181.35h-46.51c-27.02-90.41-36.89-137.44-38.97-150.43h-.52c-1.3,11.17-7.53,42.09-11.69,61.58l-18.45,88.86h-33.26l38.45-181.35Z"/><path fill="#0046ff" d="M852.51,229.41l-53.78.78,6.24-29.1h140.82l-6.5,29.1-49.36-.78-33,153.03h-37.93l33.52-153.03Z"/><path fill="#0046ff" d="M1020.35,201.09h39.75l33.52,181.35h-36.11l-7.01-42.35h-77.42l-24.16,42.35h-40.27l111.72-181.35ZM1046.33,312.03c-9.09-53.52-10.91-75.34-11.69-84.7h-.52c-4.16,9.09-15.33,30.66-45.21,84.7h57.42Z"/><path fill="#0046ff" d="M1190.52,283.71l-40.27-82.62h38.97c16.63,37.41,23.64,55.6,27.02,64.43,6.24-9.09,20.27-27.02,50.66-64.43h43.13l-76.12,86.78,44.43,94.57h-39.23c-15.59-35.07-25.72-60.8-30.66-74.05-9.35,13.25-30.4,38.97-58.46,74.05h-44.69l85.22-98.73Z"/></svg>
+
+    <div class="m-cover-mid">
+      <h1 class="m-title">Service menu</h1>
+      <p class="m-sub">Websites, and the work that keeps them earning, for service businesses in the UK, Europe and North America. One team for the site, the brand, the copy and the video.</p>
+      <div class="m-assure"><strong>See your homepage design before you pay anything.</strong> After a quick call, we'll build your homepage concept free. If you don't want to go ahead after seeing it, you owe nothing.</div>
+      <p class="m-note">All prices in US dollars. Mon–Fri 07:00–19:00 · Sat 12:00–17:00 SAST (UTC+2).</p>
+      <ul class="m-index">
+        <li><a href="#web-design">Web Design</a></li>
+        <li><a href="#seo">SEO</a></li>
+        <li><a href="#ecommerce">E-Commerce</a></li>
+        <li><a href="#maintenance">Maintenance</a></li>
+        <li><a href="#booking-systems">Booking Systems</a></li>
+        <li><a href="#copywriting">Copywriting</a></li>
+        <li><a href="#video-editing">Video Editing</a></li>
+        <li><a href="#brand-identity">Brand Identity</a></li>
+      </ul>
+    </div>
+
+      <div class="m-contact">
+        <span><strong>WhatsApp</strong> <a href="https://wa.me/27650858437">+27 65 085 8437</a></span>
+        <span><strong>Email</strong> <a href="mailto:info@prismaticsyntax.com">info@prismaticsyntax.com</a></span>
+        <span><strong>Web</strong> <a href="https://www.prismaticsyntax.com/">prismaticsyntax.com</a></span>
+      </div>
+  </header>
+
+    <section class="m-svc" id="web-design">
+      <header class="m-svc-head">
+        <div class="m-svc-kicker">Web Design</div>
+        <h2>Turn a phone screen into a booked job</h2>
+        <p class="m-svc-lede">Most of your customers will meet you on a phone before they meet you in person. We build the site that decides whether they call you or the next name on the list.</p>
+      </header>
+
+      <div class="m-incl">
+        <h3>What's included</h3>
+        <ul><li>Designed from scratch</li><li>Built mobile first</li><li>Fast on a bad connection</li><li>WhatsApp chat button</li><li>Contact form that works</li><li>Google Business Profile</li><li>On-page SEO groundwork</li><li>Training and handover</li></ul>
+      </div>
+
+      <div class="m-pricing">
+        <h3>Pricing</h3>
+        <p class="m-pricing-lead">One-off, in USD and invoiced directly. A 50% deposit starts the work once you have approved the concept, and the balance is due before launch.</p>
+        
+          <div class="m-tier">
+            <div class="m-tier-top">
+              <span class="m-tier-name">Starter</span>
+              <span class="m-tier-price">$1,900</span>
+            </div>
+            <div class="m-tier-period">one-off · 3–5 pages</div>
+            <div class="m-tier-desc">A professional presence, up fast.</div>
+            <div class="m-tier-feats">3–5 pages &middot; Mobile-responsive design &middot; WhatsApp chat integration &middot; Contact form &middot; Google Business Profile setup &middot; Basic on-page SEO &middot; 1 round of revisions</div>
+          </div>
+          <div class="m-tier rec">
+            <div class="m-tier-top">
+              <span class="m-tier-name">Business<span class="m-rec">Recommended</span></span>
+              <span class="m-tier-price">$3,900</span>
+            </div>
+            <div class="m-tier-period">one-off · 6–8 pages</div>
+            <div class="m-tier-desc">For a site that has to bring in work.</div>
+            <div class="m-tier-feats">Everything in Starter &middot; 6–8 pages &middot; Copywriting for 3 pages &middot; Full on-page SEO &middot; Google Maps + Analytics &middot; Speed tuning for phones &middot; 2 rounds of revisions</div>
+          </div>
+          <div class="m-tier">
+            <div class="m-tier-top">
+              <span class="m-tier-name">Pro</span>
+              <span class="m-tier-price">$7,500</span>
+            </div>
+            <div class="m-tier-period">one-off · up to 12 pages</div>
+            <div class="m-tier-desc">Once the site has to sell or book, not just inform.</div>
+            <div class="m-tier-feats">Everything in Business &middot; Up to 12 pages &middot; E-commerce or booking system &middot; Payment gateway setup &middot; Full copywriting &middot; Blog setup + training &middot; 3 rounds of revisions</div>
+          </div>
+          <div class="m-tier">
+            <div class="m-tier-top">
+              <span class="m-tier-name">Premium</span>
+              <span class="m-tier-price">$15,000+</span>
+            </div>
+            <div class="m-tier-period">fully custom · scoped with you</div>
+            <div class="m-tier-desc">Bespoke builds and integrations.</div>
+            <div class="m-tier-feats">Discovery &amp; strategy workshop &middot; Unlimited pages &middot; Custom features, connected to the tools you already use &middot; Full SEO strategy &middot; Direct line to the founders throughout &middot; 4 rounds of revisions</div>
+          </div>
+      </div>
+
+      <div class="m-contact">
+        <span><strong>WhatsApp</strong> <a href="https://wa.me/27650858437">+27 65 085 8437</a></span>
+        <span><strong>Email</strong> <a href="mailto:info@prismaticsyntax.com">info@prismaticsyntax.com</a></span>
+        <span><strong>Web</strong> <a href="https://www.prismaticsyntax.com/">prismaticsyntax.com</a></span>
+      </div>
+    </section>
+
+    <section class="m-svc" id="seo">
+      <header class="m-svc-head">
+        <div class="m-svc-kicker">SEO</div>
+        <h2>Get found by the people already searching for what you do</h2>
+        <p class="m-svc-lede">Someone in your area types "plumber near me" a few times a day. SEO is the work that decides whether your name is on that screen or your competitor's is.</p>
+      </header>
+
+      <div class="m-incl">
+        <h3>What's included</h3>
+        <ul><li>Keyword research</li><li>On-page SEO</li><li>Google Business Profile</li><li>Technical audit</li><li>Speed and Core Web Vitals</li><li>Monthly ranking report</li></ul>
+      </div>
+
+      <div class="m-pricing">
+        <h3>Pricing</h3>
+        <p class="m-pricing-lead">Standalone SEO in USD, priced for a site the size we build. A much larger site scales the audit, and we tell you before starting rather than after.</p>
+        
+          <div class="m-tier">
+            <div class="m-tier-top">
+              <span class="m-tier-name">SEO audit</span>
+              <span class="m-tier-price">$950</span>
+            </div>
+            <div class="m-tier-period">one-off</div>
+            <div class="m-tier-desc">A full technical and on-page audit of your existing site, with a prioritised list of what to fix.</div>
+            <div class="m-tier-feats">Technical crawl and error report &middot; On-page review, page by page &middot; Keyword and competitor snapshot &middot; Google Business Profile review &middot; Prioritised action list you can hand to anyone</div>
+          </div>
+          <div class="m-tier rec">
+            <div class="m-tier-top">
+              <span class="m-tier-name">Setup &amp; fix<span class="m-rec">Recommended</span></span>
+              <span class="m-tier-price">$2,200</span>
+            </div>
+            <div class="m-tier-period">one-off</div>
+            <div class="m-tier-desc">The audit, then the work to actually fix what it found.</div>
+            <div class="m-tier-feats">Everything in the audit &middot; On-page SEO implemented &middot; Technical fixes applied &middot; Google Business Profile set up or cleaned up &middot; Sitemap and structured data</div>
+          </div>
+          <div class="m-tier">
+            <div class="m-tier-top">
+              <span class="m-tier-name">Ongoing SEO</span>
+              <span class="m-tier-price">$650</span>
+            </div>
+            <div class="m-tier-period">per month, on top of a retainer</div>
+            <div class="m-tier-desc">Continuous work and reporting, on top of a maintenance retainer.</div>
+            <div class="m-tier-feats">Monthly ranking report &middot; Ongoing on-page improvements &middot; Content recommendations &middot; Google Business Profile upkeep &middot; Competitor movement</div>
+          </div>
+      </div>
+
+      <div class="m-contact">
+        <span><strong>WhatsApp</strong> <a href="https://wa.me/27650858437">+27 65 085 8437</a></span>
+        <span><strong>Email</strong> <a href="mailto:info@prismaticsyntax.com">info@prismaticsyntax.com</a></span>
+        <span><strong>Web</strong> <a href="https://www.prismaticsyntax.com/">prismaticsyntax.com</a></span>
+      </div>
+    </section>
+
+    <section class="m-svc" id="ecommerce">
+      <header class="m-svc-head">
+        <div class="m-svc-kicker">E-Commerce</div>
+        <h2>Sell online without the checkout falling over</h2>
+        <p class="m-svc-lede">Taking orders through DMs and manual bank transfers works until it does not. A proper shop takes the payment, records the order and tells you about it, while you are doing something else.</p>
+      </header>
+
+      <div class="m-incl">
+        <h3>What's included</h3>
+        <ul><li>Product catalogue</li><li>Secure card checkout</li><li>Stripe integration</li><li>Inventory management</li><li>Order notifications</li><li>Shipping and collection</li><li>Built for phone checkout</li><li>Training and handover</li></ul>
+      </div>
+
+      <div class="m-pricing">
+        <h3>Pricing</h3>
+        <p class="m-pricing-lead">In USD. A small shop fits on the Business package; a full catalogue is Pro. Larger catalogues or custom integrations move to Premium, which is quoted after a discovery session.</p>
+        
+          <div class="m-tier">
+            <div class="m-tier-top">
+              <span class="m-tier-name">Business</span>
+              <span class="m-tier-price">$4,500</span>
+            </div>
+            <div class="m-tier-period">one-off · 6–8 pages</div>
+            <div class="m-tier-desc">A proper website with a shop built in.</div>
+            <div class="m-tier-feats">Everything in the Business website package &middot; Online shop with up to 50 products &middot; Stripe checkout &middot; Order email notifications &middot; 2 rounds of revisions</div>
+          </div>
+          <div class="m-tier rec">
+            <div class="m-tier-top">
+              <span class="m-tier-name">Pro<span class="m-rec">Recommended</span></span>
+              <span class="m-tier-price">$7,500</span>
+            </div>
+            <div class="m-tier-period">one-off · up to 12 pages</div>
+            <div class="m-tier-desc">A complete shop on a complete website.</div>
+            <div class="m-tier-feats">Everything in the Business package &middot; Full product catalogue &middot; Secure checkout &middot; Stripe payment gateway setup &middot; Inventory and order notifications &middot; Full copywriting &middot; 3 rounds of revisions</div>
+          </div>
+          <div class="m-tier">
+            <div class="m-tier-top">
+              <span class="m-tier-name">Premium</span>
+              <span class="m-tier-price">$15,000+</span>
+            </div>
+            <div class="m-tier-period">fully custom</div>
+            <div class="m-tier-desc">Large catalogues, custom logic or an integration with the system you already run.</div>
+            <div class="m-tier-feats">Discovery &amp; strategy workshop &middot; Unlimited products and pages &middot; Custom functionality / API integrations &middot; Accounting or stock system integration &middot; Direct line to the founders throughout</div>
+          </div>
+      </div>
+
+      <div class="m-contact">
+        <span><strong>WhatsApp</strong> <a href="https://wa.me/27650858437">+27 65 085 8437</a></span>
+        <span><strong>Email</strong> <a href="mailto:info@prismaticsyntax.com">info@prismaticsyntax.com</a></span>
+        <span><strong>Web</strong> <a href="https://www.prismaticsyntax.com/">prismaticsyntax.com</a></span>
+      </div>
+    </section>
+
+    <section class="m-svc" id="maintenance">
+      <header class="m-svc-head">
+        <div class="m-svc-kicker">Maintenance</div>
+        <h2>Your site stays up and current, without you thinking about it</h2>
+        <p class="m-svc-lede">Websites do not fail loudly. A certificate expires, a form stops sending, prices go stale, and you find out weeks later from a customer. A retainer is the arrangement where that stops being your problem.</p>
+      </header>
+
+      <div class="m-incl">
+        <h3>What's included</h3>
+        <ul><li>Hosting included</li><li>Weekly backups</li><li>Security &amp; SSL monitoring</li><li>Content updates</li><li>Uptime monitoring</li><li>Monthly report</li></ul>
+      </div>
+
+      <div class="m-pricing">
+        <h3>Pricing</h3>
+        <p class="m-pricing-lead">Monthly, in USD. Each plan pairs with a website package, but you do not have to have bought the site from us. Cancel any time with 30 days' notice.</p>
+        
+          <div class="m-tier">
+            <div class="m-tier-top">
+              <span class="m-tier-name">Starter Care</span>
+              <span class="m-tier-price">$300<span class="m-per">/mo</span></span>
+            </div>
+            <div class="m-tier-period">pairs with Starter</div>
+            <div class="m-tier-desc">Keeps the site you paid for from quietly breaking.</div>
+            <div class="m-tier-feats">Hosting included &middot; Weekly backups &middot; Security &amp; SSL monitoring &middot; Content updates (1hr/mo)</div>
+          </div>
+          <div class="m-tier rec">
+            <div class="m-tier-top">
+              <span class="m-tier-name">Business Care<span class="m-rec">Recommended</span></span>
+              <span class="m-tier-price">$450<span class="m-per">/mo</span></span>
+            </div>
+            <div class="m-tier-period">pairs with Business</div>
+            <div class="m-tier-desc">For a site that has to bring in work, not just sit there.</div>
+            <div class="m-tier-feats">Everything in Starter Care &middot; Content updates (2hr/mo) &middot; Monthly SEO report &middot; Same-day reply on weekdays</div>
+          </div>
+          <div class="m-tier">
+            <div class="m-tier-top">
+              <span class="m-tier-name">Pro Care</span>
+              <span class="m-tier-price">$700<span class="m-per">/mo</span></span>
+            </div>
+            <div class="m-tier-period">pairs with Pro</div>
+            <div class="m-tier-desc">For sites with a shop or a booking system.</div>
+            <div class="m-tier-feats">Everything in Business Care &middot; Store / booking support &middot; SEO monitoring &amp; reporting &middot; Content updates (4hr/mo)</div>
+          </div>
+          <div class="m-tier">
+            <div class="m-tier-top">
+              <span class="m-tier-name">Premium Care</span>
+              <span class="m-tier-price">$1,200+<span class="m-per">/mo</span></span>
+            </div>
+            <div class="m-tier-period">pairs with Premium</div>
+            <div class="m-tier-desc">For businesses where the website is the front door.</div>
+            <div class="m-tier-feats">Everything in Pro Care &middot; Fully managed service &middot; Agreed response times in writing &middot; Direct technical contact &middot; Strategy &amp; review calls</div>
+          </div>
+      </div>
+
+      <div class="m-contact">
+        <span><strong>WhatsApp</strong> <a href="https://wa.me/27650858437">+27 65 085 8437</a></span>
+        <span><strong>Email</strong> <a href="mailto:info@prismaticsyntax.com">info@prismaticsyntax.com</a></span>
+        <span><strong>Web</strong> <a href="https://www.prismaticsyntax.com/">prismaticsyntax.com</a></span>
+      </div>
+    </section>
+
+    <section class="m-svc" id="booking-systems">
+      <header class="m-svc-head">
+        <div class="m-svc-kicker">Booking Systems</div>
+        <h2>Let clients book themselves in while you are on the job</h2>
+        <p class="m-svc-lede">Every booking taken by phone is a job interrupted, and every missed call is a booking that went to somebody else. A calendar on your site takes them while your hands are full.</p>
+      </header>
+
+      <div class="m-incl">
+        <h3>What's included</h3>
+        <ul><li>Online booking calendar</li><li>Service and staff selection</li><li>Automatic confirmations</li><li>Reminders</li><li>Custom availability</li><li>Optional booking deposit</li></ul>
+      </div>
+
+      <div class="m-pricing">
+        <h3>Pricing</h3>
+        <p class="m-pricing-lead">In USD. A booking system is part of the Pro package. More complicated setups, or an integration with software you already run, move to Premium.</p>
+        
+          <div class="m-tier rec">
+            <div class="m-tier-top">
+              <span class="m-tier-name">Pro<span class="m-rec">Recommended</span></span>
+              <span class="m-tier-price">$7,500</span>
+            </div>
+            <div class="m-tier-period">one-off · up to 12 pages</div>
+            <div class="m-tier-desc">A booking system on a complete website.</div>
+            <div class="m-tier-feats">Everything in the Business package &middot; Online booking calendar &middot; Service and staff selection &middot; Automatic confirmations and reminders &middot; Custom availability rules &middot; Full copywriting &middot; 3 rounds of revisions</div>
+          </div>
+          <div class="m-tier">
+            <div class="m-tier-top">
+              <span class="m-tier-name">Premium</span>
+              <span class="m-tier-price">$15,000+</span>
+            </div>
+            <div class="m-tier-period">fully custom</div>
+            <div class="m-tier-desc">Multiple locations, complex rules, or integration with your existing system.</div>
+            <div class="m-tier-feats">Discovery &amp; strategy workshop &middot; Multi-location or multi-team scheduling &middot; Custom functionality / API integrations &middot; Integration with software you already use &middot; Direct line to the founders throughout</div>
+          </div>
+      </div>
+
+      <div class="m-contact">
+        <span><strong>WhatsApp</strong> <a href="https://wa.me/27650858437">+27 65 085 8437</a></span>
+        <span><strong>Email</strong> <a href="mailto:info@prismaticsyntax.com">info@prismaticsyntax.com</a></span>
+        <span><strong>Web</strong> <a href="https://www.prismaticsyntax.com/">prismaticsyntax.com</a></span>
+      </div>
+    </section>
+
+    <section class="m-svc" id="copywriting">
+      <header class="m-svc-head">
+        <div class="m-svc-kicker">Copywriting</div>
+        <h2>Words that answer the question your customer is actually asking</h2>
+        <p class="m-svc-lede">Most small business websites talk about the business. The ones that get enquiries talk about the problem the visitor arrived with, and then make it obvious what to do next.</p>
+      </header>
+
+      <div class="m-incl">
+        <h3>What's included</h3>
+        <ul><li>Homepage and about copy</li><li>Service page content</li><li>Written for search</li><li>Blog posts</li><li>Proofreading and editing</li><li>Tone of voice</li></ul>
+      </div>
+
+      <div class="m-pricing">
+        <h3>Pricing</h3>
+        <p class="m-pricing-lead">Standalone copywriting, in USD. A three-page site and a twelve-page site are different jobs, so the full-site price below covers up to eight pages and scales past that.</p>
+        
+          <div class="m-tier">
+            <div class="m-tier-top">
+              <span class="m-tier-name">Page pack</span>
+              <span class="m-tier-price">$275</span>
+            </div>
+            <div class="m-tier-period">per page</div>
+            <div class="m-tier-desc">Individual pages written to order, for a site that is otherwise fine.</div>
+            <div class="m-tier-feats">Briefing call &middot; Keyword and audience research &middot; Written to your tone of voice &middot; Meta title and description &middot; Two rounds of changes</div>
+          </div>
+          <div class="m-tier rec">
+            <div class="m-tier-top">
+              <span class="m-tier-name">Full site copy<span class="m-rec">Recommended</span></span>
+              <span class="m-tier-price">$1,800</span>
+            </div>
+            <div class="m-tier-period">one-off · up to 8 pages</div>
+            <div class="m-tier-desc">Every page on the site, written as one consistent piece of work.</div>
+            <div class="m-tier-feats">Tone of voice defined up front &middot; Homepage, about and all service pages &middot; Written for search &middot; Calls to action throughout &middot; Meta titles and descriptions</div>
+          </div>
+          <div class="m-tier">
+            <div class="m-tier-top">
+              <span class="m-tier-name">Ongoing content</span>
+              <span class="m-tier-price">$750</span>
+            </div>
+            <div class="m-tier-period">per month</div>
+            <div class="m-tier-desc">Regular articles that answer what customers ask before they buy.</div>
+            <div class="m-tier-feats">Two posts a month &middot; Topics chosen from real search demand &middot; Written for search &middot; Published and formatted for you &middot; Internal links back to your service pages</div>
+          </div>
+      </div>
+
+      <div class="m-contact">
+        <span><strong>WhatsApp</strong> <a href="https://wa.me/27650858437">+27 65 085 8437</a></span>
+        <span><strong>Email</strong> <a href="mailto:info@prismaticsyntax.com">info@prismaticsyntax.com</a></span>
+        <span><strong>Web</strong> <a href="https://www.prismaticsyntax.com/">prismaticsyntax.com</a></span>
+      </div>
+    </section>
+
+    <section class="m-svc" id="video-editing">
+      <header class="m-svc-head">
+        <div class="m-svc-kicker">Video Editing</div>
+        <h2>Turn the footage on your phone into something worth posting</h2>
+        <p class="m-svc-lede">You already film the work. A tidy sixty-second cut of a job going well does more for a trade business than any stock photo, and it costs you nothing extra to shoot.</p>
+      </header>
+
+      <div class="m-incl">
+        <h3>What's included</h3>
+        <ul><li>Edit and assembly</li><li>Vertical and landscape</li><li>Subtitles and captions</li><li>Colour and sound</li><li>Branded intro and end card</li><li>Licensed music</li><li>Thumbnails</li><li>Compressed for the web</li></ul>
+      </div>
+
+      <div class="m-pricing">
+        <h3>Pricing</h3>
+        <p class="m-pricing-lead">Editing only, from footage you supply, in USD. A finished cut is up to about 90 seconds; longer pieces are quoted once we have seen the material.</p>
+        
+          <div class="m-tier">
+            <div class="m-tier-top">
+              <span class="m-tier-name">Single cut</span>
+              <span class="m-tier-price">$195</span>
+            </div>
+            <div class="m-tier-period">per video</div>
+            <div class="m-tier-desc">One edited video from footage you supply.</div>
+            <div class="m-tier-feats">One edit from your raw clips &middot; Vertical and landscape export &middot; Burned-in subtitles &middot; Colour and audio levelling &middot; Licensed music &middot; One round of changes</div>
+          </div>
+          <div class="m-tier rec">
+            <div class="m-tier-top">
+              <span class="m-tier-name">Batch<span class="m-rec">Recommended</span></span>
+              <span class="m-tier-price">$850</span>
+            </div>
+            <div class="m-tier-period">five videos</div>
+            <div class="m-tier-desc">A set of clips cut from one shoot or one month of footage.</div>
+            <div class="m-tier-feats">Five finished videos &middot; Consistent look across the set &middot; Vertical and landscape exports &middot; Subtitles on every cut &middot; Branded intro and end card &middot; Thumbnails</div>
+          </div>
+          <div class="m-tier">
+            <div class="m-tier-top">
+              <span class="m-tier-name">Monthly</span>
+              <span class="m-tier-price">$640</span>
+            </div>
+            <div class="m-tier-period">four videos a month</div>
+            <div class="m-tier-desc">A standing arrangement: you send footage, edited clips come back.</div>
+            <div class="m-tier-feats">Four finished videos a month &middot; Ongoing consistent branding &middot; Subtitles and thumbnails included &middot; Exports for every platform you post to &middot; Priority in the queue</div>
+          </div>
+      </div>
+
+      <div class="m-contact">
+        <span><strong>WhatsApp</strong> <a href="https://wa.me/27650858437">+27 65 085 8437</a></span>
+        <span><strong>Email</strong> <a href="mailto:info@prismaticsyntax.com">info@prismaticsyntax.com</a></span>
+        <span><strong>Web</strong> <a href="https://www.prismaticsyntax.com/">prismaticsyntax.com</a></span>
+      </div>
+    </section>
+
+    <section class="m-svc" id="brand-identity">
+      <header class="m-svc-head">
+        <div class="m-svc-kicker">Brand Identity</div>
+        <h2>Look like the same business everywhere someone finds you</h2>
+        <p class="m-svc-lede">A logo stretched on the van, different colours on the website, and a card someone made in Word. None of it is wrong on its own. Together it reads as a business that is not quite established yet.</p>
+      </header>
+
+      <div class="m-incl">
+        <h3>What's included</h3>
+        <ul><li>Logo design</li><li>Colour palette</li><li>Typography</li><li>Usage guidelines</li><li>Social profile assets</li><li>Print-ready files</li><li>Vector files you own</li></ul>
+      </div>
+
+      <div class="m-pricing">
+        <h3>Pricing</h3>
+        <p class="m-pricing-lead">One-off, in USD. If you already have a mark worth keeping, a refresh is quoted lower than a rebuild, and we will tell you which one you actually need.</p>
+        
+          <div class="m-tier">
+            <div class="m-tier-top">
+              <span class="m-tier-name">Logo only</span>
+              <span class="m-tier-price">$950</span>
+            </div>
+            <div class="m-tier-period">one-off</div>
+            <div class="m-tier-desc">A mark and its variations, for a business that needs the one thing.</div>
+            <div class="m-tier-feats">Primary logo plus variations &middot; Icon version for profiles and favicon &middot; Black, white and reversed versions &middot; Vector source files &middot; Three concepts, two rounds of changes</div>
+          </div>
+          <div class="m-tier rec">
+            <div class="m-tier-top">
+              <span class="m-tier-name">Identity<span class="m-rec">Recommended</span></span>
+              <span class="m-tier-price">$1,900</span>
+            </div>
+            <div class="m-tier-period">one-off</div>
+            <div class="m-tier-desc">The logo, plus the colours and type that go with it.</div>
+            <div class="m-tier-feats">Everything in Logo only &middot; Colour palette for screen, print and paint &middot; Typography pairing &middot; Usage guidelines document &middot; Social profile assets</div>
+          </div>
+          <div class="m-tier">
+            <div class="m-tier-top">
+              <span class="m-tier-name">Identity + collateral</span>
+              <span class="m-tier-price">$2,900</span>
+            </div>
+            <div class="m-tier-period">one-off</div>
+            <div class="m-tier-desc">The identity, applied to the things you actually hand people.</div>
+            <div class="m-tier-feats">Everything in Identity &middot; Business card artwork &middot; Letterhead and quote template &middot; Vehicle or signage artwork &middot; Print-ready files for your supplier</div>
+          </div>
+      </div>
+
+      <div class="m-contact">
+        <span><strong>WhatsApp</strong> <a href="https://wa.me/27650858437">+27 65 085 8437</a></span>
+        <span><strong>Email</strong> <a href="mailto:info@prismaticsyntax.com">info@prismaticsyntax.com</a></span>
+        <span><strong>Web</strong> <a href="https://www.prismaticsyntax.com/">prismaticsyntax.com</a></span>
+      </div>
+    </section>
+
+  <section class="m-end">
+    <h2>Tell us what you need</h2>
+    <p>Send a message with what your business does and what you are trying to fix. We'll come back with a straight answer on whether we can help and what it would cost.</p>
+
+      <div class="m-contact">
+        <span><strong>WhatsApp</strong> <a href="https://wa.me/27650858437">+27 65 085 8437</a></span>
+        <span><strong>Email</strong> <a href="mailto:info@prismaticsyntax.com">info@prismaticsyntax.com</a></span>
+        <span><strong>Web</strong> <a href="https://www.prismaticsyntax.com/">prismaticsyntax.com</a></span>
+      </div>
+    <p class="m-note">Mon–Fri 07:00–19:00 · Sat 12:00–17:00 SAST (UTC+2)</p>
+  </section>
+
+</div>
+</body>
+</html>

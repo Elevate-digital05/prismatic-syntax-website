@@ -12,6 +12,9 @@ import { build } from './build.mjs';
 import { SERVICES, HOURS } from './lib/services.js';
 
 const { out, tbc } = build({ write: false });
+// The international blog is hand-written, like the rand one.
+const INTL_BLOG = ['international/blog.html', 'international/blog/website-cost-2026.html',
+                   'international/blog/mobile-first-web-design.html', 'international/blog/website-enquiries.html'];
 
 /* ── generated output is current ── */
 for (const [path, expected] of out) {
@@ -69,12 +72,64 @@ for (const svc of SERVICES) {
 }
 console.log(`ok pages: ${SERVICES.length} service pages carry legal links, meta, the concept offer and honest hours`);
 
+/* ── the international service pages ── /international/<slug>, in USD. Same
+   promises as the rand pages, none of their South African copy, and the package
+   and retainer tiers at exactly the figures lib/pricing-usd.js and the homepage use. */
+{
+  const { USD_PACKAGES, USD_RETAINERS } = await import('./lib/pricing-usd.js');
+  const { HOURS_INTL } = await import('./lib/services-intl.js');
+  const homeIntl = out.get('index.html');
+  const dollars = n => '$' + String(n).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  for (const svc of SERVICES) {
+    const page = out.get(`international/${svc.slug}.html`);
+    const at = m => `international/${svc.slug}: ${m}`;
+    assert.ok(page, at('was not generated'));
+    for (const legal of ['/privacy', '/terms', '/refund-policy']) assert.ok(page.includes(`href="${legal}"`), at(`footer is missing ${legal}`));
+    assert.ok(page.includes(`<link rel="canonical" href="https://www.prismaticsyntax.com/international/${svc.slug}">`), at('canonical points at the wrong URL'));
+    assert.ok(page.includes(`hreflang="en-ZA" href="https://www.prismaticsyntax.com/services/${svc.slug}"`), at('does not name its rand counterpart in hreflang'));
+    assert.ok(JSON.parse(page.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/)[1]), at('structured data is not valid JSON'));
+    assert.ok(page.includes(HOURS_INTL), at('does not state the real support hours with their UTC offset'));
+    assert.ok(page.includes('href="/#contact"'), at('has no route to the call request on /'));
+    assert.ok(homeIntl.includes(`href="/international/${svc.slug}"`), at('the homepage does not link to it'));
+    for (const banned of ['South Africa', 'Cape Town', 'Paystack', 'ZAR', 'en_ZA', 'geo.', 'name="keywords"', 'VAT', 'once-off', ' rands', 'EFT', 'href="/south-africa', 'href="/services/']) {
+      assert.ok(!page.includes(banned), at(`contains "${banned}", which belongs on the rand pages`));
+    }
+    assert.doesNotMatch(page, /\bR\d{1,3}(,\d{3})+|\bR\d{4,}|optimiz|specializ/, at('shows a rand figure or American spelling'));
+    for (const m of page.matchAll(/SAST/g)) assert.equal(page.slice(m.index, m.index + 12), 'SAST (UTC+2)', at('names SAST without its UTC offset'));
+    for (const [, name, amount] of page.matchAll(/<div class="tier-name">([^<]+)<\/div>\s*<div class="tier-price">([^<]+)/g)) {
+      assert.match(amount, /^\$\d{1,3}(,\d{3})*\+?$/, at(`"${name}" is not a whole-dollar price: ${amount}`));
+      const listed = svc.slug === 'ecommerce' && name === 'Business' ? null : (USD_PACKAGES[name] ?? USD_RETAINERS[name]);
+      if (listed != null) assert.equal(amount.replace('+', ''), dollars(listed), at(`"${name}" is ${amount} but lib/pricing-usd.js lists ${dollars(listed)}`));
+    }
+  }
+  for (const [name, n] of Object.entries(USD_RETAINERS)) {
+    assert.ok(homeIntl.includes(`<div class="m-name">${name}</div><div class="m-price">${dollars(n)}`), `the homepage does not show ${name} at ${dollars(n)}`);
+  }
+  // The international menu and blog: same rules as the service pages.
+  const intlMenu = out.get('international/menu.html');
+  assert.ok(intlMenu && intlMenu.includes('name="robots" content="noindex, nofollow"'), 'international/menu.html is missing or indexable');
+  assert.ok(!out.get('sitemap.xml').includes('/international/menu'), 'the international menu is in the sitemap but marked noindex');
+  for (const [page, body] of [['international/menu.html', intlMenu], ...INTL_BLOG.map(p => [p, readFileSync(p, 'utf8')])]) {
+    for (const banned of ['South Africa', 'Cape Town', 'Paystack', 'ZAR', 'en_ZA', 'VAT', 'once-off', 'href="/south-africa', 'href="/services/', 'href="/blog/']) {
+      assert.ok(!body.includes(banned), `${page} contains "${banned}", which belongs on the rand pages`);
+    }
+    assert.doesNotMatch(body, /\bR\d{1,3}(,\d{3})+|\bR\d{4,}|optimiz|specializ/, `${page} shows a rand figure or American spelling`);
+  }
+  for (const p of INTL_BLOG) assert.ok(out.get('sitemap.xml').includes(`/${p.replace(/\.html$/, '')}</loc>`), `sitemap.xml does not list ${p}`);
+  assert.ok(homeIntl.includes('href="/international/blog"'), 'the homepage does not link to the international blog');
+  // The cost post quotes the packages by hand, so hold it to the price sheet.
+  const costPost = readFileSync('international/blog/website-cost-2026.html', 'utf8');
+  for (const [name, n] of Object.entries(USD_PACKAGES)) assert.ok(costPost.includes(`<strong>${dollars(n)}</strong>`), `the cost post does not quote ${name} at ${dollars(n)}`);
+  assert.ok(costPost.includes(`from ${dollars(USD_RETAINERS['Starter Care'])} a month`), 'the cost post quotes the wrong care plan starting price');
+  console.log(`ok international: ${SERVICES.length} USD service pages, a USD menu and ${INTL_BLOG.length} blog pages, priced from lib/pricing-usd.js, no rand copy, linked from /`);
+}
+
 /* ── the hand-written standalone pages, held to the same bar ──
    These are not generated, so nothing else would notice if they fell behind.
    The blog posts did: they carried a text wordmark instead of the logo and had
    no legal links at all, which is a POPIA gap on a page that gets shared. */
 for (const page of ['blog/website-cost-south-africa-2026.html', 'blog/whatsapp-marketing-website.html',
-                    'blog/mobile-first-web-design-south-africa.html',
+                    'blog/mobile-first-web-design-south-africa.html', ...INTL_BLOG,
                     'privacy.html', 'terms.html', 'refund-policy.html']) {
   const html = readFileSync(page, 'utf8');
   const legal = ['/privacy', '/terms', '/refund-policy'].filter(l => html.includes(`href="${l}"`));
@@ -172,7 +227,7 @@ const resolves = href => {
 
 const linkSources = [...out].map(([p, b]) => [p, b]).concat(
   ['blog/website-cost-south-africa-2026.html', 'blog/whatsapp-marketing-website.html',
-   'blog/mobile-first-web-design-south-africa.html', 'privacy.html', 'terms.html', 'refund-policy.html']
+   'blog/mobile-first-web-design-south-africa.html', ...INTL_BLOG, 'privacy.html', 'terms.html', 'refund-policy.html']
     .map(p => [p, readFileSync(p, 'utf8')]));
 
 let links = 0;

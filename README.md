@@ -4,9 +4,11 @@ Static site. No framework, no dependencies. Two entry pages share one stylesheet
 (`home.css`), the hero motion (`home.js`) and the hero's live WebGL glass form
 (`prism.js`):
 
-- `index.html` is the international homepage. English only, one long page, no
-  rand prices, no currency or language switch. Contact offers a call first, then
-  email, then WhatsApp.
+- `index.html` is the international homepage. English only, no rand prices, no
+  currency or language switch. Like `/south-africa` it is five views in one file
+  (Home, Services, Packages, Blog, Contact), switched by a hash router that also
+  sends anchors inside a view (`/#retainers`, `/#faq`, the older `/#pricing`) to
+  the right one. Contact offers a call first, then email, then WhatsApp.
 - `south-africa.html` (`/south-africa`) is the site for South African trades and
   service businesses, and was the homepage until September 2026. Via
   `showPage()` it is also the services / packages / blog / contact views, with
@@ -37,8 +39,8 @@ rendered from the same `lib/services.js` entry with `lib/services-intl.js` laid
 over it (the USD tier prices, and only the copy that names South Africa, rands,
 EFTs or Paystack). The homepage's service rows link there, never to the rand
 pages, and the two versions of each page name each other in hreflang.
-The international blog is hand-written at `/international/blog` (index) and
-`/international/blog/<slug>`; the posts under `/blog/` stay South African. The
+The international blog posts are hand-written at `/international/blog/<slug>`
+and listed in the Blog view on `/` (`/international/blog` redirects there); the posts under `/blog/` stay South African. The
 service pages' "Request a call" buttons send `?package=…&service=…` to the form
 on `/`, which preselects the package or retainer and starts the message.
 

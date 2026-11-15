@@ -3,6 +3,11 @@
   "trailingSlash": false,
   "redirects": [
     {
+      "source": "/international/blog",
+      "destination": "/#blog",
+      "permanent": true
+    },
+    {
       "source": "/website-cost-south-africa-2026",
       "destination": "/blog/website-cost-south-africa-2026",
       "permanent": true

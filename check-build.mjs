@@ -13,7 +13,7 @@ import { SERVICES, HOURS } from './lib/services.js';
 
 const { out, tbc } = build({ write: false });
 // The international blog is hand-written, like the rand one.
-const INTL_BLOG = ['international/blog.html', 'international/blog/website-cost-2026.html',
+const INTL_BLOG = ['international/blog/website-cost-2026.html',
                    'international/blog/mobile-first-web-design.html', 'international/blog/website-enquiries.html'];
 
 /* ── generated output is current ── */
@@ -116,7 +116,7 @@ console.log(`ok pages: ${SERVICES.length} service pages carry legal links, meta,
     assert.doesNotMatch(body, /\bR\d{1,3}(,\d{3})+|\bR\d{4,}|optimiz|specializ/, `${page} shows a rand figure or American spelling`);
   }
   for (const p of INTL_BLOG) assert.ok(out.get('sitemap.xml').includes(`/${p.replace(/\.html$/, '')}</loc>`), `sitemap.xml does not list ${p}`);
-  assert.ok(homeIntl.includes('href="/international/blog"'), 'the homepage does not link to the international blog');
+  for (const p of INTL_BLOG) assert.ok(homeIntl.includes(`<a class="blog-card" href="/${p.replace(/\.html$/, '')}">`), `the blog view on / has no card for ${p}`);
   // The cost post quotes the packages by hand, so hold it to the price sheet.
   const costPost = readFileSync('international/blog/website-cost-2026.html', 'utf8');
   for (const [name, n] of Object.entries(USD_PACKAGES)) assert.ok(costPost.includes(`<strong>${dollars(n)}</strong>`), `the cost post does not quote ${name} at ${dollars(n)}`);
@@ -533,11 +533,16 @@ for (const [needle, what] of [['prefers-reduced-transparency:reduce', 'its reduc
 console.log('ok glass: home.css, site.css and article.css keep solid fallbacks for reduced transparency, increased contrast and no backdrop-filter');
 
 /* ── the homepage menus follow the page ── the nav once listed Pricing before
-   Team while the page showed Team first. The nav, the mobile menu and the footer
-   must list sections in the order they appear. */
-const sectionOrder = [...home.matchAll(/<div class="band[^"]*" id="([a-z]+)"/g)].map(m => m[1]);
+   Team while the page showed Team first. Since / became five views like
+   /south-africa, the nav, the mobile menu and the footer must each name every
+   view, in the order the views sit in the page. */
+const sectionOrder = [...home.matchAll(/<section class="page[^"]*" id="page-([a-z]+)"/g)].map(m => m[1]);
+assert.deepEqual(sectionOrder, ['home', 'services', 'packages', 'blog', 'contact'], `/ has the views ${sectionOrder.join(', ')}; it mirrors /south-africa's five`);
 const inOrder = html => [...new Set([...html.matchAll(/href="#([a-z]+)"/g)].map(m => m[1]))].filter(id => sectionOrder.includes(id));
-const expected = list => sectionOrder.filter(id => list.includes(id));
+const expected = () => sectionOrder;
+// A hash names a view or something inside one; the router is what makes /#pricing land on Packages.
+assert.match(home, /addEventListener\('popstate', route\)/, '/ lost its view router, so /#packages and /#contact land on the hero');
+assert.match(home, /<section class="page active" id="page-home">/, '/ does not open on the home view');
 for (const [what, html] of [['nav', home.slice(home.indexOf('<nav'), home.indexOf('</nav>'))],
                             ['mobile menu', home.slice(home.indexOf('id="mobileMenu"'), home.indexOf('<main'))],
                             // the Studio column only; the Contact column lists ways to get in touch, not sections

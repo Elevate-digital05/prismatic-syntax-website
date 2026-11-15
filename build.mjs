@@ -178,8 +178,7 @@ const INTL_R = {
   footContact: `<a href="mailto:${EMAIL}">${EMAIL}</a><br>
         <a href="https://wa.me/${WA}" target="_blank" rel="noopener noreferrer">${PHONE}</a><br>
         <span class="foot-hours">${HOURS_INTL}</span>`,
-  company: [['Home', '/'], ['Services', '/#services'], ['Process', '/#process'], ['Pricing', '/#pricing'],
-            ['Blog', '/international/blog'], ['Contact', '/#contact']],
+  company: [['Home', '/'], ['Services', '/#services'], ['Packages', '/#packages'], ['Blog', '/#blog'], ['Contact', '/#contact']],
   menu: {
     file: 'international/menu.html',
     currency: 'US dollars',
@@ -684,15 +683,16 @@ function inject(text, key, body, file) {
   return text.slice(0, i + open.length) + '\n' + body + '\n' + text.slice(j);
 }
 
-// The service cards on /south-africa.
-const homeCards = SERVICES.map(s => {
-  return `      <a class="svc-card" href="/services/${s.slug}">` +
+// The service cards on /south-africa, and the same cards on / pointing at /international.
+const svcCards = (R, indent) => SERVICES.map(s => {
+  return `${indent}<a class="svc-card" href="${R.path(s.slug)}">` +
     `<div class="svc-icon" aria-hidden="true">${icon(s.icon, 22)}</div>` +
     `<div class="svc-name">${esc(s.name)}</div>` +
     `<div class="svc-desc">${esc(s.cardDesc)}</div>` +
     `<ul class="svc-list">${s.cardList.map(l => `<li>${esc(l)}</li>`).join('')}</ul>` +
     `<span class="svc-more">Read more →</span></a>`;
 }).join('\n');
+const homeCards = svcCards(ZA, '      ');
 
 const footerServices = SERVICES.map(s =>
   `      <li><a href="/services/${s.slug}">${esc(s.nav)}</a></li>`).join('\n');
@@ -736,8 +736,18 @@ const sitemapEntries = [...SERVICES.map(s => [ZA.path(s.slug), SERVICES_LASTMOD]
    index.html is the international studio page; everything written for South
    African trades lives on south-africa.html. Each service links to its
    international page at /international/<slug>, in USD, never to the rand one. */
-const intlServices = SERVICES.map(s =>
-  `        <li><a href="${INTL_R.path(s.slug)}"><div class="svc-name">${esc(s.name)}</div><div class="svc-desc">${esc(s.cardDesc)}</div><span class="svc-more">Read more →</span></a></li>`).join('\n');
+const intlServices = svcCards(INTL_R, '        ');
+const intlNavServices = SERVICES.map(s => `        <li><a href="${INTL_R.path(s.slug)}">${esc(s.nav)}</a></li>`).join('\n');
+const intlMobServices = SERVICES.map(s => `    <a class="mob-sub" href="${INTL_R.path(s.slug)}">${esc(s.nav)}</a>`).join('\n');
+// "Start here" on the home view, as on /south-africa, with the starting figures from lib/pricing-usd.js.
+const intlPaths = `      <div class="sec-lbl">Start here</div>
+      <h2 class="sec-h">Build it. Keep it running. Grow it.</h2>
+      <p class="sec-sub">Every business is at a different stage. Pick the one that sounds like you and we will take you straight to it.</p>
+      <div class="paths-grid">
+        <a class="path-card" href="#packages"><span class="path-q">"I need a website"</span><span class="path-v">Build.</span><span class="path-d">A new site designed and built from scratch, or a full redesign of the one you have. From <strong>${usd(USD_PACKAGES.Starter)}</strong>, live in about two weeks.</span><span class="path-go">See packages →</span></a>
+        <a class="path-card" href="#retainers"><span class="path-q">"I already have a site"</span><span class="path-v">Maintain.</span><span class="path-d">Hosting, backups, security and the small content changes, handled every month so it never quietly breaks. From <strong>${usd(USD_RETAINER_FROM)}</strong> a month.</span><span class="path-go">See care plans →</span></a>
+        <a class="path-card" href="#services"><span class="path-q">"I need more enquiries"</span><span class="path-v">Grow.</span><span class="path-d">SEO, your Google Business Profile and copy that turns the people already finding you into enquiries.</span><span class="path-go">See what's involved →</span></a>
+      </div>`;
 
 // USD figures are Kabelo's to set in lib/pricing-usd.js, never converted from
 // the rand sheet. Until every one is filled in, the section is one quote-on-call
@@ -814,6 +824,9 @@ export function build({ write = true } = {}) {
 
   let intl = readFileSync('index.html', 'utf8');
   intl = inject(intl, 'intl-services', intlServices, 'index.html');
+  intl = inject(intl, 'intl-nav-services', intlNavServices, 'index.html');
+  intl = inject(intl, 'intl-mob-services', intlMobServices, 'index.html');
+  intl = inject(intl, 'intl-paths', intlPaths, 'index.html');
   intl = inject(intl, 'work-wall', workWall, 'index.html');
   intl = inject(intl, 'intl-pricing', intlPricing, 'index.html');
   out.set('index.html', intl);
